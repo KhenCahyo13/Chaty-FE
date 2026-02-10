@@ -1,8 +1,13 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { FC } from 'react';
 import type { LoginDialogViewProps } from './types';
+import { FieldGroup } from '@/components/ui/field';
+import { TfTextInput } from '@/components/tanstack-form/text-input';
+import { Separator } from '@/components/ui/separator';
+import { TfSubmitButton } from '@/components/tanstack-form/button';
 
 const LoginDialogView: FC<LoginDialogViewProps> = ({
+    form,
     token
 }) => (
     <Dialog open={!token}>
@@ -11,9 +16,32 @@ const LoginDialogView: FC<LoginDialogViewProps> = ({
                 <DialogTitle>Chaty Sign In</DialogTitle>
                 <DialogDescription className="text-muted-foreground">Login first to continue using this app.</DialogDescription>
             </DialogHeader>
-            <div className="flex flex-col items-center mt-6">
-
-            </div>
+            <Separator className='mb-2' />
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    form.handleSubmit()
+                }}
+            >
+                <FieldGroup>
+                    <TfTextInput
+                        required
+                        form={form}
+                        label='Username'
+                        placeholder='Username'
+                        name='username'
+                    />
+                    <TfTextInput
+                        required
+                        type='password'
+                        form={form}
+                        label='Password'
+                        placeholder='Password'
+                        name='password'
+                    />
+                    <TfSubmitButton isLoading={false}>Sign In</TfSubmitButton>
+                </FieldGroup>
+            </form>
         </DialogContent>
     </Dialog>
 );

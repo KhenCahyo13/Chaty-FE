@@ -31,7 +31,7 @@ const MainLayoutView: FC<LayoutProps> = ({
             </SidebarInset>
         </SidebarProvider>
         {/* Login Dialog */}
-        {/* <LoginDialog /> */}
+        <LoginDialog />
     </>
 );
 
