@@ -8,7 +8,8 @@ import { TfSubmitButton } from '@/components/tanstack-form/button';
 
 const LoginDialogView: FC<LoginDialogViewProps> = ({
     form,
-    token
+    token,
+    isLoginLoading
 }) => (
     <Dialog open={!token}>
         <DialogContent showCloseButton={false}>
@@ -39,7 +40,7 @@ const LoginDialogView: FC<LoginDialogViewProps> = ({
                         placeholder='Password'
                         name='password'
                     />
-                    <TfSubmitButton isLoading={false}>Sign In</TfSubmitButton>
+                    <TfSubmitButton isLoading={isLoginLoading}>Sign In</TfSubmitButton>
                 </FieldGroup>
             </form>
         </DialogContent>

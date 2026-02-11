@@ -8,4 +8,5 @@ export type LoginFormValues = z.infer<typeof loginFormSchema>;
 export interface LoginDialogViewProps {
     form: ReturnType<typeof useForm<LoginFormValues>>;
     token: Token | null;
+    isLoginLoading: boolean;
 }

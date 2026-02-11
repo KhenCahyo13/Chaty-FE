@@ -4,7 +4,9 @@ import './index.css'
 import { createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { AppProvider } from './components/core/app-provider';
+import { QueryClient } from '@tanstack/react-query';
 
+const queryClient = new QueryClient();
 export const router = createRouter({
 	routeTree,
 	defaultPreload: 'intent',
@@ -20,6 +22,7 @@ declare module '@tanstack/react-router' {
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<AppProvider
+			queryClient={queryClient}
 			router={router}
 		/>
 	</StrictMode>,
