@@ -3,14 +3,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { login } from '@/api/auth';
+import { queryKeys } from '@/lib/query-keys';
 import { resolveErrorMessage } from '@/lib/response';
 import { useAuthStore } from '@/stores/auth-store';
+import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 
 import { loginFormDefaultValues, loginFormSchema } from './schema';
 import type { LoginFormValues } from './types';
 import LoginDialogView from './view'
-import { queryKeys } from '@/lib/query-keys';
-import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 
 const LoginDialog = () => {
     const { token, setToken, setUser } = useAuthStore();

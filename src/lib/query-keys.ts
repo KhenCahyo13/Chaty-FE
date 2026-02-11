@@ -5,7 +5,8 @@ export const queryKeys = {
         lists: () => [...queryKeys.privateConversations.all, 'list'] as const,
         list: (limit: number) =>
             [...queryKeys.privateConversations.lists(), { limit }] as const,
-        details: () => [...queryKeys.privateConversations.all, 'detail'] as const,
+        details: () =>
+            [...queryKeys.privateConversations.all, 'detail'] as const,
         detail: (id: string) =>
             [...queryKeys.privateConversations.details(), id] as const,
     },

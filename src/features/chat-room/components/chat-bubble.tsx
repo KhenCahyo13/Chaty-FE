@@ -1,10 +1,10 @@
+import { IconChecks } from '@tabler/icons-react';
 import { type FC, memo } from 'react';
 
+import { formatLastSendTime } from '@/lib/datetime';
 import { cn } from '@/lib/utils';
 
 import type { ChatBubbleProps } from '../types';
-import { IconChecks } from '@tabler/icons-react';
-import { formatLastSendTime } from '@/lib/datetime';
 
 const ChatBubble: FC<ChatBubbleProps> = ({
     message,

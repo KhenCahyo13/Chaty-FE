@@ -1,11 +1,11 @@
+import { IconChecks } from '@tabler/icons-react';
 import { type FC, memo } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatLastSendTime } from '@/lib/datetime';
+import { cn } from '@/lib/utils';
 
 import type { ChatItemViewProps } from './types';
-import { cn } from '@/lib/utils';
-import { IconChecks } from '@tabler/icons-react';
 
 const ChatItemView: FC<ChatItemViewProps> = ({
     conversation,

@@ -1,11 +1,12 @@
-import { memo, type FC } from 'react';
+import { type FC,memo } from 'react';
+
+import { ImageTextFallback } from '@/components/fallback/image-text';
+import { LoaderFallback } from '@/components/fallback/loader';
 
 import ChatBox from './components/chat-box';
 import ChatBubble from './components/chat-bubble';
 import ChatHeader from './components/chat-header';
 import type { ChatRoomViewProps } from './types';
-import { ImageTextFallback } from '@/components/fallback/image-text';
-import { LoaderFallback } from '@/components/fallback/loader';
 
 const ChatRoomView: FC<ChatRoomViewProps> = ({
     activePrivateConversationId,

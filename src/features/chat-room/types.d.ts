@@ -1,4 +1,8 @@
-import type { PrivateConversationDetails, PrivateConversationDetailsMessage, PrivateConversationListUser } from '@/types/private-conversation';
+import type {
+    PrivateConversationDetails,
+    PrivateConversationDetailsMessage,
+    PrivateConversationListUser,
+} from '@/types/private-conversation';
 
 export interface ChatBubbleProps {
     message: PrivateConversationDetailsMessage;

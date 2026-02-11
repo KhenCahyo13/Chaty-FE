@@ -1,8 +1,10 @@
-import { usePrivateConversationStore } from '@/stores/private-conversation-store';
-import ChatRoomView from './view'
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys } from '@/lib/query-keys';
+
 import { fetchPrivateConversationDetails } from '@/api/private-conversations';
+import { queryKeys } from '@/lib/query-keys';
+import { usePrivateConversationStore } from '@/stores/private-conversation-store';
+
+import ChatRoomView from './view'
 
 const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();

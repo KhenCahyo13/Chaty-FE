@@ -1,8 +1,9 @@
 import { IconPhone, IconSearch, IconVideo } from '@tabler/icons-react';
-import { memo, type FC } from 'react';
+import { type FC,memo } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+
 import type { ChatHeaderProps } from '../types';
 
 const ChatHeader: FC<ChatHeaderProps> = ({
