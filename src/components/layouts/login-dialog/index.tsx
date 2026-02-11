@@ -22,7 +22,7 @@ const LoginDialog = () => {
         validators: {
             onSubmit: loginFormSchema
         },
-        onSubmit: async ({ value }) => {
+        onSubmit: ({ value }) => {
             mutation.mutate(value);
         }
     });
@@ -34,12 +34,15 @@ const LoginDialog = () => {
             setUser(response.data);
 
             queryClient.invalidateQueries({
-                queryKey: queryKeys.privateConversations.list(10),
+                queryKey: queryKeys.privateConversations.lists(),
             });
-            queryClient.invalidateQueries({
-                queryKey: queryKeys.privateConversations.detail(activePrivateConversationId!),
-            });
-            
+
+            if (activePrivateConversationId) {
+                queryClient.invalidateQueries({
+                    queryKey: queryKeys.privateConversations.detail(activePrivateConversationId),
+                });
+            }
+
             form.reset();
         },
         onError: (error) => {

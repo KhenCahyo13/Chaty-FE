@@ -40,7 +40,7 @@ const ChatItemView: FC<ChatItemViewProps> = ({
             <div className='flex items-center gap-x-2'>
                 {conversation.lastMessage.isMe && <IconChecks className={cn(
                     'size-4',
-                    conversation.lastMessage.isRead ? 'text-blue-500' : 'text-primary'
+                    conversation.lastMessage.isRead ? 'text-blue-500' : 'text-muted-foreground'
                 )} />}
                 <p className={cn(
                     'text-sm text-muted-foreground line-clamp-1',

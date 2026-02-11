@@ -9,10 +9,12 @@ import ChatHeader from './components/chat-header';
 import type { ChatRoomViewProps } from './types';
 
 const ChatRoomView: FC<ChatRoomViewProps> = ({
+    messageForm,
     activePrivateConversationId,
     conversations,
     isConversationsLoading,
     isConversationsError,
+    isCreateMessageLoading,
 }) => (
     <div className="flex h-svh flex-col">
         {activePrivateConversationId ? (
@@ -44,7 +46,10 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                 label="Let's start new messages."
                             />
                         )}
-                        <ChatBox />
+                        <ChatBox
+                            form={messageForm}
+                            isCreateMessageLoading={isCreateMessageLoading}
+                        />
                     </>
                 )}
             </>

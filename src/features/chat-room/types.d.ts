@@ -3,6 +3,16 @@ import type {
     PrivateConversationDetailsMessage,
     PrivateConversationListUser,
 } from '@/types/private-conversation';
+import type z from 'zod';
+import type { createMessageFormSchema } from './schema';
+import type { useForm } from '@tanstack/react-form';
+
+export type CreateMessageFormValues = z.infer<typeof createMessageFormSchema>;
+
+export interface ChatBoxProps {
+    form: ReturnType<typeof useForm<CreateMessageFormValues>>;
+    isCreateMessageLoading: boolean;
+}
 
 export interface ChatBubbleProps {
     message: PrivateConversationDetailsMessage;
@@ -13,8 +23,10 @@ export interface ChatHeaderProps {
 }
 
 export interface ChatRoomViewProps {
+    messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
     activePrivateConversationId: string | null;
     conversations: PrivateConversationDetails | undefined;
     isConversationsLoading: boolean;
     isConversationsError: boolean;
+    isCreateMessageLoading: boolean;
 }
