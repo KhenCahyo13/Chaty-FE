@@ -3,13 +3,13 @@ import { type FC, memo, useEffect, useState } from 'react';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
 import { queryKeys } from '@/lib/query-keys';
+import { socket } from '@/lib/socket';
+import { useAuthStore } from '@/stores/auth-store';
+import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 import type { LayoutProps } from '@/types/components';
+import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 import MainLayoutView from './view';
-import { socket } from '@/lib/socket';
-import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
-import { usePrivateConversationStore } from '@/stores/private-conversation-store';
-import { useAuthStore } from '@/stores/auth-store';
 
 const MainLayout: FC<LayoutProps> = ({
     children
@@ -55,13 +55,9 @@ const MainLayout: FC<LayoutProps> = ({
 
         socket.connect();
 
-        socket.on('connect', () => {
-            console.log('Socket connected', socket.id);
-        });
+        socket.on('connect', () => {});
 
-        socket.on('disconnect', (reason) => {
-            console.log('Socket disconnected:', reason);
-        });
+        socket.on('disconnect', () => {});
 
         return () => {
             socket.disconnect();

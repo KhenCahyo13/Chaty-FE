@@ -1,9 +1,10 @@
 import { IconMicrophone, IconPlus, IconSend2 } from '@tabler/icons-react';
-import { memo, type FC } from 'react';
+import { type FC,memo } from 'react';
 
-import { Button } from '@/components/ui/button';
-import type { ChatBoxProps } from '../types';
 import { TfTextInput } from '@/components/tanstack-form/text-input';
+import { Button } from '@/components/ui/button';
+
+import type { ChatBoxProps } from '../types';
 
 const ChatBox: FC<ChatBoxProps> = ({
     form,

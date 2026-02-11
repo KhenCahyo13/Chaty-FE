@@ -2,15 +2,15 @@ import { type FC, memo } from 'react';
 
 import { ImageTextFallback } from '@/components/fallback/image-text';
 import { LoaderFallback } from '@/components/fallback/loader';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { getSocketConnectionBadgeClassName, getSocketConnectionBadgeText } from '@/lib/socket';
+import { cn } from '@/lib/utils';
 
 import ChatItem from '../chat-item';
 import LoginDialog from '../login-dialog';
 import type { MainLayoutViewProps } from './types';
-import { Badge } from '@/components/ui/badge';
-import { getSocketConnectionBadgeClassName, getSocketConnectionBadgeText } from '@/lib/socket';
-import { cn } from '@/lib/utils';
 
 const MainLayoutView: FC<MainLayoutViewProps> = ({
     children,

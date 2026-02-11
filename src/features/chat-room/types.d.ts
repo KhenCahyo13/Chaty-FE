@@ -1,12 +1,13 @@
+import type { useForm } from '@tanstack/react-form';
+import type z from 'zod';
+
 import type {
     PrivateConversationDetails,
     PrivateConversationDetailsMessage,
     PrivateConversationListUser,
 } from '@/types/private-conversation';
-import type z from 'zod';
+
 import type { createMessageFormSchema } from './schema';
-import type { useForm } from '@tanstack/react-form';
-import type { RefObject } from 'react';
 
 export type CreateMessageFormValues = z.infer<typeof createMessageFormSchema>;
 

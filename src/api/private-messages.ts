@@ -5,4 +5,4 @@ export const createMessage = async (payload: CreateMessageFormValues) => {
     const response = await authenticatedApi.post('/private-messages', payload);
 
     return response.data;
-}
+};

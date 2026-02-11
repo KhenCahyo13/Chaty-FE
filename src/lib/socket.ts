@@ -12,7 +12,7 @@ export const getSocketConnectionBadgeClassName = () => {
         case false:
             return 'bg-red-500/20 text-red-500 border-red-400';
     }
-}
+};
 
 export const getSocketConnectionBadgeText = () => {
     switch (socket.connected) {
@@ -21,4 +21,4 @@ export const getSocketConnectionBadgeText = () => {
         case false:
             return 'Disconnected';
     }
-}
+};

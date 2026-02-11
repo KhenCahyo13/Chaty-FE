@@ -1,19 +1,19 @@
+import { useForm } from '@tanstack/react-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails } from '@/api/private-conversations';
+import { createMessage } from '@/api/private-messages';
 import { queryKeys } from '@/lib/query-keys';
+import { resolveErrorMessage } from '@/lib/response';
+import { socket } from '@/lib/socket';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
+import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
-import ChatRoomView from './view'
-import { useForm } from '@tanstack/react-form';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
 import type { CreateMessageFormValues } from './types';
-import { createMessage } from '@/api/private-messages';
-import { toast } from 'sonner';
-import { resolveErrorMessage } from '@/lib/response';
-import { useEffect } from 'react';
-import { socket } from '@/lib/socket';
-import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
+import ChatRoomView from './view'
 
 const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
@@ -31,7 +31,6 @@ const ChatRoom = () => {
             onSubmit: createMessageFormSchema
         },
         onSubmit: async ({ value }) => {
-            console.log('Submit message:', value);
             messageMutation.mutate(value);
         }
     });
