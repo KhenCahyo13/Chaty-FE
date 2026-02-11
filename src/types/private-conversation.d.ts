@@ -32,12 +32,11 @@ export interface PrivateConversationDetails {
     createdAt: string;
     updatedAt: string;
     receiver: PrivateConversationListUser;
-    messages: PrivateConversationDetailsMessage[];
 }
 
 export interface PrivateConversationDetailsMessage {
     id: string;
-    content: string;
+    content: string | null;
     isMe: boolean;
     isDeleted: boolean;
     isRead: boolean;

@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { type FC, memo, useEffect, useState } from 'react';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
@@ -10,6 +10,9 @@ import type { LayoutProps } from '@/types/components';
 import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 import MainLayoutView from './view';
+import type { ApiResponse, CursorMeta } from '@/types/api';
+import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
+import { formatSocketPrivateMessage } from '@/lib/message';
 
 const MainLayout: FC<LayoutProps> = ({
     children
@@ -28,15 +31,29 @@ const MainLayout: FC<LayoutProps> = ({
     // Listen for new messages sent
     useEffect(() => {
         const onPrivateMessageSent = (payload: SocketPrivateMessageCreatedPayload) => {
-            if (payload.private_conversation_id === activePrivateConversationId) {
-                queryClient.invalidateQueries({
-                    queryKey: queryKeys.privateConversations.detail(activePrivateConversationId),
-                });
-            }
+            if (payload.private_conversation_id !== activePrivateConversationId) return;
 
-            queryClient.invalidateQueries({
-                queryKey: queryKeys.privateConversations.lists(),
-            });
+            queryClient.setQueryData<InfiniteData<ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>>>(
+                queryKeys.privateConversations.message(activePrivateConversationId), (old) => {
+                    if (!old) return old;
+
+                    const firstPage = old.pages[0];
+
+                    return {
+                        ...old,
+                        pages: [
+                            {
+                                ...firstPage,
+                                data: [
+                                    ...firstPage.data,
+                                    formatSocketPrivateMessage(payload.message, user?.id!),
+                                ],
+                            },
+                            ...old.pages.slice(1),
+                        ],
+                    };
+                }
+            );
         }
 
         socket.on('private-message:sent', onPrivateMessageSent);
@@ -44,7 +61,7 @@ const MainLayout: FC<LayoutProps> = ({
         return () => {
             socket.off('private-message:sent', onPrivateMessageSent);
         };
-    }, [activePrivateConversationId, queryClient]);
+    }, [activePrivateConversationId, queryClient, user?.id]);
 
     useEffect(() => {
         if (!user?.id) return;
@@ -55,9 +72,9 @@ const MainLayout: FC<LayoutProps> = ({
 
         socket.connect();
 
-        socket.on('connect', () => {});
+        socket.on('connect', () => { });
 
-        socket.on('disconnect', () => {});
+        socket.on('disconnect', () => { });
 
         return () => {
             socket.disconnect();

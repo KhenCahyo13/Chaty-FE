@@ -9,5 +9,9 @@ export const queryKeys = {
             [...queryKeys.privateConversations.all, 'detail'] as const,
         detail: (id: string) =>
             [...queryKeys.privateConversations.details(), id] as const,
+        messages: () =>
+            [...queryKeys.privateConversations.all, 'messages'] as const,
+        message: (id: string) =>
+            [...queryKeys.privateConversations.messages(), id] as const,
     },
 } as const;

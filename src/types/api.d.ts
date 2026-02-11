@@ -5,3 +5,7 @@ export interface ApiResponse<TData, TMeta = null, TError = null> {
     meta?: TMeta;
     errors?: TError;
 }
+
+export interface CursorMeta {
+    nextCursor: string | null;
+}

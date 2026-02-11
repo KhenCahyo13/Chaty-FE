@@ -1,4 +1,5 @@
 import type { useForm } from '@tanstack/react-form';
+import type { RefObject, UIEvent } from 'react';
 import type z from 'zod';
 
 import type {
@@ -27,8 +28,12 @@ export interface ChatHeaderProps {
 export interface ChatRoomViewProps {
     messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
     activePrivateConversationId: string | null;
-    conversations: PrivateConversationDetails | undefined;
-    isConversationsLoading: boolean;
-    isConversationsError: boolean;
+    room: PrivateConversationDetails | undefined;
+    messages: PrivateConversationDetailsMessage[];
+    isRoomLoading: boolean;
+    isRoomError: boolean;
     isCreateMessageLoading: boolean;
+    isFetchingNextMessagesPage: boolean;
+    handleScrollMessages: (e: UIEvent<HTMLDivElement, globalThis.UIEvent>) => void;
+    messagesContainerRef: RefObject<HTMLDivElement | null>;
 }
