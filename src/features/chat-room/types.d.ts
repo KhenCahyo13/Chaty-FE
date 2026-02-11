@@ -6,6 +6,7 @@ import type {
 import type z from 'zod';
 import type { createMessageFormSchema } from './schema';
 import type { useForm } from '@tanstack/react-form';
+import type { RefObject } from 'react';
 
 export type CreateMessageFormValues = z.infer<typeof createMessageFormSchema>;
 

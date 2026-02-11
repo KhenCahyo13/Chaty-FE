@@ -1,4 +1,4 @@
-import { type FC,memo } from 'react';
+import { type FC, memo } from 'react';
 
 import { ImageTextFallback } from '@/components/fallback/image-text';
 import { LoaderFallback } from '@/components/fallback/loader';
@@ -8,6 +8,9 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider }
 import ChatItem from '../chat-item';
 import LoginDialog from '../login-dialog';
 import type { MainLayoutViewProps } from './types';
+import { Badge } from '@/components/ui/badge';
+import { getSocketConnectionBadgeClassName, getSocketConnectionBadgeText } from '@/lib/socket';
+import { cn } from '@/lib/utils';
 
 const MainLayoutView: FC<MainLayoutViewProps> = ({
     children,
@@ -20,7 +23,14 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
         <SidebarProvider>
             <Sidebar collapsible="offcanvas">
                 <SidebarHeader className="px-4 py-4">
-                    <h1 className="font-semibold md:text-lg">Your Chats</h1>
+                    <div className='flex items-center justify-between'>
+                        <h1 className="font-semibold md:text-lg">Your Chats</h1>
+                        <Badge className={cn(
+                            getSocketConnectionBadgeClassName()
+                        )}>
+                            {getSocketConnectionBadgeText()}
+                        </Badge>
+                    </div>
                     <Input placeholder="Search chats..." />
                 </SidebarHeader>
                 <SidebarContent>

@@ -12,6 +12,8 @@ import { createMessage } from '@/api/private-messages';
 import { toast } from 'sonner';
 import { resolveErrorMessage } from '@/lib/response';
 import { useEffect } from 'react';
+import { socket } from '@/lib/socket';
+import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
@@ -47,7 +49,7 @@ const ChatRoom = () => {
                 });
             }
 
-            messageForm.reset();
+            messageForm.setFieldValue('content', '');
         },
         onError: (error) => {
             toast.error(resolveErrorMessage(error));
@@ -60,6 +62,29 @@ const ChatRoom = () => {
         }
     }, [messageForm, activePrivateConversationId]);
 
+    // Listen for new messages
+    useEffect(() => {
+        const onNewPrivateMessage = (payload: SocketPrivateMessageCreatedPayload) => {
+            if (payload.private_conversation_id === activePrivateConversationId) {
+                queryClient.invalidateQueries({
+                    queryKey: queryKeys.privateConversations.detail(
+                        activePrivateConversationId
+                    ),
+                });
+            }
+
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.privateConversations.lists(),
+            });
+        };
+
+        socket.on('private-message:new', onNewPrivateMessage);
+
+        return () => {
+            socket.off('private-message:new', onNewPrivateMessage);
+        };
+    }, [activePrivateConversationId, queryClient]);
+
     return <ChatRoomView
         messageForm={messageForm}
         activePrivateConversationId={activePrivateConversationId}
@@ -67,6 +92,7 @@ const ChatRoom = () => {
         isConversationsLoading={isConversationsLoading}
         isConversationsError={isConversationsError}
         isCreateMessageLoading={messageMutation.isPending}
+        
     />;
 };
 
