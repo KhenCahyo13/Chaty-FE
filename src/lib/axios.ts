@@ -5,8 +5,8 @@ import axios, {
 } from 'axios';
 
 import { useAuthStore } from '@/stores/auth-store';
-import type { Token, User } from '@/types/auth';
 import type { ApiResponse } from '@/types/api';
+import type { Token, User } from '@/types/auth';
 
 const BASE_API_URL = import.meta.env.VITE_API_BASE_URL as string;
 const REFRESH_TOKEN_URL = '/auth/refresh';

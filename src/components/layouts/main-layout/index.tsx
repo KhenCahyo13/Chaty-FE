@@ -1,14 +1,16 @@
-import { memo, useState, type FC } from 'react';
-import MainLayoutView from './view';
-import type { LayoutProps } from '@/types/components';
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys } from '@/lib/query-keys';
+import { type FC,memo, useState } from 'react';
+
 import { fetchPrivateConversations } from '@/api/private-conversations';
+import { queryKeys } from '@/lib/query-keys';
+import type { LayoutProps } from '@/types/components';
+
+import MainLayoutView from './view';
 
 const MainLayout: FC<LayoutProps> = ({
     children
 }) => {
-    const [privateConversationsLimit, setPrivateConversationsLimit] = useState(10);
+    const [privateConversationsLimit, _setPrivateConversationsLimit] = useState(10);
 
     const { data: privateConversations, isLoading: isPrivateConversationsLoading, isError: isPrivateConversationsError } = useQuery({
         queryKey: queryKeys.privateConversations.list(privateConversationsLimit),

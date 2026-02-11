@@ -1,7 +1,9 @@
+import { type FC,memo } from 'react';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { memo, type FC } from 'react';
-import type { ChatItemProps } from './types';
 import { formatLastSendTime } from '@/lib/datetime';
+
+import type { ChatItemProps } from './types';
 
 const ChatItemView: FC<ChatItemProps> = ({
     conversation

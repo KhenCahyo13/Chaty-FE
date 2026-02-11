@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import ChatHeader from './components/chat-header';
-import ChatBubble from './components/chat-bubble';
+
 import ChatBox from './components/chat-box';
-import { ImageTextFallback } from '@/components/fallback/image-text';
+import ChatBubble from './components/chat-bubble';
+import ChatHeader from './components/chat-header';
 
 const ChatRoomView = () => (
     <div className="flex h-svh flex-col">

@@ -1,6 +1,7 @@
-import { memo, type FC } from 'react';
-import ChatItemView from './view';
+import { type FC,memo } from 'react';
+
 import type { ChatItemProps } from './types';
+import ChatItemView from './view';
 
 const ChatItem: FC<ChatItemProps> = ({
     conversation

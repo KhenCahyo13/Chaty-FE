@@ -1,6 +1,7 @@
-import type { Token, User } from '@/types/auth';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+
+import type { Token, User } from '@/types/auth';
 
 interface AuthStoreState {
     token: Token | null;

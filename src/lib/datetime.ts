@@ -33,4 +33,4 @@ export const formatLastSendTime = (dateString: string): string => {
 
     // 2 days ago and above
     return `${diffDays} days ago`;
-}
+};

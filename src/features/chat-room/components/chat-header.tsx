@@ -1,7 +1,8 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { IconPhone, IconSearch, IconVideo } from '@tabler/icons-react';
 import { memo } from 'react';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 
 const ChatHeader = () => (
     <div className="flex items-center justify-between bg-sidebar border-b px-4 py-4">

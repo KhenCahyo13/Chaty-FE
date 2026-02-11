@@ -1,5 +1,7 @@
+import { type FC,memo } from 'react';
+
 import { cn } from '@/lib/utils';
-import { memo, type FC } from 'react';
+
 import type { ChatBubbleProps } from '../types';
 
 const ChatBubble: FC<ChatBubbleProps> = ({

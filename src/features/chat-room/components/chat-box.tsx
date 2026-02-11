@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { IconMicrophone, IconPlus } from '@tabler/icons-react';
 import { memo } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const ChatBox = () => (
     <div className="bg-sidebar border-t shrink-0">

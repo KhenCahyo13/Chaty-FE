@@ -7,9 +7,9 @@ export const fetchPrivateConversations = async (
 ): Promise<ApiResponse<PrivateConversationList[]>> => {
     const response = await authenticatedApi.get('/private-conversations', {
         params: {
-            limit
-        }
+            limit,
+        },
     });
 
     return response.data as ApiResponse<PrivateConversationList[]>;
-}
+};

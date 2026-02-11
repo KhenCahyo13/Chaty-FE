@@ -1,10 +1,12 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import type { FC } from 'react';
-import type { LoginDialogViewProps } from './types';
-import { FieldGroup } from '@/components/ui/field';
-import { TfTextInput } from '@/components/tanstack-form/text-input';
-import { Separator } from '@/components/ui/separator';
+
 import { TfSubmitButton } from '@/components/tanstack-form/button';
+import { TfTextInput } from '@/components/tanstack-form/text-input';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { FieldGroup } from '@/components/ui/field';
+import { Separator } from '@/components/ui/separator';
+
+import type { LoginDialogViewProps } from './types';
 
 const LoginDialogView: FC<LoginDialogViewProps> = ({
     form,

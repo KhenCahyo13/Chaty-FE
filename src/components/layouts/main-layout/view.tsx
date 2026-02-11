@@ -1,10 +1,12 @@
-import { memo, type FC } from 'react';
-import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { Input } from '@/components/ui/input';
-import ChatItem from '../chat-item';
-import LoginDialog from '../login-dialog';
+import { type FC,memo } from 'react';
+
 import { ImageTextFallback } from '@/components/fallback/image-text';
 import { LoaderFallback } from '@/components/fallback/loader';
+import { Input } from '@/components/ui/input';
+import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+
+import ChatItem from '../chat-item';
+import LoginDialog from '../login-dialog';
 import type { MainLayoutViewProps } from './types';
 
 const MainLayoutView: FC<MainLayoutViewProps> = ({
