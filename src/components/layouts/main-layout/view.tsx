@@ -1,12 +1,17 @@
 import { memo, type FC } from 'react';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Input } from '@/components/ui/input';
-import type { LayoutProps } from '@/types/components';
 import ChatItem from '../chat-item';
 import LoginDialog from '../login-dialog';
+import { ImageTextFallback } from '@/components/fallback/image-text';
+import { LoaderFallback } from '@/components/fallback/loader';
+import type { MainLayoutViewProps } from './types';
 
-const MainLayoutView: FC<LayoutProps> = ({
-    children
+const MainLayoutView: FC<MainLayoutViewProps> = ({
+    children,
+    privateConversations,
+    isPrivateConversationsLoading,
+    isPrivateConversationsError,
 }) => (
     <>
         {/* Main Layout */}
@@ -17,13 +22,34 @@ const MainLayoutView: FC<LayoutProps> = ({
                     <Input placeholder="Search chats..." />
                 </SidebarHeader>
                 <SidebarContent>
-                    <div className="flex flex-col gap-y-2">
-                        {Array.from({ length: 15 }).map((_, index) => (
-                            <ChatItem
-                                key={index}
-                            />
-                        ))}
-                    </div>
+                    {isPrivateConversationsLoading ? (
+                        <LoaderFallback label='Waiting for conversations data...' />
+                    ) : isPrivateConversationsError ? (
+                        <ImageTextFallback
+                            imageClassName='w-40'
+                            imageName='error'
+                            label='Something went wrong while fetching conversations.'
+                        />
+                    ) : (
+                        <>
+                            {privateConversations && privateConversations.length === 0 ? (
+                                <ImageTextFallback
+                                    imageClassName='w-40'
+                                    imageName='no-data'
+                                    label="Let's start a new conversation."
+                                />
+                            ) : (
+                                <div className="flex flex-col gap-y-2">
+                                    {privateConversations?.map((conversation) => (
+                                        <ChatItem
+                                            key={conversation.id}
+                                            conversation={conversation}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
                 </SidebarContent>
             </Sidebar>
             <SidebarInset>

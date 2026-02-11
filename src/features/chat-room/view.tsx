@@ -6,21 +6,21 @@ import { ImageTextFallback } from '@/components/fallback/image-text';
 
 const ChatRoomView = () => (
     <div className="flex h-svh flex-col">
-        {/* <ChatHeader />
+        <ChatHeader />
         <div className="flex-1 overflow-y-auto px-4 py-4 md:gap-y-6 flex flex-col gap-y-4">
             {Array.from({ length: 20 }).map((_, index) => (
                 <ChatBubble
                     key={index}
-                    className={index % 2 === 0 ? 'self-start bg-accent/10' : 'self-end bg-primary/10 text-white'}
+                    className={index % 2 === 0 ? 'self-start bg-accent rounded-tl-none' : 'self-end bg-primary text-background rounded-tr-none'}
                 />
             ))}
         </div>
-        <ChatBox /> */}
+        <ChatBox />
 
-        <ImageTextFallback
+        {/* <ImageTextFallback
             imageName='empty'
             label="No conversation selected, or let's start a new one."
-        />
+        /> */}
     </div>
 );
 
