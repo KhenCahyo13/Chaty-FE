@@ -2,11 +2,11 @@ export interface PrivateConversationList {
     id: string;
     createdAt: string;
     updatedAt: string;
-    sender: PrivateConversationListSender;
+    sender: PrivateConversationListUser;
     lastMessage: PrivateConversationListLastMessage;
 }
 
-export interface PrivateConversationListSender {
+export interface PrivateConversationListUser {
     id: string;
     username: string;
     email: string;
@@ -22,5 +22,24 @@ export interface PrivateConversationListLastMessage {
     id: string;
     content: string;
     isDeleted: boolean;
+    isRead: boolean;
+    isMe: boolean;
+    createdAt: string;
+}
+
+export interface PrivateConversationDetails {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    receiver: PrivateConversationListUser;
+    messages: PrivateConversationDetailsMessage[];
+}
+
+export interface PrivateConversationDetailsMessage {
+    id: string;
+    content: string;
+    isMe: boolean;
+    isDeleted: boolean;
+    isRead: boolean;
     createdAt: string;
 }

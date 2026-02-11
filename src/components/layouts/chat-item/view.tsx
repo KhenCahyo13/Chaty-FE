@@ -1,14 +1,24 @@
-import { type FC,memo } from 'react';
+import { type FC, memo } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatLastSendTime } from '@/lib/datetime';
 
-import type { ChatItemProps } from './types';
+import type { ChatItemViewProps } from './types';
+import { cn } from '@/lib/utils';
+import { IconChecks } from '@tabler/icons-react';
 
-const ChatItemView: FC<ChatItemProps> = ({
-    conversation
+const ChatItemView: FC<ChatItemViewProps> = ({
+    conversation,
+    activePrivateConversationId,
+    setActivePrivateConversationId
 }) => (
-    <div className="px-4 py-2 flex items-center gap-x-4 cursor-pointer hover:bg-accent">
+    <div
+        className={cn(
+            'px-4 py-2 flex items-center gap-x-4 cursor-pointer hover:bg-accent',
+            activePrivateConversationId === conversation.id && 'bg-primary/20 hover:bg-primary/20'
+        )}
+        onClick={() => setActivePrivateConversationId(conversation.id)}
+    >
         <Avatar className="size-12">
             {conversation.sender.profile && conversation.sender.profile.avatarUrl ? (
                 <AvatarImage src={conversation.sender.profile.avatarUrl} alt={conversation.sender.profile.fullName} />
@@ -23,11 +33,22 @@ const ChatItemView: FC<ChatItemProps> = ({
                 <p className="font-medium capitalize">
                     {conversation.sender.profile ? conversation.sender.profile.fullName : conversation.sender.username}
                 </p>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                     {formatLastSendTime(conversation.lastMessage.createdAt)}
                 </span>
             </div>
-            <p className='text-sm text-muted-foreground line-clamp-1'>{conversation.lastMessage.content}</p>
+            <div className='flex items-center gap-x-2'>
+                {conversation.lastMessage.isMe && <IconChecks className={cn(
+                    'size-4',
+                    conversation.lastMessage.isRead ? 'text-blue-500' : 'text-primary'
+                )} />}
+                <p className={cn(
+                    'text-sm text-muted-foreground line-clamp-1',
+                    conversation.lastMessage.isDeleted && 'italic'
+                )}>
+                    {conversation.lastMessage.content ? conversation.lastMessage.content : 'This message was deleted'}
+                </p>
+            </div>
         </div>
     </div>
 );

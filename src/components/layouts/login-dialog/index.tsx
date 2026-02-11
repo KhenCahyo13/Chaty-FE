@@ -1,5 +1,5 @@
 import { useForm } from '@tanstack/react-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import { login } from '@/api/auth';
@@ -9,9 +9,13 @@ import { useAuthStore } from '@/stores/auth-store';
 import { loginFormDefaultValues, loginFormSchema } from './schema';
 import type { LoginFormValues } from './types';
 import LoginDialogView from './view'
+import { queryKeys } from '@/lib/query-keys';
+import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 
 const LoginDialog = () => {
     const { token, setToken, setUser } = useAuthStore();
+    const { activePrivateConversationId } = usePrivateConversationStore();
+    const queryClient = useQueryClient();
 
     const form = useForm({
         defaultValues: loginFormDefaultValues,
@@ -29,6 +33,13 @@ const LoginDialog = () => {
             setToken(response.meta!);
             setUser(response.data);
 
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.privateConversations.list(10),
+            });
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.privateConversations.detail(activePrivateConversationId!),
+            });
+            
             form.reset();
         },
         onError: (error) => {
