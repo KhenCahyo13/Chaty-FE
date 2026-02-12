@@ -49,6 +49,8 @@ export const renderBody = (message: ChatRoomMessage) => {
                                 <img
                                     alt={file.fileName}
                                     className="size-10 rounded-md object-cover"
+                                    decoding="async"
+                                    loading="lazy"
                                     src={file.url}
                                 />
                             ) : (

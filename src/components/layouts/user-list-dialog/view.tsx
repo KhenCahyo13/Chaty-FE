@@ -67,7 +67,12 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                             >
                                 <Avatar className='size-10'>
                                     {user.profile && user.profile.avatarUrl ? (
-                                        <AvatarImage alt={user.profile.fullName} src={user.profile.avatarUrl} />
+                                        <AvatarImage
+                                            alt={user.profile.fullName}
+                                            decoding="async"
+                                            loading="lazy"
+                                            src={user.profile.avatarUrl}
+                                        />
                                     ) : (
                                         <AvatarFallback className="font-semibold text-sm">
                                             {user.username.slice(0, 2).toUpperCase()}

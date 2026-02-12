@@ -1,4 +1,10 @@
-import { type UIEvent, useCallback, useEffect, useRef } from 'react';
+import {
+    type UIEvent,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+} from 'react';
 
 interface UseChatRoomScrollProps {
     activePrivateConversationId: null | string;
@@ -24,6 +30,7 @@ export const useChatRoomScroll = ({
     const hasAutoScrolledRef = useRef(false);
     const prevMessagesLengthRef = useRef(0);
     const shouldAutoScrollOnNewMessageRef = useRef(true);
+    const shouldRestoreScrollRef = useRef(false);
 
     const scrollToBottom = useCallback((behavior: ScrollBehavior = 'auto') => {
         const el = messagesContainerRef.current;
@@ -56,11 +63,8 @@ export const useChatRoomScroll = ({
 
                 await fetchNextMessagesPage();
 
-                requestAnimationFrame(() => {
-                    el.scrollTop =
-                        el.scrollHeight - prevScrollHeightRef.current;
-                    shouldAutoScrollOnNewMessageRef.current = false;
-                });
+                shouldRestoreScrollRef.current = true;
+                shouldAutoScrollOnNewMessageRef.current = false;
             }
         },
         [fetchNextMessagesPage, hasNextMessagesPage, isFetchingNextMessagesPage]
@@ -70,15 +74,29 @@ export const useChatRoomScroll = ({
         hasAutoScrolledRef.current = false;
         prevMessagesLengthRef.current = 0;
         shouldAutoScrollOnNewMessageRef.current = true;
+        shouldRestoreScrollRef.current = false;
     }, [activePrivateConversationId]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!activePrivateConversationId || isRoomLoading || isRoomError)
             return;
         if (!messagesLength || isFetchingNextMessagesPage) return;
 
         const currentLength = messagesLength;
         const prevLength = prevMessagesLengthRef.current;
+
+        if (shouldRestoreScrollRef.current && currentLength > prevLength) {
+            const el = messagesContainerRef.current;
+            if (el) {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        el.scrollTop =
+                            el.scrollHeight - prevScrollHeightRef.current;
+                    });
+                });
+            }
+            shouldRestoreScrollRef.current = false;
+        }
 
         if (!hasAutoScrolledRef.current) {
             requestAnimationFrame(() => {
