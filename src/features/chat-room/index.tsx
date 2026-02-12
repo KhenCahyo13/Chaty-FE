@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
 import { createMessage } from '@/api/private-messages';
-import { usePrivateMessageListener } from '@/hooks/use-private-message-listener';
 import { queryKeys } from '@/lib/query-keys';
 import { resolveErrorMessage } from '@/lib/response';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
@@ -116,11 +115,6 @@ const ChatRoom = () => {
         fetchNextMessagesPage,
     });
 
-    usePrivateMessageListener({
-        activePrivateConversationId,
-        eventName: 'private-message:new',
-    });
-    
     usePrivateMessageRead({
         activePrivateConversationId,
         messages: memoizedMessages,

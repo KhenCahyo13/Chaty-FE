@@ -25,6 +25,10 @@ export const usePrivateMessageListener = ({
         const onPrivateMessage = (
             payload: SocketPrivateMessageCreatedPayload
         ) => {
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.privateConversations.lists(),
+            });
+
             if (!activePrivateConversationId) return;
             if (payload.private_conversation_id !== activePrivateConversationId)
                 return;

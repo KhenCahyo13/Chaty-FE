@@ -51,6 +51,10 @@ const MainLayout: FC<LayoutProps> = ({
         activePrivateConversationId,
         eventName: 'private-message:sent',
     });
+    usePrivateMessageListener({
+        activePrivateConversationId,
+        eventName: 'private-message:new',
+    });
 
     useEffect(() => {
         if (!user?.id) return;
