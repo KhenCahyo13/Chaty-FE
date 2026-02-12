@@ -7,7 +7,7 @@ import {
 } from '@/lib/firebase-messaging';
 import { usePushTokenStore } from '@/stores/push-token-store';
 
-let registerWebPushTokenPromise: Promise<void> | null = null;
+let registerWebPushTokenPromise: null | Promise<void> = null;
 
 const runRegisterCurrentWebPushToken = async (): Promise<void> => {
     try {
@@ -25,9 +25,9 @@ const runRegisterCurrentWebPushToken = async (): Promise<void> => {
         if (!fcmToken) return;
 
         const pushTokenResponse = await registerPushToken({
+            device_id: getOrCreateWebDeviceId(),
             fcm_token: fcmToken,
             platform: 'web',
-            device_id: getOrCreateWebDeviceId(),
         });
 
         usePushTokenStore.getState().setOrUpdateDevice({

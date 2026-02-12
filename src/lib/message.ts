@@ -6,12 +6,12 @@ export const formatSocketPrivateMessage = (
     currentUserId: string
 ): PrivateConversationDetailsMessage => {
     return {
-        id: message.id,
         content: message.content,
-        isMe: message.senderId === currentUserId,
+        createdAt: message.createdAt,
+        id: message.id,
         isDeleted: message.isDeleted,
+        isMe: message.senderId === currentUserId,
         isRead:
             message.senderId === currentUserId ? message.readsCount > 0 : true,
-        createdAt: message.createdAt,
     };
 };

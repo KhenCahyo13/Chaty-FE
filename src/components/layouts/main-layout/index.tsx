@@ -21,31 +21,31 @@ const MainLayout: FC<LayoutProps> = ({
 }) => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const { setOpenUserListDialog } = useComponentsStore();
-    const { user, token } = useAuthStore();
+    const { token, user } = useAuthStore();
 
     const [searchPrivateConversations, setSearchPrivateConversations] = useState<string | undefined>(undefined);
     const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, DEFAULT_DEBOUNCE_DELAY);
 
     const {
-        items: privateConversations,
-        isLoading: isPrivateConversationsLoading,
+        handleScroll: handleScrollPrivateConversations,
         isError: isPrivateConversationsError,
         isFetchingNextPage: isFetchingNextPrivateConversationsPage,
-        handleScroll: handleScrollPrivateConversations,
+        isLoading: isPrivateConversationsLoading,
+        items: privateConversations,
     } = useCursorPaginationList<
         PrivateConversationList,
         ReturnType<typeof queryKeys.privateConversations.list>
     >({
-        queryKey: queryKeys.privateConversations.list(
-            DEFAULT_LIMIT,
-            debouncedSearchPrivateConversations
-        ),
         queryFn: (pageParam) =>
             fetchPrivateConversations(
                 DEFAULT_LIMIT,
                 debouncedSearchPrivateConversations,
                 pageParam
             ),
+        queryKey: queryKeys.privateConversations.list(
+            DEFAULT_LIMIT,
+            debouncedSearchPrivateConversations
+        ),
     });
 
     usePrivateMessageListener({
@@ -80,15 +80,15 @@ const MainLayout: FC<LayoutProps> = ({
 
     return <MainLayoutView
         children={children}
-        privateConversations={privateConversations}
-        isPrivateConversationsLoading={isPrivateConversationsLoading}
-        isPrivateConversationsError={isPrivateConversationsError}
+        handleScrollPrivateConversations={handleScrollPrivateConversations}
         isFetchingNextPrivateConversationsPage={
             isFetchingNextPrivateConversationsPage
         }
-        handleScrollPrivateConversations={handleScrollPrivateConversations}
-        setOpenUserListDialog={setOpenUserListDialog}
+        isPrivateConversationsError={isPrivateConversationsError}
+        isPrivateConversationsLoading={isPrivateConversationsLoading}
+        privateConversations={privateConversations}
         searchPrivateConversations={searchPrivateConversations}
+        setOpenUserListDialog={setOpenUserListDialog}
         setSearchPrivateConversations={setSearchPrivateConversations}
     />;
 };

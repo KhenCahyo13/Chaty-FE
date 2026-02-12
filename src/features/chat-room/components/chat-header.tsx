@@ -13,7 +13,7 @@ const ChatHeader: FC<ChatHeaderProps> = ({
         <div className="flex items-center gap-x-2.5">
             <Avatar className="size-9 ring-1 ring-white/60">
                 {receiver?.profile && receiver.profile.avatarUrl ? (
-                    <AvatarImage src={receiver.profile.avatarUrl} alt={receiver.profile.fullName} />
+                    <AvatarImage alt={receiver.profile.fullName} src={receiver.profile.avatarUrl} />
                 ) : (
                     <AvatarFallback className="bg-primary/10 text-sm font-semibold">
                         {receiver?.username.slice(0, 2).toUpperCase()}
@@ -30,13 +30,13 @@ const ChatHeader: FC<ChatHeaderProps> = ({
             </div>
         </div>
         <div className="flex items-center gap-x-2">
-            <Button variant='ghost' size='icon-sm' className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background">
+            <Button className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background" size='icon-sm' variant='ghost'>
                 <IconPhone className="size-5 text-muted-foreground" />
             </Button>
-            <Button variant='ghost' size='icon-sm' className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background">
+            <Button className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background" size='icon-sm' variant='ghost'>
                 <IconVideo className="size-5 text-muted-foreground" />
             </Button>
-            <Button variant='ghost' size='icon-sm' className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background">
+            <Button className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background" size='icon-sm' variant='ghost'>
                 <IconSearch className="size-5 text-muted-foreground" />
             </Button>
         </div>

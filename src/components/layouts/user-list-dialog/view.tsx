@@ -10,28 +10,28 @@ import { Input } from '@/components/ui/input';
 import type { UserListDialogViewProps } from './types';
 
 const UserListDialogView: FC<UserListDialogViewProps> = ({
-    openUserListDialog,
-    setOpenUserListDialog,
-    users,
-    isLoading,
+    handleCreatePrivateConversation,
+    handleScrollUsers,
+    isCreatePrivateConversationLoading,
     isError,
     isFetchingNextUsersPage,
-    handleScrollUsers,
-    handleCreatePrivateConversation,
-    isCreatePrivateConversationLoading,
+    isLoading,
+    openUserListDialog,
     searchUsers,
+    setOpenUserListDialog,
     setSearchUsers,
+    users,
 }) => (
-    <Dialog open={openUserListDialog} onOpenChange={setOpenUserListDialog}>
+    <Dialog onOpenChange={setOpenUserListDialog} open={openUserListDialog}>
         <DialogContent>
             <DialogHeader>
                 <DialogTitle>User List</DialogTitle>
                 <DialogDescription className="text-muted-foreground">Let's start a new messages with your friend</DialogDescription>
             </DialogHeader>
             <Input
+                onChange={(e) => setSearchUsers(e.target.value)}
                 placeholder='Search users...'
                 value={searchUsers}
-                onChange={(e) => setSearchUsers(e.target.value)}
             />
             {isLoading ? (
                 <div className='h-64 flex items-center justify-center'>
@@ -46,8 +46,8 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                 </div>
             ) : (
                 <div
-                    onScroll={handleScrollUsers}
                     className='flex flex-col gap-y-2 max-h-96 overflow-y-scroll'
+                    onScroll={handleScrollUsers}
                 >
                     {users && users.length === 0 ? (
                         <div className='h-64 flex items-center justify-center'>
@@ -59,15 +59,15 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                     ) : (
                         users?.map((user) => (
                             <Button
-                                key={user.id}
-                                variant='ghost'
                                 className='justify-start h-14 px-2 gap-x-3 cursor-pointer'
                                 disabled={isCreatePrivateConversationLoading}
+                                key={user.id}
                                 onClick={() => handleCreatePrivateConversation(user.id)}
+                                variant='ghost'
                             >
                                 <Avatar className='size-10'>
                                     {user.profile && user.profile.avatarUrl ? (
-                                        <AvatarImage src={user.profile.avatarUrl} alt={user.profile.fullName} />
+                                        <AvatarImage alt={user.profile.fullName} src={user.profile.avatarUrl} />
                                     ) : (
                                         <AvatarFallback className="font-semibold text-sm">
                                             {user.username.slice(0, 2).toUpperCase()}

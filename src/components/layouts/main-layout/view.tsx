@@ -19,21 +19,21 @@ import type { MainLayoutViewProps } from './types';
 
 const MainLayoutView: FC<MainLayoutViewProps> = ({
     children,
-    privateConversations,
-    isPrivateConversationsLoading,
-    isPrivateConversationsError,
-    isFetchingNextPrivateConversationsPage,
     handleScrollPrivateConversations,
-    setOpenUserListDialog,
+    isFetchingNextPrivateConversationsPage,
+    isPrivateConversationsError,
+    isPrivateConversationsLoading,
+    privateConversations,
     searchPrivateConversations,
+    setOpenUserListDialog,
     setSearchPrivateConversations,
 }) => (
     <>
         {/* Main Layout */}
         <SidebarProvider>
             <Sidebar
-                collapsible="offcanvas"
                 className="bg-sidebar/90 backdrop-blur"
+                collapsible="offcanvas"
             >
                 <div className="flex h-full border-r border-sidebar-border/70">
                     <SideButtons />
@@ -53,24 +53,24 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                                 <div className="relative flex-1">
                                     <IconSearch className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
                                     <Input
-                                        value={searchPrivateConversations}
+                                        className="h-9 rounded-lg border-sidebar-border/70 bg-background/80 pl-8 text-sm shadow-none transition-colors focus-visible:border-primary/40"
                                         onChange={(e) => setSearchPrivateConversations(e.target.value)}
                                         placeholder="Search conversations..."
-                                        className="h-9 rounded-lg border-sidebar-border/70 bg-background/80 pl-8 text-sm shadow-none transition-colors focus-visible:border-primary/40"
+                                        value={searchPrivateConversations}
                                     />
                                 </div>
                                 <Button
-                                    size='icon-sm'
                                     className="size-9 rounded-lg"
                                     onClick={() => setOpenUserListDialog(true)}
+                                    size='icon-sm'
                                 >
                                     <IconPlus className="size-4" />
                                 </Button>
                             </div>
                         </SidebarHeader>
                         <SidebarContent
-                            onScroll={handleScrollPrivateConversations}
                             className="gap-y-2 bg-[radial-gradient(circle_at_top_left,oklch(0.99_0.01_240)_0%,transparent_45%)] px-2 py-2 dark:bg-[radial-gradient(circle_at_top_left,oklch(0.28_0.02_255)_0%,transparent_45%)]"
+                            onScroll={handleScrollPrivateConversations}
                         >
                             {isPrivateConversationsLoading ? (
                                 <LoaderFallback label='Waiting for conversations data...' />
@@ -92,8 +92,8 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                                         <div className="flex flex-col gap-y-1.5 pb-2">
                                             {privateConversations?.map((conversation) => (
                                                 <ChatItem
-                                                    key={conversation.id}
                                                     conversation={conversation}
+                                                    key={conversation.id}
                                                 />
                                             ))}
                                         </div>

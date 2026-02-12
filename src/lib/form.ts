@@ -1,4 +1,4 @@
-export type FormDataValue = string | number | boolean | Blob | null | undefined;
+export type FormDataValue = Blob | boolean | null | number | string | undefined;
 
 export const createFormData = (
     payload: Record<string, FormDataValue>

@@ -8,25 +8,25 @@ import { type UIEvent, useCallback, useMemo } from 'react';
 import type { ApiResponse, CursorMeta } from '@/types/api';
 
 interface UseCursorPaginationListProps<TItem, TQueryKey extends QueryKey> {
-    queryKey: TQueryKey;
     queryFn: (
         pageParam: string | undefined
     ) => Promise<ApiResponse<TItem[], CursorMeta>>;
+    queryKey: TQueryKey;
     scrollThreshold?: number;
 }
 
 export const useCursorPaginationList = <TItem, TQueryKey extends QueryKey>({
-    queryKey,
     queryFn,
+    queryKey,
     scrollThreshold = 120,
 }: UseCursorPaginationListProps<TItem, TQueryKey>) => {
     const {
         data,
-        isLoading,
-        isError,
-        hasNextPage,
-        isFetchingNextPage,
         fetchNextPage,
+        hasNextPage,
+        isError,
+        isFetchingNextPage,
+        isLoading,
     } = useInfiniteQuery<
         ApiResponse<TItem[], CursorMeta>,
         Error,
@@ -34,10 +34,10 @@ export const useCursorPaginationList = <TItem, TQueryKey extends QueryKey>({
         TQueryKey,
         string | undefined
     >({
-        queryKey,
-        queryFn: ({ pageParam }) => queryFn(pageParam),
-        initialPageParam: undefined,
         getNextPageParam: (lastPage) => lastPage?.meta?.nextCursor ?? undefined,
+        initialPageParam: undefined,
+        queryFn: ({ pageParam }) => queryFn(pageParam),
+        queryKey,
     });
 
     const items = useMemo(() => {
@@ -63,12 +63,12 @@ export const useCursorPaginationList = <TItem, TQueryKey extends QueryKey>({
     );
 
     return {
-        items,
-        isLoading,
-        isError,
-        hasNextPage,
-        isFetchingNextPage,
         fetchNextPage,
         handleScroll,
+        hasNextPage,
+        isError,
+        isFetchingNextPage,
+        isLoading,
+        items,
     };
 };

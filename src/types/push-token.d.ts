@@ -1,17 +1,17 @@
-export type DevicePlatform = 'ios' | 'android' | 'web';
+export type DevicePlatform = 'android' | 'ios' | 'web';
 
 export interface RegisterPushTokenPayload {
+    device_id?: string;
     fcm_token: string;
     platform: DevicePlatform;
-    device_id?: string;
 }
 
 export interface PushTokenDeviceResponse {
+    deviceId: null | string;
     id: string;
-    platform: DevicePlatform;
-    deviceId: string | null;
     isActive: boolean;
     lastSeenAt: string;
+    platform: DevicePlatform;
 }
 
 export interface PushTokenDevice extends PushTokenDeviceResponse {

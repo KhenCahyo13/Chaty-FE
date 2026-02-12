@@ -23,25 +23,25 @@ const UserListDialog = () => {
     const [debouncedSearchUsers] = useDebounce(searchUsers, DEFAULT_DEBOUNCE_DELAY);
 
     const {
-        items: users,
-        isLoading,
+        handleScroll: handleScrollUsers,
         isError,
         isFetchingNextPage,
-        handleScroll: handleScrollUsers,
+        isLoading,
+        items: users,
     } = useCursorPaginationList<UserList, ReturnType<typeof queryKeys.users.list>>({
-        queryKey: queryKeys.users.list(DEFAULT_LIMIT, debouncedSearchUsers),
         queryFn: (pageParam) =>
             fetchUsers(DEFAULT_LIMIT, debouncedSearchUsers, pageParam),
+        queryKey: queryKeys.users.list(DEFAULT_LIMIT, debouncedSearchUsers),
     });
 
     const createPrivateConversationMutation = useMutation({
         mutationFn: (user2Id: string) => createPrivateConversation(user2Id),
+        onError: (error) => {
+            toast.error(resolveErrorMessage(error));
+        },
         onSuccess: (response) => {
             setActivePrivateConversationId(response.data.id);
             setOpenUserListDialog(false);
-        },
-        onError: (error) => {
-            toast.error(resolveErrorMessage(error));
         }
     });
 
@@ -50,17 +50,17 @@ const UserListDialog = () => {
     }, [createPrivateConversationMutation]);
 
     return <UserListDialogView
-        openUserListDialog={openUserListDialog}
-        setOpenUserListDialog={setOpenUserListDialog}
-        users={users}
-        isLoading={isLoading}
+        handleCreatePrivateConversation={handleCreatePrivateConversation}
+        handleScrollUsers={handleScrollUsers}
+        isCreatePrivateConversationLoading={createPrivateConversationMutation.isPending}
         isError={isError}
         isFetchingNextUsersPage={isFetchingNextPage}
-        handleScrollUsers={handleScrollUsers}
-        handleCreatePrivateConversation={handleCreatePrivateConversation}
-        isCreatePrivateConversationLoading={createPrivateConversationMutation.isPending}
+        isLoading={isLoading}
+        openUserListDialog={openUserListDialog}
         searchUsers={searchUsers}
+        setOpenUserListDialog={setOpenUserListDialog}
         setSearchUsers={setSearchUsers}
+        users={users}
     />;
 };
 

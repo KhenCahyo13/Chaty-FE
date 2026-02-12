@@ -1,5 +1,5 @@
 export interface SideButtonsViewProps {
-    isDarkTheme: boolean;
     handleToggleTheme: () => void;
+    isDarkTheme: boolean;
     setOpenProfileDialog: (open: boolean) => void;
 }

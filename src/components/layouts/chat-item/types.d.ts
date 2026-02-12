@@ -5,7 +5,7 @@ export interface ChatItemProps {
 }
 
 export interface ChatItemViewProps {
+    activePrivateConversationId: null | string;
     conversation: PrivateConversationList;
-    activePrivateConversationId: string | null;
-    setActivePrivateConversationId: (id: string | null) => void;
+    setActivePrivateConversationId: (id: null | string) => void;
 }

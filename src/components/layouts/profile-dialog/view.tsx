@@ -13,20 +13,20 @@ import type { FormFileFieldState } from '@/types/components';
 import type { ProfileDialogViewProps } from './types';
 
 const ProfileDialogView: FC<ProfileDialogViewProps> = ({
-    form,
-    openProfileDialog,
-    setOpenProfileDialog,
     avatarPreviewUrl,
-    onAvatarFileChange,
-    profile,
-    isProfileLoading,
+    form,
     isProfileError,
+    isProfileLoading,
     isUpdateProfileLoading,
+    onAvatarFileChange,
+    openProfileDialog,
+    profile,
+    setOpenProfileDialog,
 }) => {
     const avatarUrl = avatarPreviewUrl || profile?.profile?.avatarUrl || undefined;
 
     return (
-        <Dialog open={openProfileDialog} onOpenChange={setOpenProfileDialog}>
+        <Dialog onOpenChange={setOpenProfileDialog} open={openProfileDialog}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className='sr-only'>Profile</DialogTitle>
@@ -50,13 +50,13 @@ const ProfileDialogView: FC<ProfileDialogViewProps> = ({
                                     return (
                                         <div className='flex flex-col items-center gap-y-2'>
                                             <label
-                                                htmlFor={field.name}
                                                 className={`cursor-pointer ${isUpdateProfileLoading ? 'pointer-events-none opacity-60' : ''}`}
+                                                htmlFor={field.name}
                                             >
                                                 <div className='relative inline-flex'>
                                                     <Avatar className='size-14 ring-1 ring-white/70 transition hover:opacity-90'>
                                                         {avatarUrl ? (
-                                                            <AvatarImage src={avatarUrl} alt={profile?.profile?.fullName || profile?.username || 'Profile avatar'} className='object-cover' />
+                                                            <AvatarImage alt={profile?.profile?.fullName || profile?.username || 'Profile avatar'} className='object-cover' src={avatarUrl} />
                                                         ) : (
                                                             <AvatarFallback className='bg-primary/10 text-base font-semibold'>
                                                                 {profile?.username.slice(0, 2).toUpperCase()}
@@ -69,11 +69,12 @@ const ProfileDialogView: FC<ProfileDialogViewProps> = ({
                                                 </div>
                                             </label>
                                             <input
-                                                id={field.name}
-                                                type='file'
-                                                name={field.name}
-                                                className='sr-only'
                                                 accept='image/jpg,image/jpeg,image/png,image/webp'
+                                                aria-invalid={isInvalid}
+                                                className='sr-only'
+                                                disabled={isUpdateProfileLoading}
+                                                id={field.name}
+                                                name={field.name}
                                                 onBlur={field.handleBlur}
                                                 onChange={(e) => {
                                                     const file = e.target.files?.[0];
@@ -81,8 +82,7 @@ const ProfileDialogView: FC<ProfileDialogViewProps> = ({
                                                     field.handleChange(file);
                                                     onAvatarFileChange(file);
                                                 }}
-                                                aria-invalid={isInvalid}
-                                                disabled={isUpdateProfileLoading}
+                                                type='file'
                                             />
                                             {isInvalid && (
                                                 <FieldError className='text-center' errors={field.state.meta.errors} />
@@ -104,19 +104,19 @@ const ProfileDialogView: FC<ProfileDialogViewProps> = ({
                         >
                             <FieldGroup>
                                 <TfTextInput
-                                    required
+                                    disabled={isUpdateProfileLoading}
                                     form={form}
                                     label='Full Name'
-                                    placeholder='Enter your full name'
                                     name='fullName'
-                                    disabled={isUpdateProfileLoading}
+                                    placeholder='Enter your full name'
+                                    required
                                 />
                                 <TfTextInput
+                                    disabled={isUpdateProfileLoading}
                                     form={form}
                                     label='About'
-                                    placeholder='Enter about yourself'
                                     name='about'
-                                    disabled={isUpdateProfileLoading}
+                                    placeholder='Enter about yourself'
                                 />
                                 <TfSubmitButton isLoading={isUpdateProfileLoading}>Save</TfSubmitButton>
                             </FieldGroup>

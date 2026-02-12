@@ -17,14 +17,17 @@ const ProfileDialog = () => {
     const queryClient = useQueryClient();
     const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | undefined>(undefined);
 
-    const { data: profile, isLoading: isProfileLoading, isError: isProfileError } = useQuery({
-        queryKey: queryKeys.me.profile(),
-        queryFn: () => fetchProfile(),
+    const { data: profile, isError: isProfileError, isLoading: isProfileLoading } = useQuery({
         enabled: openProfileDialog,
+        queryFn: () => fetchProfile(),
+        queryKey: queryKeys.me.profile(),
     });
 
     const updateProfileMutation = useMutation({
         mutationFn: (data: UpdateProfileFormValues) => updateProfile(data),
+        onError: (error) => {
+            toast.error(resolveErrorMessage(error));
+        },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
                 queryKey: queryKeys.me.profile(),
@@ -40,18 +43,15 @@ const ProfileDialog = () => {
             });
             toast.success('Profile updated successfully.');
         },
-        onError: (error) => {
-            toast.error(resolveErrorMessage(error));
-        },
     });
 
     const form = useForm({
         defaultValues: updateProfileSchemaDefaultValues,
-        validators: {
-            onSubmit: updateProfileSchema,
-        },
         onSubmit: ({ value }) => {
             updateProfileMutation.mutate(value);
+        },
+        validators: {
+            onSubmit: updateProfileSchema,
         },
     });
 
@@ -97,15 +97,15 @@ const ProfileDialog = () => {
     }, [avatarPreviewUrl]);
 
     return <ProfileDialogView
-        form={form}
-        openProfileDialog={openProfileDialog}
-        setOpenProfileDialog={handleOpenProfileDialogChange}
         avatarPreviewUrl={avatarPreviewUrl}
-        onAvatarFileChange={handleAvatarFileChange}
-        profile={profile?.data}
-        isProfileLoading={isProfileLoading}
+        form={form}
         isProfileError={isProfileError}
+        isProfileLoading={isProfileLoading}
         isUpdateProfileLoading={updateProfileMutation.isPending}
+        onAvatarFileChange={handleAvatarFileChange}
+        openProfileDialog={openProfileDialog}
+        profile={profile?.data}
+        setOpenProfileDialog={handleOpenProfileDialogChange}
     />;
 };
 

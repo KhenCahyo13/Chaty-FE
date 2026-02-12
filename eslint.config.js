@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import perfectionist from 'eslint-plugin-perfectionist'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
@@ -20,6 +21,7 @@ export default defineConfig([
     files: ['**/*.{ts,tsx}'],
     plugins: {
       'simple-import-sort': simpleImportSort,
+      perfectionist,
     },
     extends: [
       js.configs.recommended,
@@ -35,6 +37,11 @@ export default defineConfig([
       'max-lines': ['error', { max: 500 }],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+      'perfectionist/sort-objects': ['error', { type: 'natural', order: 'asc' }],
+      'perfectionist/sort-object-types': ['error', { type: 'natural', order: 'asc' }],
+      'perfectionist/sort-interfaces': ['error', { type: 'natural', order: 'asc' }],
+      'perfectionist/sort-union-types': ['error', { type: 'natural', order: 'asc' }],
+      'perfectionist/sort-jsx-props': ['error', { type: 'natural', order: 'asc' }],
       'no-console': 'error',
     },
   },

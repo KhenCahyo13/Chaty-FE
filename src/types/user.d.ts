@@ -1,13 +1,13 @@
 export interface UserProfile {
-    id: string;
+    about: null | string;
+    avatarUrl: null | string;
     fullName: string;
-    about: string | null;
-    avatarUrl: string | null;
+    id: string;
 }
 
 export interface UserList {
-    id: string;
-    username: string;
     email: string;
-    profile: UserProfile | null;
+    id: string;
+    profile: null | UserProfile;
+    username: string;
 }

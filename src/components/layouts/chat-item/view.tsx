@@ -9,8 +9,8 @@ import { cn } from '@/lib/utils';
 import type { ChatItemViewProps } from './types';
 
 const ChatItemView: FC<ChatItemViewProps> = ({
-    conversation,
     activePrivateConversationId,
+    conversation,
     setActivePrivateConversationId
 }) => (
     <div
@@ -24,7 +24,7 @@ const ChatItemView: FC<ChatItemViewProps> = ({
     >
         <Avatar className="size-10 ring-1 ring-white/70">
             {conversation.sender.profile && conversation.sender.profile.avatarUrl ? (
-                <AvatarImage src={conversation.sender.profile.avatarUrl} alt={conversation.sender.profile.fullName} />
+                <AvatarImage alt={conversation.sender.profile.fullName} src={conversation.sender.profile.avatarUrl} />
             ) : (
                 <AvatarFallback className="bg-primary/10 text-sm font-semibold">
                     {conversation.sender.username.slice(0, 2).toUpperCase()}

@@ -1,11 +1,11 @@
 export interface ApiResponse<TData, TMeta = null, TError = null> {
-    success: boolean;
-    message: string;
     data: TData;
-    meta?: TMeta;
     errors?: TError;
+    message: string;
+    meta?: TMeta;
+    success: boolean;
 }
 
 export interface CursorMeta {
-    nextCursor: string | null;
+    nextCursor: null | string;
 }

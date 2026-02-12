@@ -21,8 +21,8 @@ export const formatLastSendTime = (dateString: string): string => {
     if (diffDays === 0) {
         return date.toLocaleTimeString([], {
             hour: '2-digit',
-            minute: '2-digit',
             hour12: false,
+            minute: '2-digit',
         });
     }
 

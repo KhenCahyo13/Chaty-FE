@@ -10,8 +10,8 @@ import type { LoginDialogViewProps } from './types';
 
 const LoginDialogView: FC<LoginDialogViewProps> = ({
     form,
-    token,
-    isLoginLoading
+    isLoginLoading,
+    token
 }) => (
     <Dialog open={!token}>
         <DialogContent showCloseButton={false}>
@@ -28,19 +28,19 @@ const LoginDialogView: FC<LoginDialogViewProps> = ({
             >
                 <FieldGroup>
                     <TfTextInput
-                        required
                         form={form}
                         label='Username'
-                        placeholder='Username'
                         name='username'
+                        placeholder='Username'
+                        required
                     />
                     <TfTextInput
-                        required
-                        type='password'
                         form={form}
                         label='Password'
-                        placeholder='Password'
                         name='password'
+                        placeholder='Password'
+                        required
+                        type='password'
                     />
                     <TfSubmitButton isLoading={isLoginLoading}>Sign In</TfSubmitButton>
                 </FieldGroup>

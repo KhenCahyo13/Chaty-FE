@@ -21,12 +21,12 @@ export const ImageTextFallback: FC<ImageTextFallbackProps> = ({
     )}>
         <div className='flex flex-col items-center gap-y-4'>
             <img
-                src={`/assets/illustrations/${imageName}.svg`}
                 alt="Fallback"
                 className={cn(
                     'w-56',
                     imageClassName
                 )}
+                src={`/assets/illustrations/${imageName}.svg`}
             />
             <p className='text-muted-foreground text-sm text-center'>{label}</p>
         </div>

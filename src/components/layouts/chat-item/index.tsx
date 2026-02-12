@@ -11,8 +11,8 @@ const ChatItem: FC<ChatItemProps> = ({
     const { activePrivateConversationId, setActivePrivateConversationId } = usePrivateConversationStore();
 
     return <ChatItemView
-        conversation={conversation}
         activePrivateConversationId={activePrivateConversationId}
+        conversation={conversation}
         setActivePrivateConversationId={setActivePrivateConversationId}
     />;
 };

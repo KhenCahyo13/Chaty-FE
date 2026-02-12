@@ -9,8 +9,8 @@ const SideButtons = () => {
 
     return (
         <SideButtonsView
-            isDarkTheme={theme === 'dark'}
             handleToggleTheme={toggleTheme}
+            isDarkTheme={theme === 'dark'}
             setOpenProfileDialog={setOpenProfileDialog}
         />
     );

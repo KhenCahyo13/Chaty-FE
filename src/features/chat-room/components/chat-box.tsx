@@ -19,35 +19,35 @@ const ChatBox: FC<ChatBoxProps> = ({
             }}
         >
             <Button
+                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
+                size='icon-sm'
                 type='button'
                 variant='ghost'
-                size='icon-sm'
-                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
             >
                 <IconPlus className="size-5 text-muted-foreground" />
             </Button>
             <div className="flex flex-1 rounded-xl border border-border/70 bg-white px-1 shadow-[0_20px_26px_-30px_oklch(0.28_0.04_250)] dark:bg-muted/40 dark:shadow-none">
                 <TfTextInput
-                    form={form}
-                    placeholder='Write a message'
-                    name='content'
-                    disabled={isCreateMessageLoading}
                     className="h-9 border-none bg-transparent text-[13px] shadow-none focus-visible:ring-0"
+                    disabled={isCreateMessageLoading}
+                    form={form}
+                    name='content'
+                    placeholder='Write a message'
                 />
             </div>
             <Button
-                type='submit'
-                size='icon-sm'
                 className="rounded-lg"
                 disabled={isCreateMessageLoading}
+                size='icon-sm'
+                type='submit'
             >
                 <IconSend2 className="size-4" />
             </Button>
             <Button
+                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
+                size='icon-sm'
                 type='button'
                 variant='ghost'
-                size='icon-sm'
-                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
             >
                 <IconMicrophone className="size-5 text-muted-foreground" />
             </Button>

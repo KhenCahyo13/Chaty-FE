@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface PrivateConversationStoreState {
-    activePrivateConversationId: string | null;
-    setActivePrivateConversationId: (id: string | null) => void;
+    activePrivateConversationId: null | string;
+    setActivePrivateConversationId: (id: null | string) => void;
 }
 
 export const usePrivateConversationStore =
@@ -12,7 +12,7 @@ export const usePrivateConversationStore =
             persist(
                 (set) => ({
                     activePrivateConversationId: null,
-                    setActivePrivateConversationId: (id: string | null) =>
+                    setActivePrivateConversationId: (id: null | string) =>
                         set({ activePrivateConversationId: id }),
                 }),
                 {

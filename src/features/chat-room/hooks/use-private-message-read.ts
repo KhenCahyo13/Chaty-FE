@@ -16,7 +16,7 @@ import type {
 import type { SocketPrivateMessageReadPayload } from '@/types/realtime';
 
 interface UsePrivateMessageReadProps {
-    activePrivateConversationId: string | null;
+    activePrivateConversationId: null | string;
     messages: PrivateConversationDetailsMessage[];
 }
 
@@ -25,7 +25,7 @@ export const usePrivateMessageRead = ({
     messages,
 }: UsePrivateMessageReadProps) => {
     const queryClient = useQueryClient();
-    const requestedReadRef = useRef<string | null>(null);
+    const requestedReadRef = useRef<null | string>(null);
 
     const lastMessageId = useMemo(() => {
         const lastMessage = messages[messages.length - 1];

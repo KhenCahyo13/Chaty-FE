@@ -1,43 +1,43 @@
 import type { UserList } from './user';
 
 export interface PrivateConversationList {
-    id: string;
     createdAt: string;
-    updatedAt: string;
-    sender: UserList;
+    id: string;
     lastMessage: PrivateConversationListLastMessage;
+    sender: UserList;
     unreadMessageCount: number;
+    updatedAt: string;
 }
 
 export interface PrivateConversationListLastMessage {
-    id: string;
     content: string;
-    isDeleted: boolean;
-    isRead: boolean;
-    isMe: boolean;
     createdAt: string;
+    id: string;
+    isDeleted: boolean;
+    isMe: boolean;
+    isRead: boolean;
 }
 
 export interface PrivateConversationDetails {
-    id: string;
     createdAt: string;
-    updatedAt: string;
+    id: string;
     receiver: UserList;
+    updatedAt: string;
 }
 
 export interface PrivateConversationDetailsMessage {
-    id: string;
-    content: string | null;
-    isMe: boolean;
-    isDeleted: boolean;
-    isRead: boolean;
+    content: null | string;
     createdAt: string;
+    id: string;
+    isDeleted: boolean;
+    isMe: boolean;
+    isRead: boolean;
 }
 
 export interface CreatePrivateConversationResponse {
+    createdAt: string;
     id: string;
+    updatedAt: string;
     user1Id: string;
     user2Id: string;
-    createdAt: string;
-    updatedAt: string;
 }

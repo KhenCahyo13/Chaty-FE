@@ -4,7 +4,7 @@ export interface Token {
 }
 
 export interface User {
+    email: string;
     id: string;
     username: string;
-    email: string;
 }

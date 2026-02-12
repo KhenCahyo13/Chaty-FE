@@ -9,9 +9,9 @@ export const fetchUsers = async (
 ): Promise<ApiResponse<UserList[], CursorMeta>> => {
     const response = await authenticatedApi.get('/users', {
         params: {
+            cursor,
             limit,
             search,
-            cursor,
         },
     });
 

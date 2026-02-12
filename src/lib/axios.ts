@@ -31,10 +31,10 @@ authenticatedApi.interceptors.request.use((config) => {
     return config;
 });
 
-let refreshingPromise: Promise<Token | null> | null = null;
+let refreshingPromise: null | Promise<null | Token> = null;
 
-async function refreshAccessToken(): Promise<Token | null> {
-    const { token, setIsRefreshingToken, setUser } = useAuthStore.getState();
+async function refreshAccessToken(): Promise<null | Token> {
+    const { setIsRefreshingToken, setUser, token } = useAuthStore.getState();
 
     if (!token?.refresh_token) return null;
 
@@ -66,7 +66,7 @@ async function refreshAccessToken(): Promise<Token | null> {
     }
 }
 
-function ensureRefresh(): Promise<Token | null> {
+function ensureRefresh(): Promise<null | Token> {
     if (!refreshingPromise) {
         refreshingPromise = refreshAccessToken().finally(() => {
             refreshingPromise = null;

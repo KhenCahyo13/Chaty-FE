@@ -14,9 +14,9 @@ export const fetchPrivateConversations = async (
 ): Promise<ApiResponse<PrivateConversationList[], CursorMeta>> => {
     const response = await authenticatedApi.get('/private-conversations', {
         params: {
+            cursor,
             limit,
             search,
-            cursor,
         },
     });
 
@@ -40,8 +40,8 @@ export const fetchPrivateConversationMessagesById = async (
         `/private-conversations/${id}/messages`,
         {
             params: {
-                limit,
                 cursor,
+                limit,
             },
         }
     );

@@ -9,16 +9,16 @@ import ChatHeader from './components/chat-header';
 import type { ChatRoomViewProps } from './types';
 
 const ChatRoomView: FC<ChatRoomViewProps> = ({
-    messageForm,
     activePrivateConversationId,
-    room,
-    messages,
-    isRoomLoading,
-    isRoomError,
+    handleScrollMessages,
     isCreateMessageLoading,
     isFetchingNextMessagesPage,
-    handleScrollMessages,
+    isRoomError,
+    isRoomLoading,
+    messageForm,
+    messages,
     messagesContainerRef,
+    room,
 }) => {
     return (
         <div className="relative flex h-svh flex-col overflow-hidden">
@@ -38,9 +38,9 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
 
                             {messages.length ? (
                                 <div
-                                    ref={messagesContainerRef}
-                                    onScroll={handleScrollMessages}
                                     className="relative z-10 flex flex-1 flex-col gap-y-2.5 overflow-y-auto px-2.5 py-3 md:px-4"
+                                    onScroll={handleScrollMessages}
+                                    ref={messagesContainerRef}
                                 >
                                     {isFetchingNextMessagesPage && (
                                         <div className="mx-auto rounded-full border border-border/60 bg-background/80 px-2.5 py-0.5 text-center text-[10px] text-muted-foreground backdrop-blur">

@@ -10,14 +10,14 @@ import { TooltipProvider } from "../ui/tooltip";
 import ThemeSync from './theme-sync';
 
 interface AppProviderProps extends LayoutProps {
-    router: typeof router;
     queryClient: QueryClient;
+    router: typeof router;
 }
 
 export const AppProvider: FC<AppProviderProps> = ({
     children,
-    router,
-    queryClient
+    queryClient,
+    router
 }) => (
     <QueryClientProvider client={queryClient}>
         <TooltipProvider>

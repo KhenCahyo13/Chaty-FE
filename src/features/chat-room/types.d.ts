@@ -26,16 +26,16 @@ export interface ChatHeaderProps {
 }
 
 export interface ChatRoomViewProps {
-    messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
-    activePrivateConversationId: string | null;
-    room: PrivateConversationDetails | undefined;
-    messages: PrivateConversationDetailsMessage[];
-    isRoomLoading: boolean;
-    isRoomError: boolean;
-    isCreateMessageLoading: boolean;
-    isFetchingNextMessagesPage: boolean;
+    activePrivateConversationId: null | string;
     handleScrollMessages: (
         e: UIEvent<HTMLDivElement, globalThis.UIEvent>
     ) => void;
+    isCreateMessageLoading: boolean;
+    isFetchingNextMessagesPage: boolean;
+    isRoomError: boolean;
+    isRoomLoading: boolean;
+    messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
+    messages: PrivateConversationDetailsMessage[];
     messagesContainerRef: RefObject<HTMLDivElement | null>;
+    room: PrivateConversationDetails | undefined;
 }

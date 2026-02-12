@@ -8,13 +8,13 @@ import type { updateProfileSchema } from './schema';
 export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>;
 
 export interface ProfileDialogViewProps {
-    form: ReturnType<typeof useForm<UpdateProfileFormValues>>;
-    openProfileDialog: boolean;
-    setOpenProfileDialog: (open: boolean) => void;
     avatarPreviewUrl?: string;
-    onAvatarFileChange: (file?: File) => void;
-    profile: UserList | undefined;
-    isProfileLoading: boolean;
+    form: ReturnType<typeof useForm<UpdateProfileFormValues>>;
     isProfileError: boolean;
+    isProfileLoading: boolean;
     isUpdateProfileLoading: boolean;
+    onAvatarFileChange: (file?: File) => void;
+    openProfileDialog: boolean;
+    profile: undefined | UserList;
+    setOpenProfileDialog: (open: boolean) => void;
 }

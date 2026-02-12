@@ -14,9 +14,9 @@ export const updateProfile = async (
     data: UpdateProfileFormValues
 ): Promise<ApiResponse<UserList>> => {
     const formData = createFormData({
-        fullName: data.fullName,
         about: data.about ?? '',
         avatar: data.avatar,
+        fullName: data.fullName,
     });
 
     const response = await authenticatedApi.patch('/me', formData);

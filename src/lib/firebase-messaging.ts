@@ -12,19 +12,19 @@ const FIREBASE_MESSAGING_SW_PATH = '/firebase-messaging-sw.js';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID as string,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string,
     messagingSenderId: import.meta.env
         .VITE_FIREBASE_MESSAGING_SENDER_ID as string,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID as string,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string,
 };
 
 const rawVapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY as
     | string
     | undefined;
 
-const normalizeVapidKey = (value?: string): string | null => {
+const normalizeVapidKey = (value?: string): null | string => {
     if (!value) return null;
 
     const normalized = value.trim().replace(/^['"]|['"]$/g, '');
@@ -54,18 +54,18 @@ let isForegroundListenerInitialized = false;
 const getMessagingServiceWorkerPath = (): string => {
     const searchParams = new URLSearchParams({
         apiKey: firebaseConfig.apiKey,
+        appId: firebaseConfig.appId,
         authDomain: firebaseConfig.authDomain,
+        messagingSenderId: firebaseConfig.messagingSenderId,
         projectId: firebaseConfig.projectId,
         storageBucket: firebaseConfig.storageBucket,
-        messagingSenderId: firebaseConfig.messagingSenderId,
-        appId: firebaseConfig.appId,
     });
 
     return `${FIREBASE_MESSAGING_SW_PATH}?${searchParams.toString()}`;
 };
 
 const getFirebaseMessagingRegistration =
-    async (): Promise<ServiceWorkerRegistration | null> => {
+    async (): Promise<null | ServiceWorkerRegistration> => {
         if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
             return null;
         }
@@ -91,7 +91,7 @@ export const getOrCreateWebDeviceId = (): string | undefined => {
     return nextDeviceId;
 };
 
-export const getWebFcmToken = async (): Promise<string | null> => {
+export const getWebFcmToken = async (): Promise<null | string> => {
     if (typeof window === 'undefined') return null;
     if (!('Notification' in window) || !('serviceWorker' in navigator)) {
         return null;
@@ -131,8 +131,8 @@ export const getWebFcmToken = async (): Promise<string | null> => {
         }
 
         const token = await getToken(messaging, {
-            vapidKey,
             serviceWorkerRegistration,
+            vapidKey,
         });
 
         return token || null;
@@ -172,8 +172,8 @@ export const initializeForegroundNotificationListener =
             void navigator.serviceWorker.ready.then((registration) =>
                 registration.showNotification(title, {
                     body,
-                    icon,
                     data: payload.data,
+                    icon,
                 })
             );
         });

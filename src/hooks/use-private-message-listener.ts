@@ -10,8 +10,8 @@ import type { PrivateConversationDetailsMessage } from '@/types/private-conversa
 import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 interface UsePrivateMessageListenerProps {
-    activePrivateConversationId: string | null;
-    eventName: 'private-message:sent' | 'private-message:new';
+    activePrivateConversationId: null | string;
+    eventName: 'private-message:new' | 'private-message:sent';
 }
 
 export const usePrivateMessageListener = ({
@@ -54,9 +54,9 @@ export const usePrivateMessageListener = ({
                         CursorMeta
                     > = {
                         data: [],
+                        message: '',
                         meta: { nextCursor: null },
                         success: true,
-                        message: '',
                     };
                     const safeFirstPage = firstPage ?? fallbackFirstPage;
 

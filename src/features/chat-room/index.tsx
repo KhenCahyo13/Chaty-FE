@@ -21,10 +21,10 @@ const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const queryClient = useQueryClient();
 
-    const { data: room, isLoading: isRoomLoading, isError: isRoomError } = useQuery({
-        queryKey: queryKeys.privateConversations.detail(activePrivateConversationId!),
-        queryFn: () => fetchPrivateConversationDetails(activePrivateConversationId!),
+    const { data: room, isError: isRoomError, isLoading: isRoomLoading } = useQuery({
         enabled: !!activePrivateConversationId,
+        queryFn: () => fetchPrivateConversationDetails(activePrivateConversationId!),
+        queryKey: queryKeys.privateConversations.detail(activePrivateConversationId!),
     })
 
     const {
@@ -39,11 +39,11 @@ const ChatRoom = () => {
         ReturnType<typeof queryKeys.privateConversations.message>,
         string | undefined
     >({
-        queryKey: queryKeys.privateConversations.message(activePrivateConversationId!),
-        queryFn: ({ pageParam }) => fetchPrivateConversationMessagesById(activePrivateConversationId!, 15, pageParam),
         enabled: !!activePrivateConversationId,
-        initialPageParam: undefined,
         getNextPageParam: (lastPage) => lastPage?.meta?.nextCursor ?? undefined,
+        initialPageParam: undefined,
+        queryFn: ({ pageParam }) => fetchPrivateConversationMessagesById(activePrivateConversationId!, 15, pageParam),
+        queryKey: queryKeys.privateConversations.message(activePrivateConversationId!),
     });
 
     const memoizedMessages = useMemo(() => {
@@ -71,16 +71,19 @@ const ChatRoom = () => {
 
     const messageForm = useForm({
         defaultValues: createMessageFormDefaultValues,
-        validators: {
-            onSubmit: createMessageFormSchema
-        },
         onSubmit: async ({ value }) => {
             messageMutation.mutate(value);
+        },
+        validators: {
+            onSubmit: createMessageFormSchema
         }
     });
 
     const messageMutation = useMutation({
         mutationFn: (data: CreateMessageFormValues) => createMessage(data),
+        onError: (error) => {
+            toast.error(resolveErrorMessage(error));
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: queryKeys.privateConversations.lists(),
@@ -93,9 +96,6 @@ const ChatRoom = () => {
             }
 
             messageForm.setFieldValue('content', '');
-        },
-        onError: (error) => {
-            toast.error(resolveErrorMessage(error));
         }
     });
 
@@ -107,12 +107,12 @@ const ChatRoom = () => {
 
     const { handleScrollMessages, messagesContainerRef } = useChatRoomScroll({
         activePrivateConversationId,
-        messagesLength: memoizedMessages.length,
-        isRoomLoading,
-        isRoomError,
-        isFetchingNextMessagesPage,
-        hasNextMessagesPage,
         fetchNextMessagesPage,
+        hasNextMessagesPage,
+        isFetchingNextMessagesPage,
+        isRoomError,
+        isRoomLoading,
+        messagesLength: memoizedMessages.length,
     });
 
     usePrivateMessageRead({
@@ -121,16 +121,16 @@ const ChatRoom = () => {
     });
 
     return <ChatRoomView
-        messageForm={messageForm}
         activePrivateConversationId={activePrivateConversationId}
-        room={room?.data}
-        messages={memoizedMessages}
-        isRoomLoading={isRoomLoading}
-        isRoomError={isRoomError}
+        handleScrollMessages={handleScrollMessages}
         isCreateMessageLoading={messageMutation.isPending}
         isFetchingNextMessagesPage={isFetchingNextMessagesPage}
-        handleScrollMessages={handleScrollMessages}
+        isRoomError={isRoomError}
+        isRoomLoading={isRoomLoading}
+        messageForm={messageForm}
+        messages={memoizedMessages}
         messagesContainerRef={messagesContainerRef}
+        room={room?.data}
     />;
 };
 

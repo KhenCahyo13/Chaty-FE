@@ -1,20 +1,20 @@
 export interface SocketPrivateMessageCreatedPayload {
-    private_conversation_id: string;
     message: SocketPrivateMessagePayload;
+    private_conversation_id: string;
 }
 
 export interface SocketPrivateMessagePayload {
-    id: string;
-    content: string | null;
-    senderId: string;
-    isDeleted: boolean;
+    content: null | string;
     createdAt: string;
+    id: string;
+    isDeleted: boolean;
     readsCount: number;
+    senderId: string;
 }
 
 export interface SocketPrivateMessageReadPayload {
-    privateConversationId: string;
-    readerId: string;
     messageIds: string[];
+    privateConversationId: string;
     readAt: Date;
+    readerId: string;
 }

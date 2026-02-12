@@ -13,22 +13,25 @@ import type { LoginFormValues } from './types';
 import LoginDialogView from './view';
 
 const LoginDialog = () => {
-    const { token, setToken, setUser } = useAuthStore();
+    const { setToken, setUser, token } = useAuthStore();
     const { activePrivateConversationId } = usePrivateConversationStore();
     const queryClient = useQueryClient();
 
     const form = useForm({
         defaultValues: loginFormDefaultValues,
-        validators: {
-            onSubmit: loginFormSchema
-        },
         onSubmit: ({ value }) => {
             mutation.mutate(value);
+        },
+        validators: {
+            onSubmit: loginFormSchema
         }
     });
 
     const mutation = useMutation({
         mutationFn: (data: LoginFormValues) => login(data),
+        onError: (error) => {
+            toast.error(resolveErrorMessage(error));
+        },
         onSuccess: async (response) => {
             setToken(response.meta!);
             setUser(response.data);
@@ -43,16 +46,13 @@ const LoginDialog = () => {
                 });
             }
             form.reset();
-        },
-        onError: (error) => {
-            toast.error(resolveErrorMessage(error));
         }
     });
 
     return <LoginDialogView
         form={form}
-        token={token}
         isLoginLoading={mutation.isPending}
+        token={token}
     />;
 };
 

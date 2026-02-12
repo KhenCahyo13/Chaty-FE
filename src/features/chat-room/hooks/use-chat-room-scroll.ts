@@ -1,23 +1,23 @@
 import { type UIEvent, useCallback, useEffect, useRef } from 'react';
 
 interface UseChatRoomScrollProps {
-    activePrivateConversationId: string | null;
-    messagesLength: number;
-    isRoomLoading: boolean;
-    isRoomError: boolean;
-    isFetchingNextMessagesPage: boolean;
-    hasNextMessagesPage: boolean;
+    activePrivateConversationId: null | string;
     fetchNextMessagesPage: () => Promise<unknown>;
+    hasNextMessagesPage: boolean;
+    isFetchingNextMessagesPage: boolean;
+    isRoomError: boolean;
+    isRoomLoading: boolean;
+    messagesLength: number;
 }
 
 export const useChatRoomScroll = ({
     activePrivateConversationId,
-    messagesLength,
-    isRoomLoading,
-    isRoomError,
-    isFetchingNextMessagesPage,
-    hasNextMessagesPage,
     fetchNextMessagesPage,
+    hasNextMessagesPage,
+    isFetchingNextMessagesPage,
+    isRoomError,
+    isRoomLoading,
+    messagesLength,
 }: UseChatRoomScrollProps) => {
     const messagesContainerRef = useRef<HTMLDivElement | null>(null);
     const prevScrollHeightRef = useRef(0);
@@ -31,8 +31,8 @@ export const useChatRoomScroll = ({
         if (!el) return false;
 
         el.scrollTo({
-            top: el.scrollHeight,
             behavior,
+            top: el.scrollHeight,
         });
 
         shouldAutoScrollOnNewMessageRef.current = true;

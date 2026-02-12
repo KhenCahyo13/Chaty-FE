@@ -6,14 +6,14 @@ export interface LayoutProps {
 }
 
 export interface FormFileFieldState {
+    handleBlur: () => void;
+    handleChange: (value: File | undefined) => void;
     name: string;
     state: {
         meta: {
+            errors: Array<undefined | { message?: string }>;
             isTouched: boolean;
             isValid: boolean;
-            errors: Array<{ message?: string } | undefined>;
         };
     };
-    handleBlur: () => void;
-    handleChange: (value: File | undefined) => void;
 }
