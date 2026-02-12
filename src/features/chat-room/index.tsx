@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form';
 import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type UIEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
@@ -15,6 +15,7 @@ import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
 import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
+import { useChatRoomScroll } from './hooks/use-chat-room-scroll';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
 import type { CreateMessageFormValues } from './types';
 import ChatRoomView from './view'
@@ -23,25 +24,6 @@ const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const { user } = useAuthStore();
     const queryClient = useQueryClient();
-    const messagesContainerRef = useRef<HTMLDivElement | null>(null);
-    const prevScrollHeightRef = useRef(0);
-    const hasAutoScrolledRef = useRef(false);
-    const prevMessagesLengthRef = useRef(0);
-    const shouldAutoScrollOnNewMessageRef = useRef(true);
-
-    const scrollToBottom = useCallback((behavior: ScrollBehavior = 'auto') => {
-        const el = messagesContainerRef.current;
-
-        if (!el) return false;
-
-        el.scrollTo({
-            top: el.scrollHeight,
-            behavior,
-        });
-
-        shouldAutoScrollOnNewMessageRef.current = true;
-        return true;
-    }, []);
 
     const { data: room, isLoading: isRoomLoading, isError: isRoomError } = useQuery({
         queryKey: queryKeys.privateConversations.detail(activePrivateConversationId!),
@@ -89,33 +71,6 @@ const ChatRoom = () => {
         }
     });
 
-    const handleScrollMessages = useCallback(
-        async (e: UIEvent<HTMLDivElement>) => {
-            const el = e.target as HTMLDivElement;
-            const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 64;
-
-            shouldAutoScrollOnNewMessageRef.current = isNearBottom;
-
-            // scroll ke atas → load pesan lama
-            if (el.scrollTop === 0 && hasNextMessagesPage && !isFetchingNextMessagesPage) {
-                prevScrollHeightRef.current = el.scrollHeight;
-
-                await fetchNextMessagesPage();
-
-                requestAnimationFrame(() => {
-                    el.scrollTop = el.scrollHeight - prevScrollHeightRef.current;
-                    shouldAutoScrollOnNewMessageRef.current = false;
-                });
-            }
-        },
-        [
-            fetchNextMessagesPage,
-            hasNextMessagesPage,
-            isFetchingNextMessagesPage,
-        ]
-    );
-
-
     const messageMutation = useMutation({
         mutationFn: (data: CreateMessageFormValues) => createMessage(data),
         onSuccess: () => {
@@ -142,46 +97,15 @@ const ChatRoom = () => {
         }
     }, [messageForm, activePrivateConversationId]);
 
-    useEffect(() => {
-        hasAutoScrolledRef.current = false;
-        prevMessagesLengthRef.current = 0;
-        shouldAutoScrollOnNewMessageRef.current = true;
-    }, [activePrivateConversationId]);
-
-    useEffect(() => {
-        if (!activePrivateConversationId || isRoomLoading || isRoomError) return;
-        if (!memoizedMessages.length || isFetchingNextMessagesPage) return;
-
-        const currentLength = memoizedMessages.length;
-        const prevLength = prevMessagesLengthRef.current;
-
-        if (!hasAutoScrolledRef.current) {
-            requestAnimationFrame(() => {
-                const hasScrolled = scrollToBottom('auto');
-
-                if (!hasScrolled) return;
-
-                hasAutoScrolledRef.current = true;
-                prevMessagesLengthRef.current = currentLength;
-            });
-            return;
-        }
-
-        if (currentLength > prevLength && shouldAutoScrollOnNewMessageRef.current) {
-            requestAnimationFrame(() => {
-                scrollToBottom('smooth');
-            });
-        }
-
-        prevMessagesLengthRef.current = currentLength;
-    }, [
+    const { handleScrollMessages, messagesContainerRef } = useChatRoomScroll({
         activePrivateConversationId,
-        memoizedMessages,
-        isFetchingNextMessagesPage,
+        messagesLength: memoizedMessages.length,
         isRoomLoading,
         isRoomError,
-        scrollToBottom,
-    ]);
+        isFetchingNextMessagesPage,
+        hasNextMessagesPage,
+        fetchNextMessagesPage,
+    });
 
     // Listen for new messages
     useEffect(() => {
