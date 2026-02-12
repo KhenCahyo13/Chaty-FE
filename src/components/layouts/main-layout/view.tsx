@@ -1,8 +1,10 @@
+import { IconPlus } from '@tabler/icons-react';
 import { type FC, memo } from 'react';
 
 import { ImageTextFallback } from '@/components/fallback/image-text';
 import { LoaderFallback } from '@/components/fallback/loader';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getSocketConnectionBadgeClassName, getSocketConnectionBadgeText } from '@/lib/socket';
@@ -10,6 +12,7 @@ import { cn } from '@/lib/utils';
 
 import ChatItem from '../chat-item';
 import LoginDialog from '../login-dialog';
+import UserListDialog from '../user-list-dialog';
 import type { MainLayoutViewProps } from './types';
 
 const MainLayoutView: FC<MainLayoutViewProps> = ({
@@ -17,6 +20,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
     privateConversations,
     isPrivateConversationsLoading,
     isPrivateConversationsError,
+    setOpenUserListDialog,
 }) => (
     <>
         {/* Main Layout */}
@@ -31,7 +35,12 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                             {getSocketConnectionBadgeText()}
                         </Badge>
                     </div>
-                    <Input placeholder="Search chats..." />
+                    <div className='flex items-center gap-x-2'>
+                        <Input placeholder="Search chats..." />
+                        <Button size='icon-sm' onClick={() => setOpenUserListDialog(true)}>
+                            <IconPlus />
+                        </Button>
+                    </div>
                 </SidebarHeader>
                 <SidebarContent>
                     {isPrivateConversationsLoading ? (
@@ -70,6 +79,8 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
         </SidebarProvider>
         {/* Login Dialog */}
         <LoginDialog />
+        {/* User List Dialog */}
+        <UserListDialog />
     </>
 );
 

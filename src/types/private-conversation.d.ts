@@ -1,21 +1,11 @@
+import type { UserList } from './user';
+
 export interface PrivateConversationList {
     id: string;
     createdAt: string;
     updatedAt: string;
-    sender: PrivateConversationListUser;
+    sender: UserList;
     lastMessage: PrivateConversationListLastMessage;
-}
-
-export interface PrivateConversationListUser {
-    id: string;
-    username: string;
-    email: string;
-    profile: {
-        id: string;
-        fullName: string;
-        about: string | null;
-        avatarUrl: string | null;
-    } | null;
 }
 
 export interface PrivateConversationListLastMessage {
@@ -31,7 +21,7 @@ export interface PrivateConversationDetails {
     id: string;
     createdAt: string;
     updatedAt: string;
-    receiver: PrivateConversationListUser;
+    receiver: UserList;
 }
 
 export interface PrivateConversationDetailsMessage {

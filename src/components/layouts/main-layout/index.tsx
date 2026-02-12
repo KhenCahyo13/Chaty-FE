@@ -6,6 +6,7 @@ import { formatSocketPrivateMessage } from '@/lib/message';
 import { queryKeys } from '@/lib/query-keys';
 import { socket } from '@/lib/socket';
 import { useAuthStore } from '@/stores/auth-store';
+import { useComponentsStore } from '@/stores/components';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { LayoutProps } from '@/types/components';
@@ -19,6 +20,7 @@ const MainLayout: FC<LayoutProps> = ({
 }) => {
     const queryClient = useQueryClient();
     const { activePrivateConversationId } = usePrivateConversationStore();
+    const { setOpenUserListDialog } = useComponentsStore();
     const { user } = useAuthStore();
 
     const [privateConversationsLimit, _setPrivateConversationsLimit] = useState(10);
@@ -87,6 +89,7 @@ const MainLayout: FC<LayoutProps> = ({
         privateConversations={privateConversations?.data}
         isPrivateConversationsLoading={isPrivateConversationsLoading}
         isPrivateConversationsError={isPrivateConversationsError}
+        setOpenUserListDialog={setOpenUserListDialog}
     />;
 };
 

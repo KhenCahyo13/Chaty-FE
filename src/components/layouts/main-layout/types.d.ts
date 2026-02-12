@@ -5,4 +5,5 @@ export interface MainLayoutViewProps extends LayoutProps {
     privateConversations: PrivateConversationList[] | undefined;
     isPrivateConversationsLoading: boolean;
     isPrivateConversationsError: boolean;
+    setOpenUserListDialog: (open: boolean) => void;
 }

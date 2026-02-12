@@ -14,4 +14,12 @@ export const queryKeys = {
         message: (id: string) =>
             [...queryKeys.privateConversations.messages(), id] as const,
     },
+
+    // Users
+    users: {
+        all: ['users'] as const,
+        lists: () => [...queryKeys.users.all, 'list'] as const,
+        list: (limit: number, search: string) =>
+            [...queryKeys.users.lists(), { limit, search }] as const,
+    },
 } as const;
