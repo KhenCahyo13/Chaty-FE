@@ -1,4 +1,4 @@
-import { type FC,memo } from 'react';
+import { type FC, memo, useCallback } from 'react';
 
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 
@@ -9,11 +9,14 @@ const ChatItem: FC<ChatItemProps> = ({
     conversation
 }) => {
     const { activePrivateConversationId, setActivePrivateConversationId } = usePrivateConversationStore();
+    const handleSelect = useCallback(() => {
+        setActivePrivateConversationId(conversation.id);
+    }, [conversation.id, setActivePrivateConversationId]);
 
     return <ChatItemView
         activePrivateConversationId={activePrivateConversationId}
         conversation={conversation}
-        setActivePrivateConversationId={setActivePrivateConversationId}
+        onSelect={handleSelect}
     />;
 };
 

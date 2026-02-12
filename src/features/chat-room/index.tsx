@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form';
 import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { toast } from 'sonner';
 
@@ -17,13 +17,20 @@ import type { PrivateConversationDetailsMessage } from '@/types/private-conversa
 import { useChatRoomScroll } from './hooks/use-chat-room-scroll';
 import { usePrivateMessageRead } from './hooks/use-private-message-read';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
-import type { ChatRoomMessage, CreateMessageFormValues } from './types';
+import type {
+    ChatRoomMessage,
+    ChatRoomMessageFileMeta,
+    CreateMessageFormValues,
+} from './types';
 import ChatRoomView from './view'
 
 const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const queryClient = useQueryClient();
     const [filesResetKey, setFilesResetKey] = useState(0);
+    const fileMetaCacheRef = useRef(
+        new Map<string, { key: string; meta: ChatRoomMessageFileMeta[] }>()
+    );
 
     const { data: room, isError: isRoomError, isLoading: isRoomLoading } = useQuery({
         enabled: !!activePrivateConversationId,
@@ -95,6 +102,15 @@ const ChatRoom = () => {
         return memoizedMessages.map((message) => {
             if (!message.fileUrls?.length) return message;
 
+            const key = message.fileUrls.join('|');
+            const cached = fileMetaCacheRef.current.get(message.id);
+            if (cached && cached.key === key) {
+                return {
+                    ...message,
+                    fileMeta: cached.meta,
+                };
+            }
+
             const fileMeta = message.fileUrls.map((fileUrl) => {
                 const extension = getFileExtensionFromUrl(fileUrl);
                 return {
@@ -102,6 +118,11 @@ const ChatRoom = () => {
                     isImage: IMAGE_FILE_EXTENSIONS.has(extension),
                     url: fileUrl,
                 };
+            });
+
+            fileMetaCacheRef.current.set(message.id, {
+                key,
+                meta: fileMeta,
             });
 
             return {

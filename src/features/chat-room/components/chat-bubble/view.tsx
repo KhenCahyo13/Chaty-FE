@@ -4,9 +4,8 @@ import { type FC, memo } from 'react';
 import { formatLastSendTime } from '@/lib/datetime';
 import { cn } from '@/lib/utils';
 import type { ChatBubbleViewProps } from './types';
-import { renderBody } from './helpers';
 
-const ChatBubbleView: FC<ChatBubbleViewProps> = ({ message }) => {
+const ChatBubbleView: FC<ChatBubbleViewProps> = ({ body, message }) => {
     return (
         <div
             className={cn(
@@ -25,7 +24,7 @@ const ChatBubbleView: FC<ChatBubbleViewProps> = ({ message }) => {
                         )}
                     />
                 )}
-                {renderBody(message)}
+                {body}
                 <p
                     className={cn(
                         'shrink-0 text-[10px]',

@@ -11,7 +11,7 @@ import type { ChatItemViewProps } from './types';
 const ChatItemView: FC<ChatItemViewProps> = ({
     activePrivateConversationId,
     conversation,
-    setActivePrivateConversationId
+    onSelect
 }) => {
     const getLastMessagePreview = () => {
         if (conversation.lastMessage.isDeleted) {
@@ -36,13 +36,15 @@ const ChatItemView: FC<ChatItemViewProps> = ({
                 activePrivateConversationId === conversation.id &&
                     'border-primary/20 bg-[linear-gradient(165deg,oklch(0.96_0.03_247)_0%,oklch(0.98_0.02_252)_100%)] shadow-[0_1px_2px_0_oklch(0.33_0.12_252/0.08)] dark:border-primary/40 dark:bg-none dark:bg-sidebar-accent/80 dark:shadow-none'
             )}
-            onClick={() => setActivePrivateConversationId(conversation.id)}
+            onClick={onSelect}
         >
             <Avatar className="size-10 ring-1 ring-white/70">
                 {conversation.sender.profile &&
                 conversation.sender.profile.avatarUrl ? (
                     <AvatarImage
                         alt={conversation.sender.profile.fullName}
+                        decoding="async"
+                        loading="lazy"
                         src={conversation.sender.profile.avatarUrl}
                     />
                 ) : (
