@@ -5,15 +5,12 @@ import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
 import { createMessage } from '@/api/private-messages';
-import { formatSocketPrivateMessage } from '@/lib/message';
+import { usePrivateMessageListener } from '@/hooks/use-private-message-listener';
 import { queryKeys } from '@/lib/query-keys';
 import { resolveErrorMessage } from '@/lib/response';
-import { socket } from '@/lib/socket';
-import { useAuthStore } from '@/stores/auth-store';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
-import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 import { useChatRoomScroll } from './hooks/use-chat-room-scroll';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
@@ -22,7 +19,6 @@ import ChatRoomView from './view'
 
 const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
-    const { user } = useAuthStore();
     const queryClient = useQueryClient();
 
     const { data: room, isLoading: isRoomLoading, isError: isRoomError } = useQuery({
@@ -119,54 +115,10 @@ const ChatRoom = () => {
         fetchNextMessagesPage,
     });
 
-    // Listen for new messages
-    useEffect(() => {
-        const onNewPrivateMessage = (payload: SocketPrivateMessageCreatedPayload) => {
-            if (payload.private_conversation_id !== activePrivateConversationId) return;
-
-            queryClient.setQueryData<InfiniteData<ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>>>(
-                queryKeys.privateConversations.message(activePrivateConversationId), (old) => {
-                    if (!old) return old;
-
-                    const firstPage = old.pages[0];
-                    const nextMessage = formatSocketPrivateMessage(
-                        payload.message,
-                        user?.id ?? ''
-                    );
-                    const fallbackFirstPage: ApiResponse<
-                        PrivateConversationDetailsMessage[],
-                        CursorMeta
-                    > = {
-                        data: [],
-                        meta: {},
-                    };
-                    const safeFirstPage = firstPage ?? fallbackFirstPage;
-
-                    return {
-                        ...old,
-                        pages: [
-                            {
-                                ...safeFirstPage,
-                                data: [
-                                    ...(Array.isArray(safeFirstPage.data)
-                                        ? safeFirstPage.data
-                                        : []),
-                                    nextMessage,
-                                ],
-                            },
-                            ...old.pages.slice(1),
-                        ],
-                    };
-                }
-            );
-        };
-
-        socket.on('private-message:new', onNewPrivateMessage);
-
-        return () => {
-            socket.off('private-message:new', onNewPrivateMessage);
-        };
-    }, [activePrivateConversationId, queryClient, user?.id]);
+    usePrivateMessageListener({
+        activePrivateConversationId,
+        eventName: 'private-message:new',
+    });
 
     return <ChatRoomView
         messageForm={messageForm}

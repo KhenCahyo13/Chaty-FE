@@ -1,10 +1,10 @@
-import { type InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { type FC, memo, type UIEvent,useCallback, useEffect, useMemo, useState } from 'react';
+import { type InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
+import { type FC, memo, type UIEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
 import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/components/constants/state';
-import { formatSocketPrivateMessage } from '@/lib/message';
+import { usePrivateMessageListener } from '@/hooks/use-private-message-listener';
 import { queryKeys } from '@/lib/query-keys';
 import { socket } from '@/lib/socket';
 import { useAuthStore } from '@/stores/auth-store';
@@ -12,18 +12,13 @@ import { useComponentsStore } from '@/stores/components';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { LayoutProps } from '@/types/components';
-import type {
-    PrivateConversationDetailsMessage,
-    PrivateConversationList,
-} from '@/types/private-conversation';
-import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
+import type { PrivateConversationList } from '@/types/private-conversation';
 
 import MainLayoutView from './view';
 
 const MainLayout: FC<LayoutProps> = ({
     children
 }) => {
-    const queryClient = useQueryClient();
     const { activePrivateConversationId } = usePrivateConversationStore();
     const { setOpenUserListDialog } = useComponentsStore();
     const { user } = useAuthStore();
@@ -86,56 +81,10 @@ const MainLayout: FC<LayoutProps> = ({
         isFetchingNextPrivateConversationsPage,
     ]);
 
-    // Listen for new messages sent
-    useEffect(() => {
-        const onPrivateMessageSent = (payload: SocketPrivateMessageCreatedPayload) => {
-            if (payload.private_conversation_id !== activePrivateConversationId) return;
-
-            queryClient.setQueryData<InfiniteData<ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>>>(
-                queryKeys.privateConversations.message(activePrivateConversationId), (old) => {
-                    if (!old) return old;
-
-                    const firstPage = old.pages[0];
-                    const nextMessage = formatSocketPrivateMessage(
-                        payload.message,
-                        user?.id ?? ''
-                    );
-                    const fallbackFirstPage: ApiResponse<
-                        PrivateConversationDetailsMessage[],
-                        CursorMeta
-                    > = {
-                        data: [],
-                        meta: { nextCursor: null },
-                        success: true,
-                        message: '',
-                    };
-                    const safeFirstPage = firstPage ?? fallbackFirstPage;
-
-                    return {
-                        ...old,
-                        pages: [
-                            {
-                                ...safeFirstPage,
-                                data: [
-                                    ...(Array.isArray(safeFirstPage.data)
-                                        ? safeFirstPage.data
-                                        : []),
-                                    nextMessage,
-                                ],
-                            },
-                            ...old.pages.slice(1),
-                        ],
-                    };
-                }
-            );
-        }
-
-        socket.on('private-message:sent', onPrivateMessageSent);
-
-        return () => {
-            socket.off('private-message:sent', onPrivateMessageSent);
-        };
-    }, [activePrivateConversationId, queryClient, user?.id]);
+    usePrivateMessageListener({
+        activePrivateConversationId,
+        eventName: 'private-message:sent',
+    });
 
     useEffect(() => {
         if (!user?.id) return;
