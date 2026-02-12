@@ -1,4 +1,4 @@
-import { type FC,memo } from 'react';
+import { type FC, memo } from 'react';
 
 import { ImageTextFallback } from '@/components/fallback/image-text';
 import { LoaderFallback } from '@/components/fallback/loader';
@@ -15,6 +15,8 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
     users,
     isLoading,
     isError,
+    isFetchingNextUsersPage,
+    handleScrollUsers,
     handleCreatePrivateConversation,
     isCreatePrivateConversationLoading,
     searchUsers,
@@ -43,7 +45,10 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                     />
                 </div>
             ) : (
-                <div className='flex flex-col gap-y-2 max-h-96 overflow-y-scroll'>
+                <div
+                    onScroll={handleScrollUsers}
+                    className='flex flex-col gap-y-2 max-h-96 overflow-y-scroll'
+                >
                     {users && users.length === 0 ? (
                         <div className='h-64 flex items-center justify-center'>
                             <ImageTextFallback
@@ -75,6 +80,9 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                                 </div>
                             </Button>
                         ))
+                    )}
+                    {isFetchingNextUsersPage && (
+                        <LoaderFallback label='Loading more users...' />
                     )}
                 </div>
             )}

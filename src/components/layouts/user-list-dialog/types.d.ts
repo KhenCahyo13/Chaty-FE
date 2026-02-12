@@ -1,3 +1,5 @@
+import type { UIEvent } from 'react';
+
 import type { UserList } from '@/types/user';
 
 export interface UserListDialogViewProps {
@@ -6,6 +8,10 @@ export interface UserListDialogViewProps {
     users: UserList[] | undefined;
     isLoading: boolean;
     isError: boolean;
+    isFetchingNextUsersPage: boolean;
+    handleScrollUsers: (
+        e: UIEvent<HTMLDivElement, globalThis.UIEvent>
+    ) => void;
     handleCreatePrivateConversation: (userId: string) => void;
     isCreatePrivateConversationLoading: boolean;
     searchUsers: string | undefined;
