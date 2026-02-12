@@ -96,6 +96,7 @@ const ChatRoom = () => {
             }
 
             messageForm.setFieldValue('content', '');
+            messageForm.setFieldValue('audio', undefined);
         }
     });
 

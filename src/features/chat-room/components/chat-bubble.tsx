@@ -5,37 +5,66 @@ import { formatLastSendTime } from '@/lib/datetime';
 import { cn } from '@/lib/utils';
 
 import type { ChatBubbleProps } from '../types';
+import AudioPlayer from './audio-player';
 
 const ChatBubble: FC<ChatBubbleProps> = ({
     message,
-}) => (
-    <div
-        className={cn(
-            'max-w-[84%] rounded-xl border px-3 py-2 shadow-[0_14px_24px_-24px_oklch(0.28_0.08_256)] md:max-w-[62%]',
-            message.isMe
-                ? 'self-end rounded-br-sm border-primary/30 bg-[linear-gradient(145deg,oklch(0.56_0.2_259)_0%,oklch(0.64_0.16_244)_100%)] text-white dark:border-primary/40 dark:bg-[linear-gradient(145deg,oklch(0.34_0.08_260)_0%,oklch(0.29_0.06_252)_100%)]'
-                : 'self-start rounded-bl-sm border-border/70 bg-white/92 text-foreground backdrop-blur dark:bg-card/85'
-        )}
-    >
-        <div className='flex items-end gap-x-1'>
-            {message.isMe && <IconChecks className={cn(
-                'mb-0.5 size-3.5 shrink-0 text-white/70',
-                message.isRead && 'text-cyan-200'
-            )} />}
-            <p className={cn(
-                'wrap-break-word text-[13px] leading-relaxed',
-                message.isDeleted && (message.isMe ? 'italic text-white/70' : 'italic text-muted-foreground')
-            )}>
-                {message.content ? message.content : 'This message was deleted'}
+}) => {
+    const renderBody = () => {
+        if (message.isDeleted) {
+            return (
+                <p
+                    className={cn(
+                        'wrap-break-word text-[13px] leading-relaxed italic',
+                        message.isMe ? 'text-white/70' : 'text-muted-foreground'
+                    )}
+                >
+                    This message was deleted
+                </p>
+            );
+        }
+
+        if (message.messageType === 'AUDIO' && message.audioUrl) {
+            return <AudioPlayer isMe={message.isMe} src={message.audioUrl} />;
+        }
+
+        return (
+            <p className="wrap-break-word text-[13px] leading-relaxed">
+                {message.content ?? ''}
             </p>
-            <p className={cn(
-                'mb-0.5 shrink-0 text-[10px]',
-                message.isMe ? 'text-white/75' : 'text-muted-foreground'
-            )}>
-                {formatLastSendTime(message.createdAt)}
-            </p>
+        );
+    };
+
+    return (
+        <div
+            className={cn(
+                'max-w-[84%] rounded-xl border px-3 py-2 shadow-[0_14px_24px_-24px_oklch(0.28_0.08_256)] md:max-w-[62%]',
+                message.isMe
+                    ? 'self-end rounded-br-sm border-primary/30 bg-[linear-gradient(145deg,oklch(0.56_0.2_259)_0%,oklch(0.64_0.16_244)_100%)] text-white dark:border-primary/40 dark:bg-[linear-gradient(145deg,oklch(0.34_0.08_260)_0%,oklch(0.29_0.06_252)_100%)]'
+                    : 'self-start rounded-bl-sm border-border/70 bg-white/92 text-foreground backdrop-blur dark:bg-card/85'
+            )}
+        >
+            <div className="flex items-center gap-x-1">
+                {message.isMe && (
+                    <IconChecks
+                        className={cn(
+                            'shrink-0 size-3.5 text-white/70',
+                            message.isRead && 'text-cyan-200'
+                        )}
+                    />
+                )}
+                {renderBody()}
+                <p
+                    className={cn(
+                        'shrink-0 text-[10px]',
+                        message.isMe ? 'text-white/75' : 'text-muted-foreground'
+                    )}
+                >
+                    {formatLastSendTime(message.createdAt)}
+                </p>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default memo(ChatBubble);

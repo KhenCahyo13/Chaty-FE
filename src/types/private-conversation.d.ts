@@ -1,5 +1,7 @@
 import type { UserList } from './user';
 
+export type MessageType = 'AUDIO' | 'IMAGE' | 'TEXT';
+
 export interface PrivateConversationList {
     createdAt: string;
     id: string;
@@ -10,12 +12,14 @@ export interface PrivateConversationList {
 }
 
 export interface PrivateConversationListLastMessage {
-    content: string;
+    audioUrl: null | string;
+    content: null | string;
     createdAt: string;
     id: string;
     isDeleted: boolean;
     isMe: boolean;
     isRead: boolean;
+    messageType: MessageType;
 }
 
 export interface PrivateConversationDetails {
@@ -26,12 +30,14 @@ export interface PrivateConversationDetails {
 }
 
 export interface PrivateConversationDetailsMessage {
+    audioUrl: null | string;
     content: null | string;
     createdAt: string;
     id: string;
     isDeleted: boolean;
     isMe: boolean;
     isRead: boolean;
+    messageType: MessageType;
 }
 
 export interface CreatePrivateConversationResponse {

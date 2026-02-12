@@ -6,6 +6,7 @@ export const formatSocketPrivateMessage = (
     currentUserId: string
 ): PrivateConversationDetailsMessage => {
     return {
+        audioUrl: message.audioUrl,
         content: message.content,
         createdAt: message.createdAt,
         id: message.id,
@@ -13,5 +14,6 @@ export const formatSocketPrivateMessage = (
         isMe: message.senderId === currentUserId,
         isRead:
             message.senderId === currentUserId ? message.readsCount > 0 : true,
+        messageType: message.messageType,
     };
 };
