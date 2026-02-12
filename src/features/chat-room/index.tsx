@@ -1,6 +1,7 @@
 import { useForm } from '@tanstack/react-form';
 import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
@@ -138,6 +139,13 @@ const ChatRoom = () => {
         messagesLength: memoizedMessages.length,
     });
 
+    const messageVirtualizer = useVirtualizer({
+        count: memoizedMessages.length,
+        estimateSize: () => 64,
+        getScrollElement: () => messagesContainerRef.current,
+        overscan: 8,
+    });
+
     usePrivateMessageRead({
         activePrivateConversationId,
         messages: memoizedMessages,
@@ -151,6 +159,9 @@ const ChatRoom = () => {
         isFetchingNextMessagesPage={isFetchingNextMessagesPage}
         isRoomError={isRoomError}
         isRoomLoading={isRoomLoading}
+        messageVirtualItems={messageVirtualizer.getVirtualItems()}
+        messageVirtualMeasureElement={messageVirtualizer.measureElement}
+        messageVirtualTotalSize={messageVirtualizer.getTotalSize()}
         messageForm={messageForm}
         messages={memoizedMessages}
         messagesContainerRef={messagesContainerRef}

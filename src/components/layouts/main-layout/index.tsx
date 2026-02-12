@@ -1,5 +1,6 @@
-import { type FC, memo, useEffect, useState } from 'react';
+import { type FC, memo, useEffect, useRef, useState } from 'react';
 import { useDebounce } from 'use-debounce';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
 import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/constants/state';
@@ -77,9 +78,20 @@ const MainLayout: FC<LayoutProps> = ({
         void registerCurrentWebPushToken();
     }, [token?.access_token, user?.id]);
 
+    const conversationsContainerRef = useRef<HTMLDivElement | null>(null);
+    const conversationVirtualizer = useVirtualizer({
+        count: privateConversations?.length ?? 0,
+        estimateSize: () => 72,
+        getScrollElement: () => conversationsContainerRef.current,
+        overscan: 6,
+    });
 
     return <MainLayoutView
         children={children}
+        conversationsContainerRef={conversationsContainerRef}
+        conversationVirtualItems={conversationVirtualizer.getVirtualItems()}
+        conversationVirtualMeasureElement={conversationVirtualizer.measureElement}
+        conversationVirtualTotalSize={conversationVirtualizer.getTotalSize()}
         handleScrollPrivateConversations={handleScrollPrivateConversations}
         isFetchingNextPrivateConversationsPage={
             isFetchingNextPrivateConversationsPage
