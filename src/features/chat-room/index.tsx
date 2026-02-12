@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form';
 import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
@@ -20,6 +20,7 @@ import ChatRoomView from './view'
 const ChatRoom = () => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const queryClient = useQueryClient();
+    const [filesResetKey, setFilesResetKey] = useState(0);
 
     const { data: room, isError: isRoomError, isLoading: isRoomLoading } = useQuery({
         enabled: !!activePrivateConversationId,
@@ -97,6 +98,8 @@ const ChatRoom = () => {
 
             messageForm.setFieldValue('content', '');
             messageForm.setFieldValue('audio', undefined);
+            messageForm.setFieldValue('files', []);
+            setFilesResetKey((prev) => prev + 1);
         }
     });
 
@@ -123,6 +126,7 @@ const ChatRoom = () => {
 
     return <ChatRoomView
         activePrivateConversationId={activePrivateConversationId}
+        filesResetKey={filesResetKey}
         handleScrollMessages={handleScrollMessages}
         isCreateMessageLoading={messageMutation.isPending}
         isFetchingNextMessagesPage={isFetchingNextMessagesPage}

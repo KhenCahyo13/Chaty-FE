@@ -34,6 +34,7 @@ export interface PrivateConversationDetailsMessage {
     audioUrl: null | string;
     content: null | string;
     createdAt: string;
+    fileUrls: null | string[];
     id: string;
     isDeleted: boolean;
     isMe: boolean;

@@ -9,6 +9,7 @@ export interface SocketPrivateMessagePayload {
     audioUrl: null | string;
     content: null | string;
     createdAt: string;
+    fileUrls: null | string[];
     id: string;
     isDeleted: boolean;
     messageType: MessageType;

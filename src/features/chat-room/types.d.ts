@@ -27,6 +27,7 @@ export interface ChatHeaderProps {
 
 export interface ChatRoomViewProps {
     activePrivateConversationId: null | string;
+    filesResetKey: number;
     handleScrollMessages: (
         e: UIEvent<HTMLDivElement, globalThis.UIEvent>
     ) => void;

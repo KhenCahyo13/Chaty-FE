@@ -9,6 +9,7 @@ export const formatSocketPrivateMessage = (
         audioUrl: message.audioUrl,
         content: message.content,
         createdAt: message.createdAt,
+        fileUrls: message.fileUrls,
         id: message.id,
         isDeleted: message.isDeleted,
         isMe: message.senderId === currentUserId,

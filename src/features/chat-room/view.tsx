@@ -10,6 +10,7 @@ import type { ChatRoomViewProps } from './types';
 
 const ChatRoomView: FC<ChatRoomViewProps> = ({
     activePrivateConversationId,
+    filesResetKey,
     handleScrollMessages,
     isCreateMessageLoading,
     isFetchingNextMessagesPage,
@@ -67,6 +68,7 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                 isCreateMessageLoading={
                                     isCreateMessageLoading
                                 }
+                                key={filesResetKey}
                             />
                         </>
                     )}
