@@ -1,4 +1,4 @@
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { type FC, memo } from 'react';
 
 import { ImageTextFallback } from '@/components/fallback/image-text';
@@ -29,28 +29,46 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
     <>
         {/* Main Layout */}
         <SidebarProvider>
-            <Sidebar collapsible="offcanvas">
-                <SidebarHeader className="px-4 py-4">
-                    <div className='flex items-center justify-between'>
-                        <h1 className="font-semibold md:text-lg">Your Chats</h1>
+            <Sidebar
+                collapsible="offcanvas"
+                className="border-r border-sidebar-border/70 bg-sidebar/90 backdrop-blur"
+            >
+                <SidebarHeader className="gap-y-4 border-b border-sidebar-border/70 px-4 py-5">
+                    <div className='flex items-center justify-between gap-x-4'>
+                        <div>
+                            <h1 className="text-base font-semibold tracking-normal md:text-lg">Messages</h1>
+                            <p className="text-xs text-muted-foreground">Stay in sync with your conversations.</p>
+                        </div>
                         <Badge className={cn(
+                            'rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.08em]',
                             getSocketConnectionBadgeClassName()
                         )}>
                             {getSocketConnectionBadgeText()}
                         </Badge>
                     </div>
                     <div className='flex items-center gap-x-2'>
-                        <Input
-                            value={searchPrivateConversations}
-                            onChange={(e) => setSearchPrivateConversations(e.target.value)}
-                            placeholder="Search chats..."
-                        />
-                        <Button size='icon-sm' onClick={() => setOpenUserListDialog(true)}>
-                            <IconPlus />
+                        <div className="relative flex-1">
+                            <IconSearch className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                value={searchPrivateConversations}
+                                onChange={(e) => setSearchPrivateConversations(e.target.value)}
+                                placeholder="Search conversations..."
+                                className="h-10 rounded-xl border-sidebar-border/70 bg-background/80 pl-9 shadow-none transition-colors focus-visible:border-primary/40"
+                            />
+                        </div>
+                        <Button
+                            size='icon-sm'
+                            className="size-10 rounded-xl"
+                            onClick={() => setOpenUserListDialog(true)}
+                        >
+                            <IconPlus className="size-4" />
                         </Button>
                     </div>
                 </SidebarHeader>
-                <SidebarContent onScroll={handleScrollPrivateConversations}>
+                <SidebarContent
+                    onScroll={handleScrollPrivateConversations}
+                    className="gap-y-3 bg-[radial-gradient(circle_at_top_left,oklch(0.99_0.01_240)_0%,transparent_45%)] px-3 py-3"
+                >
                     {isPrivateConversationsLoading ? (
                         <LoaderFallback label='Waiting for conversations data...' />
                     ) : isPrivateConversationsError ? (
@@ -68,7 +86,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                                     label="Let's start a new conversation."
                                 />
                             ) : (
-                                <div className="flex flex-col gap-y-2">
+                                <div className="flex flex-col gap-y-2 pb-2">
                                     {privateConversations?.map((conversation) => (
                                         <ChatItem
                                             key={conversation.id}
@@ -84,7 +102,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                     )}
                 </SidebarContent>
             </Sidebar>
-            <SidebarInset>
+            <SidebarInset className="bg-[linear-gradient(145deg,oklch(0.996_0.004_260)_0%,oklch(0.984_0.004_255)_100%)]">
                 {children}
             </SidebarInset>
         </SidebarProvider>

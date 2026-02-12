@@ -58,6 +58,7 @@ export function TfTextInput<
                                 autoComplete={props.autoComplete ?? 'off'}
                                 disabled={props.disabled}
                                 readOnly={props.readOnly}
+                                className={props.className}
                             />
 
                             {props.type === 'password' && (

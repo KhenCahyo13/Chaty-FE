@@ -2,6 +2,7 @@ import { IconPhone, IconSearch, IconVideo } from '@tabler/icons-react';
 import { type FC,memo } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 import type { ChatHeaderProps } from '../types';
@@ -9,28 +10,35 @@ import type { ChatHeaderProps } from '../types';
 const ChatHeader: FC<ChatHeaderProps> = ({
     receiver
 }) => (
-    <div className="flex items-center justify-between bg-sidebar border-b px-4 py-4">
+    <div className="relative z-20 flex items-center justify-between border-b border-border/70 bg-background/85 px-4 py-3 backdrop-blur md:px-6 md:py-4">
         <div className="flex items-center gap-x-3">
-            <Avatar className="size-10">
+            <Avatar className="size-10 ring-2 ring-white/60">
                 {receiver?.profile && receiver.profile.avatarUrl ? (
                     <AvatarImage src={receiver.profile.avatarUrl} alt={receiver.profile.fullName} />
                 ) : (
-                    <AvatarFallback className="font-semibold">
+                    <AvatarFallback className="bg-primary/10 font-semibold">
                         {receiver?.username.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                 )}
             </Avatar>
-            <h1 className="font-medium capitalize">{receiver?.profile?.fullName || receiver?.username}</h1>
+            <div className="min-w-0">
+                <h1 className="truncate text-sm font-semibold capitalize md:text-base">
+                    {receiver?.profile?.fullName || receiver?.username}
+                </h1>
+                <Badge variant="secondary" className="mt-1 rounded-full px-2 py-0 text-[10px] font-medium">
+                    Active chat
+                </Badge>
+            </div>
         </div>
         <div className="flex items-center gap-x-3">
-            <Button variant='ghost' size='icon'>
-                <IconPhone className="size-6 text-muted-foreground" />
+            <Button variant='ghost' size='icon' className="rounded-xl border border-transparent hover:border-border/70 hover:bg-background">
+                <IconPhone className="size-5 text-muted-foreground" />
             </Button>
-            <Button variant='ghost' size='icon'>
-                <IconVideo className="size-6 text-muted-foreground" />
+            <Button variant='ghost' size='icon' className="rounded-xl border border-transparent hover:border-border/70 hover:bg-background">
+                <IconVideo className="size-5 text-muted-foreground" />
             </Button>
-            <Button variant='ghost' size='icon'>
-                <IconSearch className="size-6 text-muted-foreground" />
+            <Button variant='ghost' size='icon' className="rounded-xl border border-transparent hover:border-border/70 hover:bg-background">
+                <IconSearch className="size-5 text-muted-foreground" />
             </Button>
         </div>
     </div>

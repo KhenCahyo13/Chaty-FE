@@ -21,7 +21,8 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
     messagesContainerRef,
 }) => {
     return (
-        <div className="flex h-svh flex-col">
+        <div className="relative flex h-svh flex-col overflow-hidden">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,oklch(0.95_0.04_230)_0%,transparent_36%),radial-gradient(circle_at_bottom_left,oklch(0.965_0.03_170)_0%,transparent_40%)]" />
             {activePrivateConversationId ? (
                 <>
                     {isRoomLoading ? (
@@ -39,10 +40,10 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                 <div
                                     ref={messagesContainerRef}
                                     onScroll={handleScrollMessages}
-                                    className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-y-4"
+                                    className="relative z-10 flex flex-1 flex-col gap-y-3 overflow-y-auto px-3 py-4 md:px-6"
                                 >
                                     {isFetchingNextMessagesPage && (
-                                        <div className="text-center text-xs text-muted">
+                                        <div className="mx-auto rounded-full border border-border/60 bg-background/80 px-3 py-1 text-center text-xs text-muted-foreground backdrop-blur">
                                             Loading older messages…
                                         </div>
                                     )}
