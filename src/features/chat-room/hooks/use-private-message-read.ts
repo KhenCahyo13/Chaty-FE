@@ -27,10 +27,11 @@ export const usePrivateMessageRead = ({
     const queryClient = useQueryClient();
     const requestedReadRef = useRef<null | string>(null);
 
-    const lastMessageId = useMemo(() => {
-        const lastMessage = messages[messages.length - 1];
-        return lastMessage?.id ?? null;
+    const lastMessage = useMemo(() => {
+        return messages[messages.length - 1] ?? null;
     }, [messages]);
+
+    const lastMessageId = lastMessage?.id ?? null;
 
     const readMutation = useMutation({
         mutationFn: ({
@@ -50,6 +51,7 @@ export const usePrivateMessageRead = ({
 
     useEffect(() => {
         if (!activePrivateConversationId || !lastMessageId) return;
+        if (lastMessage?.isMe || lastMessage?.isRead) return;
 
         const requestKey = `${activePrivateConversationId}:${lastMessageId}`;
         if (requestedReadRef.current === requestKey) return;
@@ -59,7 +61,7 @@ export const usePrivateMessageRead = ({
             conversationId: activePrivateConversationId,
             lastReadMessageId: lastMessageId,
         });
-    }, [activePrivateConversationId, lastMessageId, readMutation]);
+    }, [activePrivateConversationId, lastMessageId, lastMessage?.isMe, lastMessage?.isRead, readMutation]);
 
     useEffect(() => {
         const onPrivateMessageRead = (
