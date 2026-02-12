@@ -50,7 +50,7 @@ const ChatRoom = () => {
     const memoizedMessages = useMemo(() => {
         if (!messages) return [];
 
-        return messages.pages
+        const normalized = messages.pages
             .slice()
             .reverse()
             .flatMap((page) => (Array.isArray(page?.data) ? page.data : []))
@@ -61,12 +61,31 @@ const ChatRoom = () => {
                     !!message &&
                     typeof message.id === 'string' &&
                     typeof message.createdAt === 'string'
-            )
-            .sort(
-                (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime()
             );
+
+        // Fast path: skip sorting when data is already in ascending time order.
+        let prevTimestamp = -Infinity;
+        let isSorted = true;
+
+        for (const message of normalized) {
+            const timestamp = Date.parse(message.createdAt);
+            if (timestamp < prevTimestamp) {
+                isSorted = false;
+                break;
+            }
+            prevTimestamp = timestamp;
+        }
+
+        if (isSorted) return normalized;
+
+        // Compute timestamps once, then sort using numeric comparison.
+        const withTimestamp = normalized.map((message) => ({
+            message,
+            timestamp: Date.parse(message.createdAt),
+        }));
+
+        withTimestamp.sort((a, b) => a.timestamp - b.timestamp);
+        return withTimestamp.map((item) => item.message);
     }, [messages]);
 
 
