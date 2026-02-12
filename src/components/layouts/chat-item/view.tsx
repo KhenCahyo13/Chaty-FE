@@ -15,46 +15,46 @@ const ChatItemView: FC<ChatItemViewProps> = ({
 }) => (
     <div
         className={cn(
-            'group relative flex cursor-pointer items-center gap-x-3 rounded-2xl border border-transparent px-3 py-3 transition-all',
+            'group relative flex cursor-pointer items-center gap-x-2.5 rounded-xl border border-transparent px-2.5 py-2.5 transition-all',
             'hover:border-primary/15 hover:bg-white hover:shadow-[0_4px_10px_-12px_oklch(0.32_0.06_250)]',
             activePrivateConversationId === conversation.id &&
                 'border-primary/20 bg-[linear-gradient(165deg,oklch(0.96_0.03_247)_0%,oklch(0.98_0.02_252)_100%)] shadow-[0_1px_2px_0_oklch(0.33_0.12_252/0.08)]'
         )}
         onClick={() => setActivePrivateConversationId(conversation.id)}
     >
-        <Avatar className="size-11 ring-2 ring-white/70">
+        <Avatar className="size-10 ring-1 ring-white/70">
             {conversation.sender.profile && conversation.sender.profile.avatarUrl ? (
                 <AvatarImage src={conversation.sender.profile.avatarUrl} alt={conversation.sender.profile.fullName} />
             ) : (
-                <AvatarFallback className="bg-primary/10 font-semibold md:text-lg">
+                <AvatarFallback className="bg-primary/10 text-sm font-semibold">
                     {conversation.sender.username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
             )}
         </Avatar>
-        <div className="flex w-full min-w-0 flex-col gap-y-1">
+        <div className="flex w-full min-w-0 flex-col gap-y-0.5">
             <div className="flex items-center justify-between">
-                <p className="truncate pr-2 text-sm font-semibold capitalize md:text-[15px]">
+                <p className="truncate pr-2 text-sm font-semibold capitalize">
                     {conversation.sender.profile ? conversation.sender.profile.fullName : conversation.sender.username}
                 </p>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-[12px] text-muted-foreground">
                     {formatLastSendTime(conversation.lastMessage.createdAt)}
                 </span>
             </div>
             <div className='flex items-center justify-between'>
                 <div className='flex min-w-0 items-center gap-x-2'>
                     {conversation.lastMessage.isMe && <IconChecks className={cn(
-                        'size-4 shrink-0',
+                        'size-3.5 shrink-0',
                         conversation.lastMessage.isRead ? 'text-blue-500' : 'text-muted-foreground'
                     )} />}
                     <p className={cn(
-                        'line-clamp-1 text-xs text-muted-foreground md:text-sm',
+                        'line-clamp-1 text-[12px] text-muted-foreground',
                         conversation.lastMessage.isDeleted && 'italic'
                     )}>
                         {conversation.lastMessage.content ? conversation.lastMessage.content : 'This message was deleted'}
                     </p>
                 </div>
                 {conversation.unreadMessageCount > 0 && (
-                    <Badge className="rounded-full px-2 py-0 text-[11px] leading-5">{conversation.unreadMessageCount}</Badge>
+                    <Badge className="rounded-full px-1.5 py-0 text-[11px] leading-4">{conversation.unreadMessageCount}</Badge>
                 )}
             </div>
         </div>

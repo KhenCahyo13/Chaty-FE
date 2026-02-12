@@ -40,10 +40,10 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                 <div
                                     ref={messagesContainerRef}
                                     onScroll={handleScrollMessages}
-                                    className="relative z-10 flex flex-1 flex-col gap-y-3 overflow-y-auto px-3 py-4 md:px-6"
+                                    className="relative z-10 flex flex-1 flex-col gap-y-2.5 overflow-y-auto px-2.5 py-3 md:px-4"
                                 >
                                     {isFetchingNextMessagesPage && (
-                                        <div className="mx-auto rounded-full border border-border/60 bg-background/80 px-3 py-1 text-center text-xs text-muted-foreground backdrop-blur">
+                                        <div className="mx-auto rounded-full border border-border/60 bg-background/80 px-2.5 py-0.5 text-center text-[10px] text-muted-foreground backdrop-blur">
                                             Loading older messages…
                                         </div>
                                     )}
