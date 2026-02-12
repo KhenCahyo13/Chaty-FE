@@ -1,4 +1,8 @@
-import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+    type InfiniteData,
+    useMutation,
+    useQueryClient,
+} from '@tanstack/react-query';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { readPrivateConversation } from '@/api/private-conversations';
@@ -55,14 +59,12 @@ export const usePrivateMessageRead = ({
             conversationId: activePrivateConversationId,
             lastReadMessageId: lastMessageId,
         });
-    }, [
-        activePrivateConversationId,
-        lastMessageId,
-        readMutation,
-    ]);
+    }, [activePrivateConversationId, lastMessageId, readMutation]);
 
     useEffect(() => {
-        const onPrivateMessageRead = (payload: SocketPrivateMessageReadPayload) => {
+        const onPrivateMessageRead = (
+            payload: SocketPrivateMessageReadPayload
+        ) => {
             const messageIds = new Set(payload.messageIds);
             if (!messageIds.size) return;
 
@@ -71,7 +73,9 @@ export const usePrivateMessageRead = ({
                     ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>
                 >
             >(
-                queryKeys.privateConversations.message(payload.privateConversationId),
+                queryKeys.privateConversations.message(
+                    payload.privateConversationId
+                ),
                 (old) => {
                     if (!old) return old;
 
