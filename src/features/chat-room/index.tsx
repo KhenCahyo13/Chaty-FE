@@ -6,6 +6,8 @@ import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
 import { createMessage } from '@/api/private-messages';
+import { IMAGE_FILE_EXTENSIONS } from '@/constants/file';
+import { getFileExtensionFromUrl, getFileNameFromUrl } from '@/lib/file';
 import { queryKeys } from '@/lib/query-keys';
 import { resolveErrorMessage } from '@/lib/response';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
@@ -15,7 +17,7 @@ import type { PrivateConversationDetailsMessage } from '@/types/private-conversa
 import { useChatRoomScroll } from './hooks/use-chat-room-scroll';
 import { usePrivateMessageRead } from './hooks/use-private-message-read';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
-import type { CreateMessageFormValues } from './types';
+import type { ChatRoomMessage, CreateMessageFormValues } from './types';
 import ChatRoomView from './view'
 
 const ChatRoom = () => {
@@ -89,6 +91,26 @@ const ChatRoom = () => {
         return withTimestamp.map((item) => item.message);
     }, [messages]);
 
+    const messagesWithFileMeta = useMemo<ChatRoomMessage[]>(() => {
+        return memoizedMessages.map((message) => {
+            if (!message.fileUrls?.length) return message;
+
+            const fileMeta = message.fileUrls.map((fileUrl) => {
+                const extension = getFileExtensionFromUrl(fileUrl);
+                return {
+                    fileName: getFileNameFromUrl(fileUrl),
+                    isImage: IMAGE_FILE_EXTENSIONS.has(extension),
+                    url: fileUrl,
+                };
+            });
+
+            return {
+                ...message,
+                fileMeta,
+            };
+        });
+    }, [memoizedMessages]);
+
 
     const messageForm = useForm({
         defaultValues: createMessageFormDefaultValues,
@@ -136,11 +158,11 @@ const ChatRoom = () => {
         isFetchingNextMessagesPage,
         isRoomError,
         isRoomLoading,
-        messagesLength: memoizedMessages.length,
+        messagesLength: messagesWithFileMeta.length,
     });
 
     const messageVirtualizer = useVirtualizer({
-        count: memoizedMessages.length,
+        count: messagesWithFileMeta.length,
         estimateSize: () => 64,
         getScrollElement: () => messagesContainerRef.current,
         overscan: 8,
@@ -148,7 +170,7 @@ const ChatRoom = () => {
 
     usePrivateMessageRead({
         activePrivateConversationId,
-        messages: memoizedMessages,
+        messages: messagesWithFileMeta,
     });
 
     return <ChatRoomView
@@ -163,7 +185,7 @@ const ChatRoom = () => {
         messageVirtualMeasureElement={messageVirtualizer.measureElement}
         messageVirtualTotalSize={messageVirtualizer.getTotalSize()}
         messageForm={messageForm}
-        messages={memoizedMessages}
+        messages={messagesWithFileMeta}
         messagesContainerRef={messagesContainerRef}
         room={room?.data}
     />;

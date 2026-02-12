@@ -19,12 +19,22 @@ export interface ChatBoxProps {
 }
 
 export interface ChatBubbleProps {
-    message: PrivateConversationDetailsMessage;
+    message: ChatRoomMessage;
 }
 
 export interface ChatHeaderProps {
     receiver: PrivateConversationListUser | undefined;
 }
+
+export interface ChatRoomMessageFileMeta {
+    fileName: string;
+    isImage: boolean;
+    url: string;
+}
+
+export type ChatRoomMessage = PrivateConversationDetailsMessage & {
+    fileMeta?: ChatRoomMessageFileMeta[];
+};
 
 export interface ChatRoomViewProps {
     activePrivateConversationId: null | string;
@@ -42,7 +52,7 @@ export interface ChatRoomViewProps {
         element: Element | null
     ) => void;
     messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
-    messages: PrivateConversationDetailsMessage[];
+    messages: ChatRoomMessage[];
     messagesContainerRef: RefObject<HTMLDivElement | null>;
     room: PrivateConversationDetails | undefined;
 }

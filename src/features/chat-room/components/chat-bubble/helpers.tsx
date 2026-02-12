@@ -1,11 +1,10 @@
-import { cn } from '@/lib/utils';
-import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
-import AudioPlayer from '../audio-player';
-import { getFileExtensionFromUrl, getFileNameFromUrl } from '@/lib/file';
 import { IconFile } from '@tabler/icons-react';
-import { IMAGE_FILE_EXTENSIONS } from '@/constants/file';
 
-export const renderBody = (message: PrivateConversationDetailsMessage) => {
+import AudioPlayer from '../audio-player';
+import { cn } from '@/lib/utils';
+import type { ChatRoomMessage } from '../../types';
+
+export const renderBody = (message: ChatRoomMessage) => {
     if (message.isDeleted) {
         return (
             <p
@@ -24,13 +23,15 @@ export const renderBody = (message: PrivateConversationDetailsMessage) => {
     }
 
     if (message.messageType === 'FILE' && message.fileUrls?.length) {
+        const files = message.fileMeta ?? message.fileUrls.map((fileUrl) => ({
+            fileName: fileUrl,
+            isImage: false,
+            url: fileUrl,
+        }));
+
         return (
             <div className="grid max-w-xs grid-cols-1 gap-2 md:max-w-sm">
-                {message.fileUrls.map((fileUrl, index) => {
-                    const extension = getFileExtensionFromUrl(fileUrl);
-                    const isImage = IMAGE_FILE_EXTENSIONS.has(extension);
-                    const fileName = getFileNameFromUrl(fileUrl);
-
+                {files.map((file, index) => {
                     return (
                         <a
                             className={cn(
@@ -39,16 +40,16 @@ export const renderBody = (message: PrivateConversationDetailsMessage) => {
                                     ? 'border-white/25 bg-white/10 hover:bg-white/20'
                                     : 'border-border/70 bg-muted/35 hover:bg-muted/55'
                             )}
-                            href={fileUrl}
-                            key={`${fileUrl}-${index}`}
+                            href={file.url}
+                            key={`${file.url}-${index}`}
                             rel="noreferrer"
                             target="_blank"
                         >
-                            {isImage ? (
+                            {file.isImage ? (
                                 <img
-                                    alt={fileName}
+                                    alt={file.fileName}
                                     className="size-10 rounded-md object-cover"
-                                    src={fileUrl}
+                                    src={file.url}
                                 />
                             ) : (
                                 <div
@@ -63,7 +64,7 @@ export const renderBody = (message: PrivateConversationDetailsMessage) => {
                                 </div>
                             )}
                             <p className="line-clamp-2 break-all text-left">
-                                {fileName}
+                                {file.fileName}
                             </p>
                         </a>
                     );
