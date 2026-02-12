@@ -22,12 +22,21 @@ export const usePrivateMessageListener = ({
     const { user } = useAuthStore();
 
     useEffect(() => {
-        const onPrivateMessage = (payload: SocketPrivateMessageCreatedPayload) => {
+        const onPrivateMessage = (
+            payload: SocketPrivateMessageCreatedPayload
+        ) => {
             if (!activePrivateConversationId) return;
-            if (payload.private_conversation_id !== activePrivateConversationId) return;
+            if (payload.private_conversation_id !== activePrivateConversationId)
+                return;
 
-            queryClient.setQueryData<InfiniteData<ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>>>(
-                queryKeys.privateConversations.message(activePrivateConversationId),
+            queryClient.setQueryData<
+                InfiniteData<
+                    ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>
+                >
+            >(
+                queryKeys.privateConversations.message(
+                    activePrivateConversationId
+                ),
                 (old) => {
                     if (!old) return old;
 

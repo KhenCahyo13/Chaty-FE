@@ -9,7 +9,9 @@ import type { ApiResponse, CursorMeta } from '@/types/api';
 
 interface UseCursorPaginationListProps<TItem, TQueryKey extends QueryKey> {
     queryKey: TQueryKey;
-    queryFn: (pageParam: string | undefined) => Promise<ApiResponse<TItem[], CursorMeta>>;
+    queryFn: (
+        pageParam: string | undefined
+    ) => Promise<ApiResponse<TItem[], CursorMeta>>;
     scrollThreshold?: number;
 }
 
