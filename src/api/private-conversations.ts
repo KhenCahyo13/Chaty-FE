@@ -9,16 +9,18 @@ import type {
 
 export const fetchPrivateConversations = async (
     limit: number,
-    search?: string
-): Promise<ApiResponse<PrivateConversationList[]>> => {
+    search?: string,
+    cursor?: string
+): Promise<ApiResponse<PrivateConversationList[], CursorMeta>> => {
     const response = await authenticatedApi.get('/private-conversations', {
         params: {
             limit,
             search,
+            cursor,
         },
     });
 
-    return response.data as ApiResponse<PrivateConversationList[]>;
+    return response.data as ApiResponse<PrivateConversationList[], CursorMeta>;
 };
 
 export const fetchPrivateConversationDetails = async (

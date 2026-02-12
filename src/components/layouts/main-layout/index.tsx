@@ -1,9 +1,9 @@
-import { type InfiniteData,useQuery, useQueryClient } from '@tanstack/react-query';
-import { type FC, memo, useEffect, useState } from 'react';
+import { type InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { type FC, memo, type UIEvent,useCallback, useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
-import { DEFAULT_DEBOUNCE_DELAY } from '@/components/constants/state';
+import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/components/constants/state';
 import { formatSocketPrivateMessage } from '@/lib/message';
 import { queryKeys } from '@/lib/query-keys';
 import { socket } from '@/lib/socket';
@@ -12,7 +12,10 @@ import { useComponentsStore } from '@/stores/components';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
 import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { LayoutProps } from '@/types/components';
-import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
+import type {
+    PrivateConversationDetailsMessage,
+    PrivateConversationList,
+} from '@/types/private-conversation';
 import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 import MainLayoutView from './view';
@@ -25,14 +28,63 @@ const MainLayout: FC<LayoutProps> = ({
     const { setOpenUserListDialog } = useComponentsStore();
     const { user } = useAuthStore();
 
-    const [privateConversationsLimit, _setPrivateConversationsLimit] = useState(10);
     const [searchPrivateConversations, setSearchPrivateConversations] = useState<string | undefined>(undefined);
     const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, DEFAULT_DEBOUNCE_DELAY);
 
-    const { data: privateConversations, isLoading: isPrivateConversationsLoading, isError: isPrivateConversationsError } = useQuery({
-        queryKey: queryKeys.privateConversations.list(privateConversationsLimit, debouncedSearchPrivateConversations),
-        queryFn: () => fetchPrivateConversations(privateConversationsLimit, debouncedSearchPrivateConversations),
+    const {
+        data: privateConversationsData,
+        isLoading: isPrivateConversationsLoading,
+        isError: isPrivateConversationsError,
+        hasNextPage: hasNextPrivateConversationsPage,
+        isFetchingNextPage: isFetchingNextPrivateConversationsPage,
+        fetchNextPage: fetchNextPrivateConversationsPage,
+    } = useInfiniteQuery<
+        ApiResponse<PrivateConversationList[], CursorMeta>,
+        Error,
+        InfiniteData<ApiResponse<PrivateConversationList[], CursorMeta>>,
+        ReturnType<typeof queryKeys.privateConversations.list>,
+        string | undefined
+    >({
+        queryKey: queryKeys.privateConversations.list(DEFAULT_LIMIT, debouncedSearchPrivateConversations),
+        queryFn: ({ pageParam }) =>
+            fetchPrivateConversations(
+                DEFAULT_LIMIT,
+                debouncedSearchPrivateConversations,
+                pageParam
+            ),
+        initialPageParam: undefined,
+        getNextPageParam: (lastPage) => lastPage?.meta?.nextCursor ?? undefined,
     });
+
+    const privateConversations = useMemo(() => {
+        if (!privateConversationsData) return [];
+
+        return privateConversationsData.pages.flatMap((page) =>
+            Array.isArray(page?.data) ? page.data : []
+        );
+    }, [privateConversationsData]);
+
+    const handleScrollPrivateConversations = useCallback((
+        e: UIEvent<HTMLDivElement, globalThis.UIEvent>
+    ) => {
+        if (
+            !hasNextPrivateConversationsPage ||
+            isFetchingNextPrivateConversationsPage
+        ) {
+            return;
+        }
+
+        const element = e.currentTarget;
+        const remainingHeight =
+            element.scrollHeight - element.scrollTop - element.clientHeight;
+        if (remainingHeight > 120) return;
+
+        fetchNextPrivateConversationsPage();
+    }, [
+        fetchNextPrivateConversationsPage,
+        hasNextPrivateConversationsPage,
+        isFetchingNextPrivateConversationsPage,
+    ]);
 
     // Listen for new messages sent
     useEffect(() => {
@@ -106,9 +158,13 @@ const MainLayout: FC<LayoutProps> = ({
 
     return <MainLayoutView
         children={children}
-        privateConversations={privateConversations?.data}
+        privateConversations={privateConversations}
         isPrivateConversationsLoading={isPrivateConversationsLoading}
         isPrivateConversationsError={isPrivateConversationsError}
+        isFetchingNextPrivateConversationsPage={
+            isFetchingNextPrivateConversationsPage
+        }
+        handleScrollPrivateConversations={handleScrollPrivateConversations}
         setOpenUserListDialog={setOpenUserListDialog}
         searchPrivateConversations={searchPrivateConversations}
         setSearchPrivateConversations={setSearchPrivateConversations}

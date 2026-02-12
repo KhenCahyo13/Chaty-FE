@@ -20,6 +20,8 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
     privateConversations,
     isPrivateConversationsLoading,
     isPrivateConversationsError,
+    isFetchingNextPrivateConversationsPage,
+    handleScrollPrivateConversations,
     setOpenUserListDialog,
     searchPrivateConversations,
     setSearchPrivateConversations,
@@ -48,7 +50,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                         </Button>
                     </div>
                 </SidebarHeader>
-                <SidebarContent>
+                <SidebarContent onScroll={handleScrollPrivateConversations}>
                     {isPrivateConversationsLoading ? (
                         <LoaderFallback label='Waiting for conversations data...' />
                     ) : isPrivateConversationsError ? (
@@ -74,6 +76,9 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                                         />
                                     ))}
                                 </div>
+                            )}
+                            {isFetchingNextPrivateConversationsPage && (
+                                <LoaderFallback label='Loading more conversations...' />
                             )}
                         </>
                     )}
