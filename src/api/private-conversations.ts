@@ -18,7 +18,9 @@ export const fetchPrivateConversations = async (
     return response.data as ApiResponse<PrivateConversationList[]>;
 };
 
-export const fetchPrivateConversationDetails = async (id: string): Promise<ApiResponse<PrivateConversationDetails>> => {
+export const fetchPrivateConversationDetails = async (
+    id: string
+): Promise<ApiResponse<PrivateConversationDetails>> => {
     const response = await authenticatedApi.get(`/private-conversations/${id}`);
 
     return response.data as ApiResponse<PrivateConversationDetails>;
@@ -29,12 +31,18 @@ export const fetchPrivateConversationMessagesById = async (
     limit: number,
     cursor?: string
 ): Promise<ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>> => {
-    const response = await authenticatedApi.get(`/private-conversations/${id}/messages`, {
-        params: {
-            limit,
-            cursor,
-        },
-    });
+    const response = await authenticatedApi.get(
+        `/private-conversations/${id}/messages`,
+        {
+            params: {
+                limit,
+                cursor,
+            },
+        }
+    );
 
-    return response.data as ApiResponse<PrivateConversationDetailsMessage[], CursorMeta>;
-}
+    return response.data as ApiResponse<
+        PrivateConversationDetailsMessage[],
+        CursorMeta
+    >;
+};

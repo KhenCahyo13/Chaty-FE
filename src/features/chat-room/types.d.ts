@@ -34,6 +34,8 @@ export interface ChatRoomViewProps {
     isRoomError: boolean;
     isCreateMessageLoading: boolean;
     isFetchingNextMessagesPage: boolean;
-    handleScrollMessages: (e: UIEvent<HTMLDivElement, globalThis.UIEvent>) => void;
+    handleScrollMessages: (
+        e: UIEvent<HTMLDivElement, globalThis.UIEvent>
+    ) => void;
     messagesContainerRef: RefObject<HTMLDivElement | null>;
 }

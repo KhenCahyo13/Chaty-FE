@@ -1,5 +1,3 @@
-import type { PrivateConversationDetailsMessage } from './private-conversation';
-
 export interface SocketPrivateMessageCreatedPayload {
     private_conversation_id: string;
     message: SocketPrivateMessagePayload;

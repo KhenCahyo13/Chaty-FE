@@ -1,18 +1,18 @@
-import { useQuery, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import { type InfiniteData,useQuery, useQueryClient } from '@tanstack/react-query';
 import { type FC, memo, useEffect, useState } from 'react';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
+import { formatSocketPrivateMessage } from '@/lib/message';
 import { queryKeys } from '@/lib/query-keys';
 import { socket } from '@/lib/socket';
 import { useAuthStore } from '@/stores/auth-store';
 import { usePrivateConversationStore } from '@/stores/private-conversation-store';
+import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { LayoutProps } from '@/types/components';
+import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
 import type { SocketPrivateMessageCreatedPayload } from '@/types/realtime';
 
 import MainLayoutView from './view';
-import type { ApiResponse, CursorMeta } from '@/types/api';
-import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
-import { formatSocketPrivateMessage } from '@/lib/message';
 
 const MainLayout: FC<LayoutProps> = ({
     children

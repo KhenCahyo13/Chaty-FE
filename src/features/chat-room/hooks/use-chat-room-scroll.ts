@@ -1,4 +1,4 @@
-import { type UIEvent,useCallback, useEffect, useRef } from 'react';
+import { type UIEvent, useCallback, useEffect, useRef } from 'react';
 
 interface UseChatRoomScrollProps {
     activePrivateConversationId: string | null;
@@ -42,26 +42,28 @@ export const useChatRoomScroll = ({
     const handleScrollMessages = useCallback(
         async (e: UIEvent<HTMLDivElement>) => {
             const el = e.target as HTMLDivElement;
-            const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 64;
+            const isNearBottom =
+                el.scrollHeight - el.scrollTop - el.clientHeight < 64;
 
             shouldAutoScrollOnNewMessageRef.current = isNearBottom;
 
-            if (el.scrollTop === 0 && hasNextMessagesPage && !isFetchingNextMessagesPage) {
+            if (
+                el.scrollTop === 0 &&
+                hasNextMessagesPage &&
+                !isFetchingNextMessagesPage
+            ) {
                 prevScrollHeightRef.current = el.scrollHeight;
 
                 await fetchNextMessagesPage();
 
                 requestAnimationFrame(() => {
-                    el.scrollTop = el.scrollHeight - prevScrollHeightRef.current;
+                    el.scrollTop =
+                        el.scrollHeight - prevScrollHeightRef.current;
                     shouldAutoScrollOnNewMessageRef.current = false;
                 });
             }
         },
-        [
-            fetchNextMessagesPage,
-            hasNextMessagesPage,
-            isFetchingNextMessagesPage,
-        ]
+        [fetchNextMessagesPage, hasNextMessagesPage, isFetchingNextMessagesPage]
     );
 
     useEffect(() => {
@@ -71,7 +73,8 @@ export const useChatRoomScroll = ({
     }, [activePrivateConversationId]);
 
     useEffect(() => {
-        if (!activePrivateConversationId || isRoomLoading || isRoomError) return;
+        if (!activePrivateConversationId || isRoomLoading || isRoomError)
+            return;
         if (!messagesLength || isFetchingNextMessagesPage) return;
 
         const currentLength = messagesLength;
@@ -89,7 +92,10 @@ export const useChatRoomScroll = ({
             return;
         }
 
-        if (currentLength > prevLength && shouldAutoScrollOnNewMessageRef.current) {
+        if (
+            currentLength > prevLength &&
+            shouldAutoScrollOnNewMessageRef.current
+        ) {
             requestAnimationFrame(() => {
                 scrollToBottom('smooth');
             });
