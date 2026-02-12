@@ -21,6 +21,8 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
     isPrivateConversationsLoading,
     isPrivateConversationsError,
     setOpenUserListDialog,
+    searchPrivateConversations,
+    setSearchPrivateConversations,
 }) => (
     <>
         {/* Main Layout */}
@@ -36,7 +38,11 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                         </Badge>
                     </div>
                     <div className='flex items-center gap-x-2'>
-                        <Input placeholder="Search chats..." />
+                        <Input
+                            value={searchPrivateConversations}
+                            onChange={(e) => setSearchPrivateConversations(e.target.value)}
+                            placeholder="Search chats..."
+                        />
                         <Button size='icon-sm' onClick={() => setOpenUserListDialog(true)}>
                             <IconPlus />
                         </Button>

@@ -1,5 +1,6 @@
 import { type InfiniteData,useQuery, useQueryClient } from '@tanstack/react-query';
 import { type FC, memo, useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
 import { formatSocketPrivateMessage } from '@/lib/message';
@@ -24,10 +25,12 @@ const MainLayout: FC<LayoutProps> = ({
     const { user } = useAuthStore();
 
     const [privateConversationsLimit, _setPrivateConversationsLimit] = useState(10);
+    const [searchPrivateConversations, setSearchPrivateConversations] = useState<string | undefined>(undefined);
+    const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, 300);
 
     const { data: privateConversations, isLoading: isPrivateConversationsLoading, isError: isPrivateConversationsError } = useQuery({
-        queryKey: queryKeys.privateConversations.list(privateConversationsLimit),
-        queryFn: () => fetchPrivateConversations(privateConversationsLimit),
+        queryKey: queryKeys.privateConversations.list(privateConversationsLimit, debouncedSearchPrivateConversations),
+        queryFn: () => fetchPrivateConversations(privateConversationsLimit, debouncedSearchPrivateConversations),
     });
 
     // Listen for new messages sent
@@ -106,6 +109,8 @@ const MainLayout: FC<LayoutProps> = ({
         isPrivateConversationsLoading={isPrivateConversationsLoading}
         isPrivateConversationsError={isPrivateConversationsError}
         setOpenUserListDialog={setOpenUserListDialog}
+        searchPrivateConversations={searchPrivateConversations}
+        setSearchPrivateConversations={setSearchPrivateConversations}
     />;
 };
 

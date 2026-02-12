@@ -6,4 +6,6 @@ export interface MainLayoutViewProps extends LayoutProps {
     isPrivateConversationsLoading: boolean;
     isPrivateConversationsError: boolean;
     setOpenUserListDialog: (open: boolean) => void;
+    searchPrivateConversations: string | undefined;
+    setSearchPrivateConversations: (search: string | undefined) => void;
 }

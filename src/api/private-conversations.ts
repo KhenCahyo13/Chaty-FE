@@ -8,11 +8,13 @@ import type {
 } from '@/types/private-conversation';
 
 export const fetchPrivateConversations = async (
-    limit: number
+    limit: number,
+    search?: string
 ): Promise<ApiResponse<PrivateConversationList[]>> => {
     const response = await authenticatedApi.get('/private-conversations', {
         params: {
             limit,
+            search,
         },
     });
 

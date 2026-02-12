@@ -3,8 +3,11 @@ export const queryKeys = {
     privateConversations: {
         all: ['private-conversations'] as const,
         lists: () => [...queryKeys.privateConversations.all, 'list'] as const,
-        list: (limit: number) =>
-            [...queryKeys.privateConversations.lists(), { limit }] as const,
+        list: (limit: number, search?: string) =>
+            [
+                ...queryKeys.privateConversations.lists(),
+                { limit, search },
+            ] as const,
         details: () =>
             [...queryKeys.privateConversations.all, 'detail'] as const,
         detail: (id: string) =>
