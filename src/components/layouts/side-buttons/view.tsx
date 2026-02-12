@@ -1,4 +1,9 @@
-import { IconMoonStars, IconSettings, IconUserCircle } from '@tabler/icons-react';
+import {
+    IconLogout,
+    IconMoonStars,
+    IconSettings,
+    IconUserCircle,
+} from '@tabler/icons-react';
 import { type FC, memo } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -6,8 +11,10 @@ import { Button } from '@/components/ui/button';
 import type { SideButtonsViewProps } from './types';
 
 const SideButtonsView: FC<SideButtonsViewProps> = ({
+    handleLogout,
     handleToggleTheme,
     isDarkTheme,
+    isLogoutLoading,
     setOpenProfileDialog,
 }) => (
     <aside className="hidden w-14 shrink-0 flex-col justify-end border-r border-sidebar-border/70 px-1.5 py-3 md:flex">
@@ -41,6 +48,17 @@ const SideButtonsView: FC<SideButtonsViewProps> = ({
                 variant="ghost"
             >
                 <IconMoonStars className="size-5 text-muted-foreground" />
+            </Button>
+            <Button
+                aria-label="Logout"
+                className="size-10 rounded-xl"
+                disabled={isLogoutLoading}
+                onClick={handleLogout}
+                size="icon"
+                type="button"
+                variant="destructive"
+            >
+                <IconLogout className="size-5" />
             </Button>
         </div>
     </aside>

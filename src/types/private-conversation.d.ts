@@ -1,6 +1,6 @@
 import type { UserList } from './user';
 
-export type MessageType = 'AUDIO' | 'IMAGE' | 'TEXT';
+export type MessageType = 'AUDIO' | 'FILE' | 'TEXT';
 
 export interface PrivateConversationList {
     createdAt: string;
@@ -15,6 +15,7 @@ export interface PrivateConversationListLastMessage {
     audioUrl: null | string;
     content: null | string;
     createdAt: string;
+    fileUrls: null | string[];
     id: string;
     isDeleted: boolean;
     isMe: boolean;
