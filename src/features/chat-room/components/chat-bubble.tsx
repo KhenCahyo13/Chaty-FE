@@ -13,8 +13,8 @@ const ChatBubble: FC<ChatBubbleProps> = ({
         className={cn(
             'max-w-[84%] rounded-xl border px-3 py-2 shadow-[0_14px_24px_-24px_oklch(0.28_0.08_256)] md:max-w-[62%]',
             message.isMe
-                ? 'self-end rounded-br-sm border-primary/30 bg-[linear-gradient(145deg,oklch(0.56_0.2_259)_0%,oklch(0.64_0.16_244)_100%)] text-white'
-                : 'self-start rounded-bl-sm border-border/70 bg-white/92 text-foreground backdrop-blur'
+                ? 'self-end rounded-br-sm border-primary/30 bg-[linear-gradient(145deg,oklch(0.56_0.2_259)_0%,oklch(0.64_0.16_244)_100%)] text-white dark:border-primary/40 dark:bg-[linear-gradient(145deg,oklch(0.34_0.08_260)_0%,oklch(0.29_0.06_252)_100%)]'
+                : 'self-start rounded-bl-sm border-border/70 bg-white/92 text-foreground backdrop-blur dark:bg-card/85'
         )}
     >
         <div className='flex items-end gap-x-1'>

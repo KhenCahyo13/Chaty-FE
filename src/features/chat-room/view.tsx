@@ -22,7 +22,7 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
 }) => {
     return (
         <div className="relative flex h-svh flex-col overflow-hidden">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,oklch(0.95_0.04_230)_0%,transparent_36%),radial-gradient(circle_at_bottom_left,oklch(0.965_0.03_170)_0%,transparent_40%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,oklch(0.95_0.04_230)_0%,transparent_36%),radial-gradient(circle_at_bottom_left,oklch(0.965_0.03_170)_0%,transparent_40%)] dark:bg-[radial-gradient(circle_at_top_right,oklch(0.33_0.03_240)_0%,transparent_36%),radial-gradient(circle_at_bottom_left,oklch(0.28_0.03_170)_0%,transparent_40%)]" />
             {activePrivateConversationId ? (
                 <>
                     {isRoomLoading ? (

@@ -7,6 +7,7 @@ import type { LayoutProps } from "@/types/components";
 
 import { Toaster } from '../ui/sonner';
 import { TooltipProvider } from "../ui/tooltip";
+import ThemeSync from './theme-sync';
 
 interface AppProviderProps extends LayoutProps {
     router: typeof router;
@@ -20,6 +21,7 @@ export const AppProvider: FC<AppProviderProps> = ({
 }) => (
     <QueryClientProvider client={queryClient}>
         <TooltipProvider>
+            <ThemeSync />
             {children}
             <RouterProvider router={router} />
             <Toaster position="top-center" />
