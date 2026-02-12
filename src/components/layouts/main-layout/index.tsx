@@ -5,6 +5,7 @@ import { fetchPrivateConversations } from '@/api/private-conversations';
 import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/components/constants/state';
 import { useCursorPaginationList } from '@/hooks/use-cursor-pagination-list';
 import { usePrivateMessageListener } from '@/hooks/use-private-message-listener';
+import { registerCurrentWebPushToken } from '@/lib/push-token';
 import { queryKeys } from '@/lib/query-keys';
 import { socket } from '@/lib/socket';
 import { useAuthStore } from '@/stores/auth-store';
@@ -20,7 +21,7 @@ const MainLayout: FC<LayoutProps> = ({
 }) => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const { setOpenUserListDialog } = useComponentsStore();
-    const { user } = useAuthStore();
+    const { user, token } = useAuthStore();
 
     const [searchPrivateConversations, setSearchPrivateConversations] = useState<string | undefined>(undefined);
     const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, DEFAULT_DEBOUNCE_DELAY);
@@ -65,14 +66,16 @@ const MainLayout: FC<LayoutProps> = ({
 
         socket.connect();
 
-        socket.on('connect', () => { });
-
-        socket.on('disconnect', () => { });
-
         return () => {
             socket.disconnect();
         };
     }, [user?.id]);
+
+    useEffect(() => {
+        if (!user?.id || !token?.access_token) return;
+
+        void registerCurrentWebPushToken();
+    }, [token?.access_token, user?.id]);
 
 
     return <MainLayoutView

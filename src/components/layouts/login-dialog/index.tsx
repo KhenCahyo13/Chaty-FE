@@ -10,7 +10,7 @@ import { usePrivateConversationStore } from '@/stores/private-conversation-store
 
 import { loginFormDefaultValues, loginFormSchema } from './schema';
 import type { LoginFormValues } from './types';
-import LoginDialogView from './view'
+import LoginDialogView from './view';
 
 const LoginDialog = () => {
     const { token, setToken, setUser } = useAuthStore();
@@ -29,7 +29,7 @@ const LoginDialog = () => {
 
     const mutation = useMutation({
         mutationFn: (data: LoginFormValues) => login(data),
-        onSuccess: (response) => {
+        onSuccess: async (response) => {
             setToken(response.meta!);
             setUser(response.data);
 
@@ -42,7 +42,6 @@ const LoginDialog = () => {
                     queryKey: queryKeys.privateConversations.detail(activePrivateConversationId),
                 });
             }
-
             form.reset();
         },
         onError: (error) => {
