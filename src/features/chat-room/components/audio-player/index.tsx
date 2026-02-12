@@ -3,6 +3,7 @@ import {
     memo,
     type SyntheticEvent,
     useCallback,
+    useEffect,
     useRef,
     useState,
 } from 'react';
@@ -12,6 +13,10 @@ import AudioPlayerView from './view';
 
 const AudioPlayer: FC<AudioPlayerProps> = ({ isMe, src }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const lastUpdateRef = useRef(0);
+    const rafIdRef = useRef<number | null>(null);
+    const lastReportedTimeRef = useRef(0);
+    const isPlayingRef = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -31,8 +36,14 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ isMe, src }) => {
     }, []);
 
     const handleEnded = useCallback(() => {
+        isPlayingRef.current = false;
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current);
+            rafIdRef.current = null;
+        }
         setIsPlaying(false);
         setCurrentTime(0);
+        lastReportedTimeRef.current = 0;
     }, []);
 
     const handleLoadedMetadata = useCallback(
@@ -43,16 +54,49 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ isMe, src }) => {
     );
 
     const handlePause = useCallback(() => {
+        isPlayingRef.current = false;
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current);
+            rafIdRef.current = null;
+        }
         setIsPlaying(false);
     }, []);
 
     const handlePlay = useCallback(() => {
+        isPlayingRef.current = true;
         setIsPlaying(true);
+
+        if (rafIdRef.current !== null) return;
+
+        const tick = () => {
+            const audio = audioRef.current;
+            if (!audio) {
+                rafIdRef.current = null;
+                return;
+            }
+
+            const nextTime = audio.currentTime || 0;
+            if (Math.abs(nextTime - lastReportedTimeRef.current) >= 0.1) {
+                lastReportedTimeRef.current = nextTime;
+                setCurrentTime(nextTime);
+            }
+
+            rafIdRef.current = requestAnimationFrame(tick);
+        };
+
+        rafIdRef.current = requestAnimationFrame(tick);
     }, []);
 
     const handleTimeUpdate = useCallback(
         (event: SyntheticEvent<HTMLAudioElement>) => {
-            setCurrentTime(event.currentTarget.currentTime || 0);
+            if (isPlayingRef.current) return;
+            const now = performance.now();
+            if (now - lastUpdateRef.current < 200) return;
+
+            lastUpdateRef.current = now;
+            const nextTime = event.currentTarget.currentTime || 0;
+            lastReportedTimeRef.current = nextTime;
+            setCurrentTime(nextTime);
         },
         []
     );
@@ -64,6 +108,15 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ isMe, src }) => {
 
         audio.currentTime = nextValue;
         setCurrentTime(nextValue);
+        lastReportedTimeRef.current = nextValue;
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (rafIdRef.current !== null) {
+                cancelAnimationFrame(rafIdRef.current);
+            }
+        };
     }, []);
 
     return (
