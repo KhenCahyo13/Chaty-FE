@@ -2,7 +2,7 @@ import { type FC, memo, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
-import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/components/constants/state';
+import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/constants/state';
 import { useCursorPaginationList } from '@/hooks/use-cursor-pagination-list';
 import { usePrivateMessageListener } from '@/hooks/use-private-message-listener';
 import { registerCurrentWebPushToken } from '@/lib/push-token';

@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 
 import { createPrivateConversation } from '@/api/private-conversations';
 import { fetchUsers } from '@/api/users';
-import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/components/constants/state';
+import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/constants/state';
 import { useCursorPaginationList } from '@/hooks/use-cursor-pagination-list';
 import { queryKeys } from '@/lib/query-keys';
 import { resolveErrorMessage } from '@/lib/response';

@@ -7,150 +7,32 @@ import {
     IconSend2,
     IconX,
 } from '@tabler/icons-react';
-import {
-    type ChangeEvent,
-    type FC,
-    memo,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
-import { toast } from 'sonner';
+import { type FC, memo } from 'react';
 
 import { TfTextInput } from '@/components/tanstack-form/text-input';
 import { Button } from '@/components/ui/button';
+import { formatFileSize } from '@/lib/file';
 
-import { useAudioRecorder } from '../../../hooks/use-audio-recorder';
-import { ALLOWED_CHAT_FILE_EXTENSIONS } from '../schema';
-import type { ChatBoxProps } from '../types';
+import type { ChatBoxViewProps } from './types';
 
-const CHAT_FILE_ACCEPT = Array.from(ALLOWED_CHAT_FILE_EXTENSIONS).join(',');
-
-const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) {
-        return `${bytes} B`;
-    }
-
-    const kb = bytes / 1024;
-    if (kb < 1024) {
-        return `${kb.toFixed(1)} KB`;
-    }
-
-    return `${(kb / 1024).toFixed(1)} MB`;
-};
-
-const ChatBox: FC<ChatBoxProps> = ({
+const ChatBoxView: FC<ChatBoxViewProps> = ({
+    accept,
+    fileInputRef,
+    filePreviews,
     form,
     isCreateMessageLoading,
+    isRecording,
+    onCancelRecording,
+    onOpenFilePicker,
+    onPickFiles,
+    onRemoveFile,
+    onStartRecording,
+    onStopRecording,
+    onSubmit,
 }) => {
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [selectedFiles, setSelectedFiles] = useState<File[]>(
-        form.state.values.files ?? []
-    );
-
-    const handleRecorded = useCallback(
-        (audioFile: File) => {
-            if (selectedFiles.length) {
-                toast.error('Remove files first before recording audio.');
-                return;
-            }
-
-            form.setFieldValue('audio', audioFile);
-            form.handleSubmit();
-        },
-        [form, selectedFiles.length]
-    );
-
-    const {
-        cancelRecording,
-        isRecording,
-        startRecording,
-        stopRecording,
-    } = useAudioRecorder({
-        disabled: isCreateMessageLoading,
-        onRecorded: handleRecorded,
-    });
-
-    const handleCancelRecording = useCallback(() => {
-        form.setFieldValue('audio', undefined);
-        cancelRecording();
-    }, [cancelRecording, form]);
-
-    const handleOpenFilePicker = useCallback(() => {
-        fileInputRef.current?.click();
-    }, []);
-
-    const handlePickFiles = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const files = Array.from(event.target.files ?? []);
-            if (!files.length) {
-                return;
-            }
-
-            const nextFiles = [...selectedFiles, ...files];
-            setSelectedFiles(nextFiles);
-            form.setFieldValue('audio', undefined);
-            form.setFieldValue('files', nextFiles);
-            event.target.value = '';
-        },
-        [form, selectedFiles]
-    );
-
-    const handleRemoveFile = useCallback(
-        (fileIndex: number) => {
-            const nextFiles = selectedFiles.filter(
-                (_, index) => index !== fileIndex
-            );
-
-            setSelectedFiles(nextFiles);
-            form.setFieldValue('files', nextFiles);
-        },
-        [form, selectedFiles]
-    );
-
-    const filePreviews = useMemo(
-        () =>
-            selectedFiles.map((file) => {
-                const isImage = file.type.startsWith('image/');
-
-                return {
-                    file,
-                    previewUrl: isImage ? URL.createObjectURL(file) : null,
-                };
-            }),
-        [selectedFiles]
-    );
-
-    useEffect(() => {
-        return () => {
-            filePreviews.forEach((preview) => {
-                if (preview.previewUrl) {
-                    URL.revokeObjectURL(preview.previewUrl);
-                }
-            });
-        };
-    }, [filePreviews]);
-
-    const handleStartRecording = useCallback(() => {
-        if (selectedFiles.length) {
-            toast.error('Remove selected files before recording audio.');
-            return;
-        }
-
-        void startRecording();
-    }, [selectedFiles.length, startRecording]);
-
     return (
         <div className="relative z-20 shrink-0 border-t border-border/70 bg-background/85 backdrop-blur">
-            <form
-                className="mx-auto max-w-5xl py-2"
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    form.handleSubmit();
-                }}
-            >
+            <form className="mx-auto max-w-5xl py-2" onSubmit={onSubmit}>
                 {isCreateMessageLoading && (
                     <div className="mb-2 inline-flex items-center gap-x-1 rounded-full border border-border/70 bg-white/85 px-2.5 py-1 text-[11px] text-muted-foreground dark:bg-muted/50">
                         <IconLoader2 className="size-3.5 animate-spin" />
@@ -183,7 +65,7 @@ const ChatBox: FC<ChatBoxProps> = ({
                                 </p>
                                 <Button
                                     className="absolute right-1 top-1 size-6 rounded-full bg-black/45 text-white hover:bg-black/60"
-                                    onClick={() => handleRemoveFile(index)}
+                                    onClick={() => onRemoveFile(index)}
                                     size="icon-sm"
                                     type="button"
                                     variant="ghost"
@@ -196,17 +78,17 @@ const ChatBox: FC<ChatBoxProps> = ({
                 )}
                 <div className="flex items-center gap-x-1.5 md:gap-x-2">
                     <input
-                        accept={CHAT_FILE_ACCEPT}
+                        accept={accept}
                         className="hidden"
                         multiple
-                        onChange={handlePickFiles}
+                        onChange={onPickFiles}
                         ref={fileInputRef}
                         type="file"
                     />
                     <Button
                         className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
                         disabled={isCreateMessageLoading || isRecording}
-                        onClick={handleOpenFilePicker}
+                        onClick={onOpenFilePicker}
                         size="icon-sm"
                         type="button"
                         variant="ghost"
@@ -240,7 +122,7 @@ const ChatBox: FC<ChatBoxProps> = ({
                             <Button
                                 className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
                                 disabled={isCreateMessageLoading}
-                                onClick={stopRecording}
+                                onClick={onStopRecording}
                                 size="icon-sm"
                                 type="button"
                                 variant="ghost"
@@ -250,7 +132,7 @@ const ChatBox: FC<ChatBoxProps> = ({
                             <Button
                                 className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
                                 disabled={isCreateMessageLoading}
-                                onClick={handleCancelRecording}
+                                onClick={onCancelRecording}
                                 size="icon-sm"
                                 type="button"
                                 variant="ghost"
@@ -262,7 +144,7 @@ const ChatBox: FC<ChatBoxProps> = ({
                         <Button
                             className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
                             disabled={isCreateMessageLoading}
-                            onClick={handleStartRecording}
+                            onClick={onStartRecording}
                             size="icon-sm"
                             type="button"
                             variant="ghost"
@@ -276,4 +158,4 @@ const ChatBox: FC<ChatBoxProps> = ({
     );
 };
 
-export default memo(ChatBox);
+export default memo(ChatBoxView);
