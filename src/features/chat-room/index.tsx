@@ -13,6 +13,7 @@ import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
 
 import { useChatRoomScroll } from './hooks/use-chat-room-scroll';
+import { usePrivateMessageRead } from './hooks/use-private-message-read';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
 import type { CreateMessageFormValues } from './types';
 import ChatRoomView from './view'
@@ -118,6 +119,11 @@ const ChatRoom = () => {
     usePrivateMessageListener({
         activePrivateConversationId,
         eventName: 'private-message:new',
+    });
+    
+    usePrivateMessageRead({
+        activePrivateConversationId,
+        messages: memoizedMessages,
     });
 
     return <ChatRoomView

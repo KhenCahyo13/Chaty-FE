@@ -61,3 +61,17 @@ export const createPrivateConversation = async (
 
     return response.data as ApiResponse<CreatePrivateConversationResponse>;
 };
+
+export const readPrivateConversation = async (
+    id: string,
+    lastReadMessageId: string
+): Promise<ApiResponse<null>> => {
+    const response = await authenticatedApi.post(
+        `/private-conversations/${id}/read`,
+        {
+            last_read_message_id: lastReadMessageId,
+        }
+    );
+
+    return response.data as ApiResponse<null>;
+};

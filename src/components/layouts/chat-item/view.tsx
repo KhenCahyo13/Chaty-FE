@@ -6,6 +6,7 @@ import { formatLastSendTime } from '@/lib/datetime';
 import { cn } from '@/lib/utils';
 
 import type { ChatItemViewProps } from './types';
+import { Badge } from '@/components/ui/badge';
 
 const ChatItemView: FC<ChatItemViewProps> = ({
     conversation,
@@ -37,17 +38,20 @@ const ChatItemView: FC<ChatItemViewProps> = ({
                     {formatLastSendTime(conversation.lastMessage.createdAt)}
                 </span>
             </div>
-            <div className='flex items-center gap-x-2'>
-                {conversation.lastMessage.isMe && <IconChecks className={cn(
-                    'size-4',
-                    conversation.lastMessage.isRead ? 'text-blue-500' : 'text-muted-foreground'
-                )} />}
-                <p className={cn(
-                    'text-sm text-muted-foreground line-clamp-1',
-                    conversation.lastMessage.isDeleted && 'italic'
-                )}>
-                    {conversation.lastMessage.content ? conversation.lastMessage.content : 'This message was deleted'}
-                </p>
+            <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-x-2'>
+                    {conversation.lastMessage.isMe && <IconChecks className={cn(
+                        'size-4',
+                        conversation.lastMessage.isRead ? 'text-blue-500' : 'text-muted-foreground'
+                    )} />}
+                    <p className={cn(
+                        'text-sm text-muted-foreground line-clamp-1',
+                        conversation.lastMessage.isDeleted && 'italic'
+                    )}>
+                        {conversation.lastMessage.content ? conversation.lastMessage.content : 'This message was deleted'}
+                    </p>
+                </div>
+                {conversation.unreadMessageCount > 0 && <Badge>{conversation.unreadMessageCount}</Badge>}
             </div>
         </div>
     </div>

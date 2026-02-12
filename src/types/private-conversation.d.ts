@@ -6,6 +6,7 @@ export interface PrivateConversationList {
     updatedAt: string;
     sender: UserList;
     lastMessage: PrivateConversationListLastMessage;
+    unreadMessageCount: number;
 }
 
 export interface PrivateConversationListLastMessage {

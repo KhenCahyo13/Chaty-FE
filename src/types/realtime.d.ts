@@ -11,3 +11,10 @@ export interface SocketPrivateMessagePayload {
     createdAt: string;
     readsCount: number;
 }
+
+export interface SocketPrivateMessageReadPayload {
+    privateConversationId: string;
+    readerId: string;
+    messageIds: string[];
+    readAt: Date;
+}
