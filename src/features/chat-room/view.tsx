@@ -57,39 +57,31 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                         height: messageVirtualTotalSize,
                                     }}
                                 >
-                                    {messageVirtualItems.map((virtualRow) => {
-                                        const message =
-                                            messages[virtualRow.index];
-                                        return (
-                                            <div
-                                                className="flex pb-2.5"
-                                                data-index={
-                                                    virtualRow.index
-                                                }
-                                                key={message.id}
-                                                ref={messageVirtualMeasureElement}
-                                                style={{
-                                                    left: 0,
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    transform: `translateY(${virtualRow.start}px)`,
-                                                    width: '100%',
-                                                }}
-                                            >
+                                        {messageVirtualItems.map((virtualRow) => {
+                                            const message =
+                                                messages[virtualRow.index];
+                                            return (
                                                 <div
                                                     className={
                                                         message.isMe
-                                                            ? 'ml-auto'
-                                                            : 'mr-auto'
+                                                            ? 'absolute left-0 flex w-full justify-end pb-2.5'
+                                                            : 'absolute left-0 flex w-full justify-start pb-2.5'
                                                     }
+                                                    data-index={
+                                                        virtualRow.index
+                                                    }
+                                                    key={message.id}
+                                                    ref={messageVirtualMeasureElement}
+                                                    style={{
+                                                        transform: `translateY(${virtualRow.start}px)`,
+                                                    }}
                                                 >
                                                     <ChatBubble
                                                         message={message}
                                                     />
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
+                                            );
+                                        })}
                                 </div>
                             </div>
                         ) : (
