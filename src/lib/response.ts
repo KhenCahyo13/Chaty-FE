@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function resolveErrorMessage(error: unknown): string {
-    const unknownErrorMessage = 'Terjadi kesalahan yang tidak diketahui';
+    const unknownErrorMessage = 'An unknown error occurred';
 
     if (!axios.isAxiosError(error)) {
         return unknownErrorMessage;
