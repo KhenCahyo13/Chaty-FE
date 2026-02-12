@@ -5,7 +5,7 @@ import { LoaderFallback } from '@/components/fallback/loader';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
 
 import type { UserListDialogViewProps } from './types';
 
@@ -17,6 +17,8 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
     isError,
     handleCreatePrivateConversation,
     isCreatePrivateConversationLoading,
+    searchUsers,
+    setSearchUsers,
 }) => (
     <Dialog open={openUserListDialog} onOpenChange={setOpenUserListDialog}>
         <DialogContent>
@@ -24,7 +26,11 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                 <DialogTitle>User List</DialogTitle>
                 <DialogDescription className="text-muted-foreground">Let's start a new messages with your friend</DialogDescription>
             </DialogHeader>
-            <Separator />
+            <Input
+                placeholder='Search users...'
+                value={searchUsers}
+                onChange={(e) => setSearchUsers(e.target.value)}
+            />
             {isLoading ? (
                 <div className='h-64 flex items-center justify-center'>
                     <LoaderFallback label='Waiting for users data...' />

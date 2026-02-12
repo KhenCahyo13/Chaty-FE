@@ -3,6 +3,7 @@ import { type FC, memo, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
+import { DEFAULT_DEBOUNCE_DELAY } from '@/components/constants/state';
 import { formatSocketPrivateMessage } from '@/lib/message';
 import { queryKeys } from '@/lib/query-keys';
 import { socket } from '@/lib/socket';
@@ -26,7 +27,7 @@ const MainLayout: FC<LayoutProps> = ({
 
     const [privateConversationsLimit, _setPrivateConversationsLimit] = useState(10);
     const [searchPrivateConversations, setSearchPrivateConversations] = useState<string | undefined>(undefined);
-    const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, 300);
+    const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, DEFAULT_DEBOUNCE_DELAY);
 
     const { data: privateConversations, isLoading: isPrivateConversationsLoading, isError: isPrivateConversationsError } = useQuery({
         queryKey: queryKeys.privateConversations.list(privateConversationsLimit, debouncedSearchPrivateConversations),

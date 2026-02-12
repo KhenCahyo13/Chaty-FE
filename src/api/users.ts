@@ -4,7 +4,7 @@ import type { UserList } from '@/types/user';
 
 export const fetchUsers = async (
     limit: number,
-    search: string
+    search?: string
 ): Promise<ApiResponse<UserList[]>> => {
     const response = await authenticatedApi.get('/users', {
         params: {

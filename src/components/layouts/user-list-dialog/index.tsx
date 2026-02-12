@@ -1,9 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
+import { useDebounce } from 'use-debounce';
 
 import { createPrivateConversation } from '@/api/private-conversations';
 import { fetchUsers } from '@/api/users';
+import { DEFAULT_DEBOUNCE_DELAY } from '@/components/constants/state';
 import { queryKeys } from '@/lib/query-keys';
 import { resolveErrorMessage } from '@/lib/response';
 import { useComponentsStore } from '@/stores/components';
@@ -15,9 +17,12 @@ const UserListDialog = () => {
     const { openUserListDialog, setOpenUserListDialog } = useComponentsStore();
     const { setActivePrivateConversationId } = usePrivateConversationStore();
 
+    const [searchUsers, setSearchUsers] = useState<string | undefined>(undefined);
+    const [debouncedSearchUsers] = useDebounce(searchUsers, DEFAULT_DEBOUNCE_DELAY);
+
     const { data, isLoading, isError } = useQuery({
-        queryKey: queryKeys.users.list(20, ''),
-        queryFn: () => fetchUsers(20, ''),
+        queryKey: queryKeys.users.list(20, debouncedSearchUsers),
+        queryFn: () => fetchUsers(20, debouncedSearchUsers),
     });
 
     const createPrivateConversationMutation = useMutation({
@@ -43,6 +48,8 @@ const UserListDialog = () => {
         isError={isError}
         handleCreatePrivateConversation={handleCreatePrivateConversation}
         isCreatePrivateConversationLoading={createPrivateConversationMutation.isPending}
+        searchUsers={searchUsers}
+        setSearchUsers={setSearchUsers}
     />;
 };
 

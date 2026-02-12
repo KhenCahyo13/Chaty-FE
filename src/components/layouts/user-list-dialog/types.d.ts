@@ -8,4 +8,6 @@ export interface UserListDialogViewProps {
     isError: boolean;
     handleCreatePrivateConversation: (userId: string) => void;
     isCreatePrivateConversationLoading: boolean;
+    searchUsers: string | undefined;
+    setSearchUsers: (search: string | undefined) => void;
 }
