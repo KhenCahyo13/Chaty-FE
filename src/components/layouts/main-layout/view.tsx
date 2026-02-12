@@ -56,7 +56,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                             {privateConversations && privateConversations.length === 0 ? (
                                 <ImageTextFallback
                                     imageClassName='w-40'
-                                    imageName='no-data'
+                                    imageName='empty'
                                     label="Let's start a new conversation."
                                 />
                             ) : (

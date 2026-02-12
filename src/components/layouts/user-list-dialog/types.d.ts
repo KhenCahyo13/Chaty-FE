@@ -6,4 +6,6 @@ export interface UserListDialogViewProps {
     users: UserList[] | undefined;
     isLoading: boolean;
     isError: boolean;
+    handleCreatePrivateConversation: (userId: string) => void;
+    isCreatePrivateConversationLoading: boolean;
 }

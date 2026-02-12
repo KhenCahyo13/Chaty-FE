@@ -32,3 +32,11 @@ export interface PrivateConversationDetailsMessage {
     isRead: boolean;
     createdAt: string;
 }
+
+export interface CreatePrivateConversationResponse {
+    id: string;
+    user1Id: string;
+    user2Id: string;
+    createdAt: string;
+    updatedAt: string;
+}

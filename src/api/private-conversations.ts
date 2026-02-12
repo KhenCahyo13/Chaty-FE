@@ -1,6 +1,7 @@
 import { authenticatedApi } from '@/lib/axios';
 import type { ApiResponse, CursorMeta } from '@/types/api';
 import type {
+    CreatePrivateConversationResponse,
     PrivateConversationDetails,
     PrivateConversationDetailsMessage,
     PrivateConversationList,
@@ -45,4 +46,14 @@ export const fetchPrivateConversationMessagesById = async (
         PrivateConversationDetailsMessage[],
         CursorMeta
     >;
+};
+
+export const createPrivateConversation = async (
+    user2Id: string
+): Promise<ApiResponse<CreatePrivateConversationResponse>> => {
+    const response = await authenticatedApi.post('/private-conversations', {
+        user_2_id: user2Id,
+    });
+
+    return response.data as ApiResponse<CreatePrivateConversationResponse>;
 };

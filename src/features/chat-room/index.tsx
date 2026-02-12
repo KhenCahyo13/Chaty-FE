@@ -53,10 +53,22 @@ const ChatRoom = () => {
     const memoizedMessages = useMemo(() => {
         if (!messages) return [];
 
-        return messages.pages.slice().reverse()
-            .flatMap((page) => page.data)
-            .sort((a, b) =>
-                new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        return messages.pages
+            .slice()
+            .reverse()
+            .flatMap((page) => (Array.isArray(page?.data) ? page.data : []))
+            .filter(
+                (
+                    message
+                ): message is PrivateConversationDetailsMessage =>
+                    !!message &&
+                    typeof message.id === 'string' &&
+                    typeof message.createdAt === 'string'
+            )
+            .sort(
+                (a, b) =>
+                    new Date(a.createdAt).getTime() -
+                    new Date(b.createdAt).getTime()
             );
     }, [messages]);
 
@@ -117,15 +129,29 @@ const ChatRoom = () => {
                     if (!old) return old;
 
                     const firstPage = old.pages[0];
+                    const nextMessage = formatSocketPrivateMessage(
+                        payload.message,
+                        user?.id ?? ''
+                    );
+                    const fallbackFirstPage: ApiResponse<
+                        PrivateConversationDetailsMessage[],
+                        CursorMeta
+                    > = {
+                        data: [],
+                        meta: {},
+                    };
+                    const safeFirstPage = firstPage ?? fallbackFirstPage;
 
                     return {
                         ...old,
                         pages: [
                             {
-                                ...firstPage,
+                                ...safeFirstPage,
                                 data: [
-                                    ...firstPage.data,
-                                    formatSocketPrivateMessage(payload.message, user?.id ?? ''),
+                                    ...(Array.isArray(safeFirstPage.data)
+                                        ? safeFirstPage.data
+                                        : []),
+                                    nextMessage,
                                 ],
                             },
                             ...old.pages.slice(1),

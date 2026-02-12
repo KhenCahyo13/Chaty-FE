@@ -40,15 +40,31 @@ const MainLayout: FC<LayoutProps> = ({
                     if (!old) return old;
 
                     const firstPage = old.pages[0];
+                    const nextMessage = formatSocketPrivateMessage(
+                        payload.message,
+                        user?.id ?? ''
+                    );
+                    const fallbackFirstPage: ApiResponse<
+                        PrivateConversationDetailsMessage[],
+                        CursorMeta
+                    > = {
+                        data: [],
+                        meta: { nextCursor: null },
+                        success: true,
+                        message: '',
+                    };
+                    const safeFirstPage = firstPage ?? fallbackFirstPage;
 
                     return {
                         ...old,
                         pages: [
                             {
-                                ...firstPage,
+                                ...safeFirstPage,
                                 data: [
-                                    ...firstPage.data,
-                                    formatSocketPrivateMessage(payload.message, user?.id!),
+                                    ...(Array.isArray(safeFirstPage.data)
+                                        ? safeFirstPage.data
+                                        : []),
+                                    nextMessage,
                                 ],
                             },
                             ...old.pages.slice(1),

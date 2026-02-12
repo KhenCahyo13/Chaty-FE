@@ -3,6 +3,7 @@ import { type FC,memo } from 'react';
 import { ImageTextFallback } from '@/components/fallback/image-text';
 import { LoaderFallback } from '@/components/fallback/loader';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
@@ -14,6 +15,8 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
     users,
     isLoading,
     isError,
+    handleCreatePrivateConversation,
+    isCreatePrivateConversationLoading,
 }) => (
     <Dialog open={openUserListDialog} onOpenChange={setOpenUserListDialog}>
         <DialogContent>
@@ -34,19 +37,22 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                     />
                 </div>
             ) : (
-                <div className='flex flex-col max-h-96 overflow-y-scroll'>
+                <div className='flex flex-col gap-y-2 max-h-96 overflow-y-scroll'>
                     {users && users.length === 0 ? (
                         <div className='h-64 flex items-center justify-center'>
                             <ImageTextFallback
-                                imageName='no-data'
+                                imageName='empty'
                                 label='No users found.'
                             />
                         </div>
                     ) : (
                         users?.map((user) => (
-                            <div
+                            <Button
                                 key={user.id}
-                                className='py-3 px-2 flex items-center gap-x-4 cursor-pointer hover:bg-accent rounded-md'
+                                variant='ghost'
+                                className='justify-start h-14 px-2 gap-x-3 cursor-pointer'
+                                disabled={isCreatePrivateConversationLoading}
+                                onClick={() => handleCreatePrivateConversation(user.id)}
                             >
                                 <Avatar className='size-10'>
                                     {user.profile && user.profile.avatarUrl ? (
@@ -57,11 +63,11 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                                         </AvatarFallback>
                                     )}
                                 </Avatar>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col items-start'>
                                     <p className='capitalize text-sm font-medium'>{user.profile?.fullName || user.username}</p>
                                     <p className='text-xs text-muted-foreground'>{user.email}</p>
                                 </div>
-                            </div>
+                            </Button>
                         ))
                     )}
                 </div>
