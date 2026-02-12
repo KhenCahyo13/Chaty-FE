@@ -14,7 +14,7 @@ import AudioPlayerView from './view';
 const AudioPlayer: FC<AudioPlayerProps> = ({ isMe, src }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const lastUpdateRef = useRef(0);
-    const rafIdRef = useRef<number | null>(null);
+    const rafIdRef = useRef<null | number>(null);
     const lastReportedTimeRef = useRef(0);
     const isPlayingRef = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);

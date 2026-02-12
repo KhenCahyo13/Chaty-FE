@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form';
 import { type InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { fetchPrivateConversationDetails, fetchPrivateConversationMessagesById } from '@/api/private-conversations';
@@ -182,6 +182,7 @@ const ChatRoom = () => {
         messagesLength: messagesWithFileMeta.length,
     });
 
+    // eslint-disable-next-line react-hooks/incompatible-library
     const messageVirtualizer = useVirtualizer({
         count: messagesWithFileMeta.length,
         estimateSize: () => 64,
@@ -202,12 +203,12 @@ const ChatRoom = () => {
         isFetchingNextMessagesPage={isFetchingNextMessagesPage}
         isRoomError={isRoomError}
         isRoomLoading={isRoomLoading}
-        messageVirtualItems={messageVirtualizer.getVirtualItems()}
-        messageVirtualMeasureElement={messageVirtualizer.measureElement}
-        messageVirtualTotalSize={messageVirtualizer.getTotalSize()}
         messageForm={messageForm}
         messages={messagesWithFileMeta}
         messagesContainerRef={messagesContainerRef}
+        messageVirtualItems={messageVirtualizer.getVirtualItems()}
+        messageVirtualMeasureElement={messageVirtualizer.measureElement}
+        messageVirtualTotalSize={messageVirtualizer.getTotalSize()}
         room={room?.data}
     />;
 };

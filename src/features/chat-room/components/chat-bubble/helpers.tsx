@@ -1,8 +1,9 @@
 import { IconFile } from '@tabler/icons-react';
 
-import AudioPlayer from '../audio-player';
 import { cn } from '@/lib/utils';
+
 import type { ChatRoomMessage } from '../../types';
+import AudioPlayer from '../audio-player';
 
 export const renderBody = (message: ChatRoomMessage) => {
     if (message.isDeleted) {

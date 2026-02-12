@@ -18,10 +18,10 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
     isRoomLoading,
     messageForm,
     messages,
+    messagesContainerRef,
     messageVirtualItems,
     messageVirtualMeasureElement,
     messageVirtualTotalSize,
-    messagesContainerRef,
     room,
 }) => (
     <div className="relative flex h-svh flex-col overflow-hidden">

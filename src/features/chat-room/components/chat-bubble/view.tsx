@@ -3,6 +3,7 @@ import { type FC, memo } from 'react';
 
 import { formatLastSendTime } from '@/lib/datetime';
 import { cn } from '@/lib/utils';
+
 import type { ChatBubbleViewProps } from './types';
 
 const ChatBubbleView: FC<ChatBubbleViewProps> = ({ body, message }) => {

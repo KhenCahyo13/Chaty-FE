@@ -11,11 +11,12 @@ import {
 } from 'react';
 import { toast } from 'sonner';
 
+import { ALLOWED_CHAT_FILE_EXTENSIONS } from '@/constants/file';
+import { useAudioRecorder } from '@/hooks/use-audio-recorder';
+
+import type { ChatBoxProps } from '../../types';
 import type { ChatBoxViewFilePreview } from './types';
 import ChatBoxView from './view';
-import { ALLOWED_CHAT_FILE_EXTENSIONS } from '@/constants/file';
-import type { ChatBoxProps } from '../../types';
-import { useAudioRecorder } from '@/hooks/use-audio-recorder';
 
 const CHAT_FILE_ACCEPT = Array.from(ALLOWED_CHAT_FILE_EXTENSIONS).join(',');
 

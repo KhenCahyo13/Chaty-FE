@@ -1,6 +1,6 @@
 import type { useForm } from '@tanstack/react-form';
-import type { RefObject, UIEvent } from 'react';
 import type { VirtualItem } from '@tanstack/react-virtual';
+import type { RefObject, UIEvent } from 'react';
 import type z from 'zod';
 
 import type {
@@ -46,13 +46,11 @@ export interface ChatRoomViewProps {
     isFetchingNextMessagesPage: boolean;
     isRoomError: boolean;
     isRoomLoading: boolean;
-    messageVirtualItems: VirtualItem[];
-    messageVirtualTotalSize: number;
-    messageVirtualMeasureElement: (
-        element: Element | null
-    ) => void;
     messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
     messages: ChatRoomMessage[];
     messagesContainerRef: RefObject<HTMLDivElement | null>;
+    messageVirtualItems: VirtualItem[];
+    messageVirtualMeasureElement: (element: Element | null) => void;
+    messageVirtualTotalSize: number;
     room: PrivateConversationDetails | undefined;
 }

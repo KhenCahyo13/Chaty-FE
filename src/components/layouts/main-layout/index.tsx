@@ -1,6 +1,6 @@
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { type FC, memo, useEffect, useRef, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
 import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/constants/state';
@@ -79,6 +79,7 @@ const MainLayout: FC<LayoutProps> = ({
     }, [token?.access_token, user?.id]);
 
     const conversationsContainerRef = useRef<HTMLDivElement | null>(null);
+    // eslint-disable-next-line react-hooks/incompatible-library
     const conversationVirtualizer = useVirtualizer({
         count: privateConversations?.length ?? 0,
         estimateSize: () => 72,

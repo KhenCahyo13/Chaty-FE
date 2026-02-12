@@ -61,7 +61,13 @@ export const usePrivateMessageRead = ({
             conversationId: activePrivateConversationId,
             lastReadMessageId: lastMessageId,
         });
-    }, [activePrivateConversationId, lastMessageId, lastMessage?.isMe, lastMessage?.isRead, readMutation]);
+    }, [
+        activePrivateConversationId,
+        lastMessageId,
+        lastMessage?.isMe,
+        lastMessage?.isRead,
+        readMutation,
+    ]);
 
     useEffect(() => {
         const onPrivateMessageRead = (
