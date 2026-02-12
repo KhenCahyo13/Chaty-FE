@@ -9,9 +9,7 @@ export interface UserListDialogViewProps {
     isLoading: boolean;
     isError: boolean;
     isFetchingNextUsersPage: boolean;
-    handleScrollUsers: (
-        e: UIEvent<HTMLDivElement, globalThis.UIEvent>
-    ) => void;
+    handleScrollUsers: (e: UIEvent<HTMLDivElement, globalThis.UIEvent>) => void;
     handleCreatePrivateConversation: (userId: string) => void;
     isCreatePrivateConversationLoading: boolean;
     searchUsers: string | undefined;
