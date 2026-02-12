@@ -1,5 +1,5 @@
 import { IconMoonStars, IconSettings, IconUserCircle } from '@tabler/icons-react';
-import { type FC,memo } from 'react';
+import { type FC, memo } from 'react';
 
 import { Button } from '@/components/ui/button';
 
@@ -7,7 +7,8 @@ import type { SideButtonsViewProps } from './types';
 
 const SideButtonsView: FC<SideButtonsViewProps> = ({
     isDarkTheme,
-    handleToggleTheme
+    handleToggleTheme,
+    setOpenProfileDialog,
 }) => (
     <aside className="hidden w-14 shrink-0 flex-col justify-end border-r border-sidebar-border/70 px-1.5 py-3 md:flex">
         <div className="flex flex-col items-center gap-y-2">
@@ -15,8 +16,9 @@ const SideButtonsView: FC<SideButtonsViewProps> = ({
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="size-10 rounded-xl border border-sidebar-border/70 bg-background/80 hover:bg-background"
+                className="size-10 rounded-xl border border-transparent hover:border-sidebar-border/80 hover:bg-background/80"
                 aria-label="Profile"
+                onClick={() => setOpenProfileDialog(true)}
             >
                 <IconUserCircle className="size-5 text-muted-foreground" />
             </Button>

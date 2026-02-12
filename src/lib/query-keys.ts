@@ -25,4 +25,10 @@ export const queryKeys = {
         list: (limit: number, search?: string) =>
             [...queryKeys.users.lists(), { limit, search }] as const,
     },
+
+    // Me
+    me: {
+        all: ['me'] as const,
+        profile: () => [...queryKeys.me.all, 'profile'] as const,
+    },
 } as const;

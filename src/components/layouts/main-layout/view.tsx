@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 
 import ChatItem from '../chat-item';
 import LoginDialog from '../login-dialog';
+import ProfileDialog from '../profile-dialog';
 import SideButtons from '../side-buttons';
 import UserListDialog from '../user-list-dialog';
 import type { MainLayoutViewProps } from './types';
@@ -40,10 +41,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                     <div className="flex min-w-0 flex-1 flex-col">
                         <SidebarHeader className="gap-y-3 border-b border-sidebar-border/70 px-3 py-4">
                             <div className='flex items-center justify-between gap-x-4'>
-                                <div className='flex flex-col gap-y-0.5'>
-                                    <h1 className="text-sm font-semibold tracking-normal md:text-base">Messages</h1>
-                                    <p className="text-[11px] text-muted-foreground">Stay in sync with your conversations.</p>
-                                </div>
+                                <h1 className="text-sm font-semibold tracking-normal md:text-base">Messages</h1>
                                 <Badge className={cn(
                                     'rounded-full border px-2 py-0 text-[9px] font-medium uppercase tracking-[0.08em]',
                                     getSocketConnectionBadgeClassName()
@@ -117,6 +115,8 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
         <LoginDialog />
         {/* User List Dialog */}
         <UserListDialog />
+        {/* Profile Dialog */}
+        <ProfileDialog />
     </>
 );
 
