@@ -23,3 +23,14 @@ export interface SocketPrivateMessageReadPayload {
     readAt: Date;
     readerId: string;
 }
+
+export interface SocketErrorPayload {
+    message: string;
+}
+
+export interface SocketPresencePayload {
+    is_online: boolean;
+    last_seen_at: null | string;
+    private_conversation_id: string;
+    user_id: string;
+}

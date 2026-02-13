@@ -1,6 +1,8 @@
 import type { PrivateConversationList } from '@/types/private-conversation';
 
-export const getLastMessagePreview = (conversation: PrivateConversationList) => {
+export const getLastMessagePreview = (
+    conversation: PrivateConversationList
+) => {
     if (conversation.lastMessage.isDeleted) {
         return 'This message was deleted';
     }

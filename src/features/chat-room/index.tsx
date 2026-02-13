@@ -15,6 +15,7 @@ import type { ApiResponse, CursorMeta } from '@/types/api';
 import type { PrivateConversationDetailsMessage } from '@/types/private-conversation';
 
 import { useChatRoomScroll } from './hooks/use-chat-room-scroll';
+import { usePrivateMessageOnlineStatus } from './hooks/use-private-message-online-status';
 import { usePrivateMessageRead } from './hooks/use-private-message-read';
 import { createMessageFormDefaultValues, createMessageFormSchema } from './schema';
 import type {
@@ -31,6 +32,15 @@ const ChatRoom = () => {
     const fileMetaCacheRef = useRef(
         new Map<string, { key: string; meta: ChatRoomMessageFileMeta[] }>()
     );
+
+    const [isReceiverOnline, setIsReceiverOnline] = useState(false);
+    const [receiverLastSeenAt, setReceiverLastSeenAt] = useState<null | string>(null);
+
+    useEffect(() => {
+        // Prevent stale presence from previous room while waiting next presence event.
+        setIsReceiverOnline(false);
+        setReceiverLastSeenAt(null);
+    }, [activePrivateConversationId]);
 
     const { data: room, isError: isRoomError, isLoading: isRoomLoading } = useQuery({
         enabled: !!activePrivateConversationId,
@@ -191,6 +201,12 @@ const ChatRoom = () => {
         overscan: 8,
     });
 
+    usePrivateMessageOnlineStatus(
+        activePrivateConversationId!,
+        setIsReceiverOnline,
+        setReceiverLastSeenAt
+    );
+
     usePrivateMessageRead({
         activePrivateConversationId,
         messages: messagesWithFileMeta,
@@ -202,6 +218,7 @@ const ChatRoom = () => {
         handleScrollMessages={handleScrollMessages}
         isCreateMessageLoading={messageMutation.isPending}
         isFetchingNextMessagesPage={isFetchingNextMessagesPage}
+        isReceiverOnline={isReceiverOnline}
         isRoomError={isRoomError}
         isRoomLoading={isRoomLoading}
         messageForm={messageForm}
@@ -210,6 +227,7 @@ const ChatRoom = () => {
         messageVirtualItems={messageVirtualizer.getVirtualItems()}
         messageVirtualMeasureElement={messageVirtualizer.measureElement}
         messageVirtualTotalSize={messageVirtualizer.getTotalSize()}
+        receiverLastSeenAt={receiverLastSeenAt}
         room={room?.data}
     />;
 };

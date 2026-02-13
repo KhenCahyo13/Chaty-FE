@@ -14,6 +14,7 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
     handleScrollMessages,
     isCreateMessageLoading,
     isFetchingNextMessagesPage,
+    isReceiverOnline,
     isRoomError,
     isRoomLoading,
     messageForm,
@@ -22,6 +23,7 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
     messageVirtualItems,
     messageVirtualMeasureElement,
     messageVirtualTotalSize,
+    receiverLastSeenAt,
     room,
 }) => (
     <div className="relative flex h-svh flex-col overflow-hidden">
@@ -37,7 +39,11 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                     />
                 ) : (
                     <>
-                        <ChatHeader receiver={room?.receiver} />
+                        <ChatHeader
+                            isReceiverOnline={isReceiverOnline}
+                            receiver={room?.receiver}
+                            receiverLastSeenAt={receiverLastSeenAt}
+                        />
 
                         {messages.length ? (
                             <div

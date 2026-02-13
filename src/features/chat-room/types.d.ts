@@ -23,7 +23,9 @@ export interface ChatBubbleProps {
 }
 
 export interface ChatHeaderProps {
+    isReceiverOnline: boolean;
     receiver: PrivateConversationListUser | undefined;
+    receiverLastSeenAt: null | string;
 }
 
 export interface ChatRoomMessageFileMeta {
@@ -44,6 +46,7 @@ export interface ChatRoomViewProps {
     ) => void;
     isCreateMessageLoading: boolean;
     isFetchingNextMessagesPage: boolean;
+    isReceiverOnline: boolean;
     isRoomError: boolean;
     isRoomLoading: boolean;
     messageForm: ReturnType<typeof useForm<CreateMessageFormValues>>;
@@ -52,5 +55,6 @@ export interface ChatRoomViewProps {
     messageVirtualItems: VirtualItem[];
     messageVirtualMeasureElement: (element: Element | null) => void;
     messageVirtualTotalSize: number;
+    receiverLastSeenAt: null | string;
     room: PrivateConversationDetails | undefined;
 }

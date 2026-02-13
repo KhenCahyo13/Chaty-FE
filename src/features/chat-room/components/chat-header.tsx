@@ -1,13 +1,16 @@
 import { IconPhone, IconSearch, IconVideo } from '@tabler/icons-react';
-import { type FC,memo } from 'react';
+import { type FC, memo } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { formatLastSendTime } from '@/lib/datetime';
 
 import type { ChatHeaderProps } from '../types';
 
 const ChatHeader: FC<ChatHeaderProps> = ({
-    receiver
+    isReceiverOnline,
+    receiver,
+    receiverLastSeenAt,
 }) => (
     <div className="relative z-20 flex items-center justify-between border-b border-border/70 bg-background/85 px-3 py-2.5 backdrop-blur md:px-4 md:py-3">
         <div className="flex items-center gap-x-2.5">
@@ -20,13 +23,19 @@ const ChatHeader: FC<ChatHeaderProps> = ({
                     </AvatarFallback>
                 )}
             </Avatar>
-            <div className="min-w-0">
+            <div className="min-w-0 flex flex-col gap-y-0.5">
                 <h1 className="truncate text-sm font-semibold capitalize">
                     {receiver?.profile?.fullName || receiver?.username}
                 </h1>
-                {/* <Badge variant="secondary" className="mt-0.5 rounded-full px-1.5 py-0 text-[9px] font-medium">
-                    Active chat
-                </Badge> */}
+                {isReceiverOnline ? (
+                    <span className='text-xs text-green-500 font-medium'>Online</span>
+                ) : (
+                    <span className='text-xs text-muted-foreground'>
+                        {receiverLastSeenAt
+                            ? `Last seen at ${formatLastSendTime(receiverLastSeenAt)}`
+                            : 'Offline'}
+                    </span>
+                )}
             </div>
         </div>
         <div className="flex items-center gap-x-2">
