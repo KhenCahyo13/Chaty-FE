@@ -5,6 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { fetchPrivateConversations } from '@/api/private-conversations';
 import { DEFAULT_DEBOUNCE_DELAY, DEFAULT_LIMIT } from '@/constants/state';
 import { useCursorPaginationList } from '@/hooks/use-cursor-pagination-list';
+import { usePrivateCall } from '@/hooks/use-private-call';
 import { usePrivateMessageListener } from '@/hooks/use-private-message-listener';
 import { registerCurrentWebPushToken } from '@/lib/push-token';
 import { queryKeys } from '@/lib/query-keys';
@@ -17,15 +18,17 @@ import type { PrivateConversationList } from '@/types/private-conversation';
 
 import MainLayoutView from './view';
 
-const MainLayout: FC<LayoutProps> = ({
-    children
-}) => {
+const MainLayout: FC<LayoutProps> = ({ children }) => {
     const { activePrivateConversationId } = usePrivateConversationStore();
     const { setOpenUserListDialog } = useComponentsStore();
     const { token, user } = useAuthStore();
 
-    const [searchPrivateConversations, setSearchPrivateConversations] = useState<string | undefined>(undefined);
-    const [debouncedSearchPrivateConversations] = useDebounce(searchPrivateConversations, DEFAULT_DEBOUNCE_DELAY);
+    const [searchPrivateConversations, setSearchPrivateConversations] =
+        useState<string | undefined>(undefined);
+    const [debouncedSearchPrivateConversations] = useDebounce(
+        searchPrivateConversations,
+        DEFAULT_DEBOUNCE_DELAY
+    );
 
     const {
         handleScroll: handleScrollPrivateConversations,
@@ -56,6 +59,9 @@ const MainLayout: FC<LayoutProps> = ({
     usePrivateMessageListener({
         activePrivateConversationId,
         eventName: 'private-message:new',
+    });
+    usePrivateCall({
+        privateConversations,
     });
 
     useEffect(() => {
@@ -93,29 +99,32 @@ const MainLayout: FC<LayoutProps> = ({
     const conversationVirtualizer = useVirtualizer({
         count: sortedPrivateConversations?.length ?? 0,
         estimateSize: () => 72,
-        getItemKey: (index) =>
-            sortedPrivateConversations?.[index]?.id ?? index,
+        getItemKey: (index) => sortedPrivateConversations?.[index]?.id ?? index,
         getScrollElement: () => conversationsContainerRef.current,
         overscan: 6,
     });
 
-    return <MainLayoutView
-        children={children}
-        conversationsContainerRef={conversationsContainerRef}
-        conversationVirtualItems={conversationVirtualizer.getVirtualItems()}
-        conversationVirtualMeasureElement={conversationVirtualizer.measureElement}
-        conversationVirtualTotalSize={conversationVirtualizer.getTotalSize()}
-        handleScrollPrivateConversations={handleScrollPrivateConversations}
-        isFetchingNextPrivateConversationsPage={
-            isFetchingNextPrivateConversationsPage
-        }
-        isPrivateConversationsError={isPrivateConversationsError}
-        isPrivateConversationsLoading={isPrivateConversationsLoading}
-        privateConversations={sortedPrivateConversations}
-        searchPrivateConversations={searchPrivateConversations}
-        setOpenUserListDialog={setOpenUserListDialog}
-        setSearchPrivateConversations={setSearchPrivateConversations}
-    />;
+    return (
+        <MainLayoutView
+            children={children}
+            conversationsContainerRef={conversationsContainerRef}
+            conversationVirtualItems={conversationVirtualizer.getVirtualItems()}
+            conversationVirtualMeasureElement={
+                conversationVirtualizer.measureElement
+            }
+            conversationVirtualTotalSize={conversationVirtualizer.getTotalSize()}
+            handleScrollPrivateConversations={handleScrollPrivateConversations}
+            isFetchingNextPrivateConversationsPage={
+                isFetchingNextPrivateConversationsPage
+            }
+            isPrivateConversationsError={isPrivateConversationsError}
+            isPrivateConversationsLoading={isPrivateConversationsLoading}
+            privateConversations={sortedPrivateConversations}
+            searchPrivateConversations={searchPrivateConversations}
+            setOpenUserListDialog={setOpenUserListDialog}
+            setSearchPrivateConversations={setSearchPrivateConversations}
+        />
+    );
 };
 
 export default memo(MainLayout);

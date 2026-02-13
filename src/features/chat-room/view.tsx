@@ -63,31 +63,31 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                         height: messageVirtualTotalSize,
                                     }}
                                 >
-                                        {messageVirtualItems.map((virtualRow) => {
-                                            const message =
-                                                messages[virtualRow.index];
-                                            return (
-                                                <div
-                                                    className={
-                                                        message.isMe
-                                                            ? 'absolute left-0 top-0 flex w-full justify-end pb-2.5'
-                                                            : 'absolute left-0 top-0 flex w-full justify-start pb-2.5'
-                                                    }
-                                                    data-index={
-                                                        virtualRow.index
-                                                    }
-                                                    key={virtualRow.key}
-                                                    ref={messageVirtualMeasureElement}
-                                                    style={{
-                                                        transform: `translateY(${virtualRow.start}px)`,
-                                                    }}
-                                                >
-                                                    <ChatBubble
-                                                        message={message}
-                                                    />
-                                                </div>
-                                            );
-                                        })}
+                                    {messageVirtualItems.map((virtualRow) => {
+                                        const message =
+                                            messages[virtualRow.index];
+                                        return (
+                                            <div
+                                                className={
+                                                    message.isMe
+                                                        ? 'absolute left-0 top-0 flex w-full justify-end pb-2.5'
+                                                        : 'absolute left-0 top-0 flex w-full justify-start pb-2.5'
+                                                }
+                                                data-index={
+                                                    virtualRow.index
+                                                }
+                                                key={virtualRow.key}
+                                                ref={messageVirtualMeasureElement}
+                                                style={{
+                                                    transform: `translateY(${virtualRow.start}px)`,
+                                                }}
+                                            >
+                                                <ChatBubble
+                                                    message={message}
+                                                />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         ) : (

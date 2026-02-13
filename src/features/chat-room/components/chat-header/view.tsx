@@ -5,12 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { formatLastSendTime } from '@/lib/datetime';
 
-import type { ChatHeaderProps } from '../types';
+import type { ChatHeaderViewProps } from './types';
 
-const ChatHeader: FC<ChatHeaderProps> = ({
+const ChatHeaderView: FC<ChatHeaderViewProps> = ({
     isReceiverOnline,
     receiver,
     receiverLastSeenAt,
+    handleStartPrivateAudioCall,
 }) => (
     <div className="relative z-20 flex items-center justify-between border-b border-border/70 bg-background/85 px-3 py-2.5 backdrop-blur md:px-4 md:py-3">
         <div className="flex items-center gap-x-2.5">
@@ -39,7 +40,12 @@ const ChatHeader: FC<ChatHeaderProps> = ({
             </div>
         </div>
         <div className="flex items-center gap-x-2">
-            <Button className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background" size='icon-sm' variant='ghost'>
+            <Button
+                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background"
+                size='icon-sm'
+                variant='ghost'
+                onClick={handleStartPrivateAudioCall}
+            >
                 <IconPhone className="size-5 text-muted-foreground" />
             </Button>
             <Button className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background" size='icon-sm' variant='ghost'>
@@ -52,4 +58,4 @@ const ChatHeader: FC<ChatHeaderProps> = ({
     </div>
 );
 
-export default memo(ChatHeader);
+export default memo(ChatHeaderView);

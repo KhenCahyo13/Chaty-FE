@@ -10,6 +10,7 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarProvider }
 import { getSocketConnectionBadgeClassName, getSocketConnectionBadgeText } from '@/lib/socket';
 import { cn } from '@/lib/utils';
 
+import CallDialog from '../call-dialog';
 import ChatItem from '../chat-item';
 import LoginDialog from '../login-dialog';
 import ProfileDialog from '../profile-dialog';
@@ -153,6 +154,8 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
             <UserListDialog />
             {/* Profile Dialog */}
             <ProfileDialog />
+            {/* Call Dialog */}
+            <CallDialog />
         </>
 );
 
