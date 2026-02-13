@@ -8,10 +8,10 @@ import { formatLastSendTime } from '@/lib/datetime';
 import type { ChatHeaderViewProps } from './types';
 
 const ChatHeaderView: FC<ChatHeaderViewProps> = ({
+    handleStartPrivateAudioCall,
     isReceiverOnline,
     receiver,
     receiverLastSeenAt,
-    handleStartPrivateAudioCall,
 }) => (
     <div className="relative z-20 flex items-center justify-between border-b border-border/70 bg-background/85 px-3 py-2.5 backdrop-blur md:px-4 md:py-3">
         <div className="flex items-center gap-x-2.5">
@@ -42,9 +42,9 @@ const ChatHeaderView: FC<ChatHeaderViewProps> = ({
         <div className="flex items-center gap-x-2">
             <Button
                 className="rounded-lg border border-transparent hover:border-border/70 hover:bg-background"
+                onClick={handleStartPrivateAudioCall}
                 size='icon-sm'
                 variant='ghost'
-                onClick={handleStartPrivateAudioCall}
             >
                 <IconPhone className="size-5 text-muted-foreground" />
             </Button>
