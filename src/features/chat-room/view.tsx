@@ -64,13 +64,13 @@ const ChatRoomView: FC<ChatRoomViewProps> = ({
                                                 <div
                                                     className={
                                                         message.isMe
-                                                            ? 'absolute left-0 flex w-full justify-end pb-2.5'
-                                                            : 'absolute left-0 flex w-full justify-start pb-2.5'
+                                                            ? 'absolute left-0 top-0 flex w-full justify-end pb-2.5'
+                                                            : 'absolute left-0 top-0 flex w-full justify-start pb-2.5'
                                                     }
                                                     data-index={
                                                         virtualRow.index
                                                     }
-                                                    key={message.id}
+                                                    key={virtualRow.key}
                                                     ref={messageVirtualMeasureElement}
                                                     style={{
                                                         transform: `translateY(${virtualRow.start}px)`,

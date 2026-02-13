@@ -185,7 +185,8 @@ const ChatRoom = () => {
     // eslint-disable-next-line react-hooks/incompatible-library
     const messageVirtualizer = useVirtualizer({
         count: messagesWithFileMeta.length,
-        estimateSize: () => 64,
+        estimateSize: () => 124,
+        getItemKey: (index) => messagesWithFileMeta[index]?.id ?? index,
         getScrollElement: () => messagesContainerRef.current,
         overscan: 8,
     });

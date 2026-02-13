@@ -51,7 +51,6 @@ export const usePrivateMessageRead = ({
 
     useEffect(() => {
         if (!activePrivateConversationId || !lastMessageId) return;
-        if (lastMessage?.isMe || lastMessage?.isRead) return;
 
         const requestKey = `${activePrivateConversationId}:${lastMessageId}`;
         if (requestedReadRef.current === requestKey) return;

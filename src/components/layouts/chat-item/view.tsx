@@ -6,8 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { formatLastSendTime } from '@/lib/datetime';
 import { cn } from '@/lib/utils';
 
-import type { ChatItemViewProps } from './types';
 import { getLastMessagePreview } from './helpers';
+import type { ChatItemViewProps } from './types';
 
 const ChatItemView: FC<ChatItemViewProps> = ({
     activePrivateConversationId,
