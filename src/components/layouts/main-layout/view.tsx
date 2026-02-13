@@ -112,7 +112,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = ({
                                                             data-index={
                                                             virtualRow.index
                                                         }
-                                                        key={conversation.id}
+                                                        key={virtualRow.key}
                                                         ref={
                                                             conversationVirtualMeasureElement
                                                         }

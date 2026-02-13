@@ -1,5 +1,5 @@
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { type FC, memo, useEffect, useRef, useState } from 'react';
+import { type FC, memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { fetchPrivateConversations } from '@/api/private-conversations';
@@ -79,10 +79,22 @@ const MainLayout: FC<LayoutProps> = ({
     }, [token?.access_token, user?.id]);
 
     const conversationsContainerRef = useRef<HTMLDivElement | null>(null);
+    const sortedPrivateConversations = useMemo(() => {
+        if (!privateConversations?.length) return privateConversations;
+
+        return [...privateConversations].sort((a, b) => {
+            const aTimestamp = Date.parse(a.lastMessage.createdAt);
+            const bTimestamp = Date.parse(b.lastMessage.createdAt);
+            return bTimestamp - aTimestamp;
+        });
+    }, [privateConversations]);
+
     // eslint-disable-next-line react-hooks/incompatible-library
     const conversationVirtualizer = useVirtualizer({
-        count: privateConversations?.length ?? 0,
+        count: sortedPrivateConversations?.length ?? 0,
         estimateSize: () => 72,
+        getItemKey: (index) =>
+            sortedPrivateConversations?.[index]?.id ?? index,
         getScrollElement: () => conversationsContainerRef.current,
         overscan: 6,
     });
@@ -99,7 +111,7 @@ const MainLayout: FC<LayoutProps> = ({
         }
         isPrivateConversationsError={isPrivateConversationsError}
         isPrivateConversationsLoading={isPrivateConversationsLoading}
-        privateConversations={privateConversations}
+        privateConversations={sortedPrivateConversations}
         searchPrivateConversations={searchPrivateConversations}
         setOpenUserListDialog={setOpenUserListDialog}
         setSearchPrivateConversations={setSearchPrivateConversations}
