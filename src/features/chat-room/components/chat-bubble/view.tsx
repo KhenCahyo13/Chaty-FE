@@ -6,9 +6,8 @@ import { cn } from '@/lib/utils';
 
 import type { ChatBubbleViewProps } from './types';
 
-const ChatBubbleView: FC<ChatBubbleViewProps> = ({ body, message }) => {
-    return (
-        <div
+const ChatBubbleView: FC<ChatBubbleViewProps> = ({ body, message }) => (
+    <div
             className={cn(
                 'max-w-[84%] rounded-xl border px-3 py-2 md:max-w-[62%]',
                 message.isMe
@@ -36,7 +35,6 @@ const ChatBubbleView: FC<ChatBubbleViewProps> = ({ body, message }) => {
                 </p>
             </div>
         </div>
-    );
-};
+);
 
 export default memo(ChatBubbleView);

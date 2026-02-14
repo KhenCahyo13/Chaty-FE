@@ -93,3 +93,17 @@ export interface ActivePrivateCall {
     startedAt: string;
     status: PrivateCallStatus;
 }
+
+export interface SocketPrivateCallWebRtcPayload {
+    call_id: string;
+    from_user_id: string;
+    private_conversation_id: string;
+    sdp: RTCSessionDescriptionInit | string;
+}
+
+export interface SocketPrivateCallIceCandidatePayload {
+    call_id: string;
+    candidate: RTCIceCandidateInit | string | unknown;
+    from_user_id: string;
+    private_conversation_id: string;
+}

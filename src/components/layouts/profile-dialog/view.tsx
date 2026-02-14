@@ -8,6 +8,7 @@ import { TfTextInput } from '@/components/tanstack-form/text-input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { FieldError, FieldGroup } from '@/components/ui/field';
+import { getInitials } from '@/lib/sentence';
 import type { FormFileFieldState } from '@/types/components';
 
 import type { ProfileDialogViewProps } from './types';
@@ -59,7 +60,7 @@ const ProfileDialogView: FC<ProfileDialogViewProps> = ({
                                                             <AvatarImage alt={profile?.profile?.fullName || profile?.username || 'Profile avatar'} className='object-cover' src={avatarUrl} />
                                                         ) : (
                                                             <AvatarFallback className='bg-primary/10 text-base font-semibold'>
-                                                                {profile?.username.slice(0, 2).toUpperCase()}
+                                                                {getInitials(profile?.username)}
                                                             </AvatarFallback>
                                                         )}
                                                     </Avatar>

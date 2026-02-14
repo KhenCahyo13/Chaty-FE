@@ -29,133 +29,131 @@ const ChatBoxView: FC<ChatBoxViewProps> = ({
     onStartRecording,
     onStopRecording,
     onSubmit,
-}) => {
-    return (
-        <div className="relative z-20 shrink-0 border-t border-border/70 bg-background/85 backdrop-blur">
-            <form className="mx-auto max-w-5xl py-2" onSubmit={onSubmit}>
-                {isCreateMessageLoading && (
-                    <div className="mb-2 inline-flex items-center gap-x-1 rounded-full border border-border/70 bg-white/85 px-2.5 py-1 text-[11px] text-muted-foreground dark:bg-muted/50">
-                        <IconLoader2 className="size-3.5 animate-spin" />
-                        Sending message...
-                    </div>
-                )}
-                {filePreviews.length > 0 && (
-                    <div className="mb-2 grid max-h-44 grid-cols-2 gap-2 overflow-y-auto rounded-xl border border-border/70 bg-white/90 p-2 dark:bg-muted/40 md:grid-cols-3">
-                        {filePreviews.map((preview, index) => (
-                            <div
-                                className="relative rounded-lg border border-border/70 bg-background/80 p-2"
-                                key={`${preview.file.name}-${preview.file.lastModified}-${index}`}
+}) => (
+    <div className="relative z-20 shrink-0 border-t border-border/70 bg-background/85 backdrop-blur">
+        <form className="mx-auto max-w-5xl py-2" onSubmit={onSubmit}>
+            {isCreateMessageLoading && (
+                <div className="mb-2 inline-flex items-center gap-x-1 rounded-full border border-border/70 bg-white/85 px-2.5 py-1 text-[11px] text-muted-foreground dark:bg-muted/50">
+                    <IconLoader2 className="size-3.5 animate-spin" />
+                    Sending message...
+                </div>
+            )}
+            {filePreviews.length > 0 && (
+                <div className="mb-2 grid max-h-44 grid-cols-2 gap-2 overflow-y-auto rounded-xl border border-border/70 bg-white/90 p-2 dark:bg-muted/40 md:grid-cols-3">
+                    {filePreviews.map((preview, index) => (
+                        <div
+                            className="relative rounded-lg border border-border/70 bg-background/80 p-2"
+                            key={`${preview.file.name}-${preview.file.lastModified}-${index}`}
+                        >
+                            {preview.previewUrl ? (
+                                <img
+                                    alt={preview.file.name}
+                                    className="h-16 w-full rounded-md object-cover"
+                                    src={preview.previewUrl}
+                                />
+                            ) : (
+                                <div className="flex h-16 items-center justify-center rounded-md border border-dashed border-border/70 text-muted-foreground">
+                                    <IconPaperclip className="size-4" />
+                                </div>
+                            )}
+                            <p className="mt-1 line-clamp-1 text-[11px] font-medium">
+                                {preview.file.name}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground">
+                                {formatFileSize(preview.file.size)}
+                            </p>
+                            <Button
+                                className="absolute right-1 top-1 size-6 rounded-full bg-black/45 text-white hover:bg-black/60"
+                                onClick={() => onRemoveFile(index)}
+                                size="icon-sm"
+                                type="button"
+                                variant="ghost"
                             >
-                                {preview.previewUrl ? (
-                                    <img
-                                        alt={preview.file.name}
-                                        className="h-16 w-full rounded-md object-cover"
-                                        src={preview.previewUrl}
-                                    />
-                                ) : (
-                                    <div className="flex h-16 items-center justify-center rounded-md border border-dashed border-border/70 text-muted-foreground">
-                                        <IconPaperclip className="size-4" />
-                                    </div>
-                                )}
-                                <p className="mt-1 line-clamp-1 text-[11px] font-medium">
-                                    {preview.file.name}
-                                </p>
-                                <p className="text-[10px] text-muted-foreground">
-                                    {formatFileSize(preview.file.size)}
-                                </p>
-                                <Button
-                                    className="absolute right-1 top-1 size-6 rounded-full bg-black/45 text-white hover:bg-black/60"
-                                    onClick={() => onRemoveFile(index)}
-                                    size="icon-sm"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    <IconX className="size-3.5" />
-                                </Button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                <div className="flex items-center gap-x-1.5 md:gap-x-2">
-                    <input
-                        accept={accept}
-                        className="hidden"
-                        multiple
-                        onChange={onPickFiles}
-                        ref={fileInputRef}
-                        type="file"
+                                <IconX className="size-3.5" />
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+            )}
+            <div className="flex items-center gap-x-1.5 md:gap-x-2">
+                <input
+                    accept={accept}
+                    className="hidden"
+                    multiple
+                    onChange={onPickFiles}
+                    ref={fileInputRef}
+                    type="file"
+                />
+                <Button
+                    className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
+                    disabled={isCreateMessageLoading || isRecording}
+                    onClick={onOpenFilePicker}
+                    size="icon-sm"
+                    type="button"
+                    variant="ghost"
+                >
+                    <IconPlus className="size-5 text-muted-foreground" />
+                </Button>
+                <div className="flex flex-1 rounded-xl border border-border/70 bg-white px-1 shadow-[0_20px_26px_-30px_oklch(0.28_0.04_250)] dark:bg-muted/40 dark:shadow-none">
+                    <TfTextInput
+                        className="h-9 border-none bg-transparent text-[13px] shadow-none focus-visible:ring-0"
+                        disabled={isCreateMessageLoading || isRecording}
+                        form={form}
+                        name="content"
+                        placeholder="Write a message"
                     />
-                    <Button
-                        className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
-                        disabled={isCreateMessageLoading || isRecording}
-                        onClick={onOpenFilePicker}
-                        size="icon-sm"
-                        type="button"
-                        variant="ghost"
-                    >
-                        <IconPlus className="size-5 text-muted-foreground" />
-                    </Button>
-                    <div className="flex flex-1 rounded-xl border border-border/70 bg-white px-1 shadow-[0_20px_26px_-30px_oklch(0.28_0.04_250)] dark:bg-muted/40 dark:shadow-none">
-                        <TfTextInput
-                            className="h-9 border-none bg-transparent text-[13px] shadow-none focus-visible:ring-0"
-                            disabled={isCreateMessageLoading || isRecording}
-                            form={form}
-                            name="content"
-                            placeholder="Write a message"
-                        />
-                    </div>
-                    <Button
-                        className="rounded-lg"
-                        disabled={isCreateMessageLoading || isRecording}
-                        size="icon-sm"
-                        type="submit"
-                    >
-                        {isCreateMessageLoading ? (
-                            <IconLoader2 className="size-4 animate-spin" />
-                        ) : (
-                            <IconSend2 className="size-4" />
-                        )}
-                    </Button>
-
-                    {isRecording ? (
-                        <>
-                            <Button
-                                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
-                                disabled={isCreateMessageLoading}
-                                onClick={onStopRecording}
-                                size="icon-sm"
-                                type="button"
-                                variant="ghost"
-                            >
-                                <IconPlayerStopFilled className="size-5 text-rose-500" />
-                            </Button>
-                            <Button
-                                className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
-                                disabled={isCreateMessageLoading}
-                                onClick={onCancelRecording}
-                                size="icon-sm"
-                                type="button"
-                                variant="ghost"
-                            >
-                                <IconX className="size-5 text-muted-foreground" />
-                            </Button>
-                        </>
+                </div>
+                <Button
+                    className="rounded-lg"
+                    disabled={isCreateMessageLoading || isRecording}
+                    size="icon-sm"
+                    type="submit"
+                >
+                    {isCreateMessageLoading ? (
+                        <IconLoader2 className="size-4 animate-spin" />
                     ) : (
+                        <IconSend2 className="size-4" />
+                    )}
+                </Button>
+
+                {isRecording ? (
+                    <>
                         <Button
                             className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
                             disabled={isCreateMessageLoading}
-                            onClick={onStartRecording}
+                            onClick={onStopRecording}
                             size="icon-sm"
                             type="button"
                             variant="ghost"
                         >
-                            <IconMicrophone className="size-5 text-muted-foreground" />
+                            <IconPlayerStopFilled className="size-5 text-rose-500" />
                         </Button>
-                    )}
-                </div>
-            </form>
-        </div>
-    );
-};
+                        <Button
+                            className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
+                            disabled={isCreateMessageLoading}
+                            onClick={onCancelRecording}
+                            size="icon-sm"
+                            type="button"
+                            variant="ghost"
+                        >
+                            <IconX className="size-5 text-muted-foreground" />
+                        </Button>
+                    </>
+                ) : (
+                    <Button
+                        className="rounded-lg border border-transparent hover:border-border/70 hover:bg-white dark:hover:bg-muted/50"
+                        disabled={isCreateMessageLoading}
+                        onClick={onStartRecording}
+                        size="icon-sm"
+                        type="button"
+                        variant="ghost"
+                    >
+                        <IconMicrophone className="size-5 text-muted-foreground" />
+                    </Button>
+                )}
+            </div>
+        </form>
+    </div>
+)
 
 export default memo(ChatBoxView);

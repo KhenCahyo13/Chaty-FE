@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { getInitials } from '@/lib/sentence';
 
 import type { UserListDialogViewProps } from './types';
 
@@ -75,7 +76,7 @@ const UserListDialogView: FC<UserListDialogViewProps> = ({
                                         />
                                     ) : (
                                         <AvatarFallback className="font-semibold text-sm">
-                                            {user.username.slice(0, 2).toUpperCase()}
+                                            {getInitials(user.username)}
                                         </AvatarFallback>
                                     )}
                                 </Avatar>

@@ -4,6 +4,7 @@ import { type FC, memo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { formatLastSendTime } from '@/lib/datetime';
+import { getInitials } from '@/lib/sentence';
 
 import type { ChatHeaderViewProps } from './types';
 
@@ -20,7 +21,7 @@ const ChatHeaderView: FC<ChatHeaderViewProps> = ({
                     <AvatarImage alt={receiver.profile.fullName} src={receiver.profile.avatarUrl} />
                 ) : (
                     <AvatarFallback className="bg-primary/10 text-sm font-semibold">
-                        {receiver?.username.slice(0, 2).toUpperCase()}
+                        {getInitials(receiver?.username)}
                     </AvatarFallback>
                 )}
             </Avatar>

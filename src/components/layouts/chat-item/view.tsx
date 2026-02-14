@@ -4,6 +4,7 @@ import { type FC, memo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { formatLastSendTime } from '@/lib/datetime';
+import { getInitials } from '@/lib/sentence';
 import { cn } from '@/lib/utils';
 
 import { getLastMessagePreview } from './helpers';
@@ -34,7 +35,7 @@ const ChatItemView: FC<ChatItemViewProps> = ({
                 />
             ) : (
                 <AvatarFallback className="bg-primary/10 text-sm font-semibold">
-                    {conversation.sender.username.slice(0, 2).toUpperCase()}
+                    {getInitials(conversation.sender.username)}
                 </AvatarFallback>
             )}
         </Avatar>
