@@ -42,7 +42,7 @@ pnpm preview
 
 ### 6. Important configuration notes
 - API base URL is read from `VITE_API_BASE_URL`.
-- Socket server is currently configured in `src/lib/socket.ts` to `http://localhost:3000`.
+- Socket base URL is read from `VITE_SOCKET_URL`.
 - Web push notifications require valid Firebase configuration + VAPID key.
 
 ## Env Example
